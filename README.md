@@ -3,7 +3,7 @@ MUSICROOM PROJECT
 
 ## Description of the project :
 
-A Sptify like music mobile application
+A Spotify like music mobile application
 
 ## Team 
 - Abdeljalil NACEUR **contact@naceur-abdeljalil.com**
