@@ -1,7 +1,8 @@
+// In App.js in a new project
 import 'react-native-gesture-handler';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 
+import * as React from 'react';
+import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -9,24 +10,17 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SigninScreens from './src/screens/SigninScreen';
 import SignupScreens from './src/screens/SignupScreen';
 
-
 const Stack = createStackNavigator();
 
-export default function App() {
+function App() {
   return (
-<NavigationContainer>
+    <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={SigninScreens} />
+        <Stack.Screen initialRouteName="Signin" name="Signin" options={{ headerShown: false }} component={SigninScreens} />
+        <Stack.Screen name="Signup" options={{ headerShown: false }} component={SignupScreens} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;

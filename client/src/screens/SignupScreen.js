@@ -21,7 +21,7 @@ const SignupScreens = () => {
                     <Text style={Styles.title}>MusicRoom</Text>
                 </View>
                 <View style={Styles.myForm}>
-                    <MyForm />
+                    <MyForm name="Signup" />
                 </View>
             </KeyboardAvoidingView>
         )
