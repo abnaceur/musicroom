@@ -14,7 +14,7 @@ import { AntDesign } from '@expo/vector-icons'
 import { Context as AuthContext } from '../context/AuthContext';
 
 const MyForm = (props) => {
-  const { state, signup } = useContext(AuthContext);
+  const { state, signup, signin } = useContext(AuthContext);
 
   const { name, navigation, isLoggin } = props;
   const [username, setUsername] = useState('');
@@ -48,11 +48,18 @@ const MyForm = (props) => {
         onChange={e => setPasswor(e.target.value)}
       />
 
-      <TouchableOpacity
-        onPress={() => signup({ username, email, password })}
-        style={Styles.buttonContainer}>
-        <Text style={Styles.buttonText} >{name}</Text>
-      </TouchableOpacity>
+      {!isLoggin ?
+        <TouchableOpacity
+          onPress={() => signup({ username, email, password })}
+          style={Styles.buttonContainer}>
+          <Text style={Styles.buttonText} >{name}</Text>
+        </TouchableOpacity> :
+        <TouchableOpacity
+          onPress={() => signin({ email, password })}
+          style={Styles.buttonContainer}>
+          <Text style={Styles.buttonText} >{name}</Text>
+        </TouchableOpacity>}
+
 
 
       {isLoggin ?

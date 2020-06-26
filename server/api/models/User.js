@@ -11,11 +11,15 @@ let userSchema = mongoose.Schema({
         type: String,
         default: "",
     },
-    fullname: {
+    username: {
         type: String,
         require: true,
     },
     email: String,
+    password: {
+        type: String,
+        require: true,
+    },
     dateOfCreation: {
         type: Date,
         default: Date.now,
