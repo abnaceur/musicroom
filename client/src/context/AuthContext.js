@@ -1,5 +1,5 @@
 import creatDataContext from './CreateDataContext';
-import { createContext } from 'react';
+import userApi from '../api/user';
 
 const authReducer = (state, action) => {
     switch(action.type) {
@@ -8,8 +8,19 @@ const authReducer = (state, action) => {
     }
 };
 
+const signup = dispatch => {
+    return async ({username, email, password}) => {
+        try {
+            let response = await userApi.post('/user/signup', {username, email, password});
+            console.log("Response signup : ", response);
+        } catch (err) {
+            console.error(err.message)
+        }
+    }
+}
+
 export const {Context, Provider} = creatDataContext(
     authReducer,
-    {},
+    { signup },
     {isSignedIn: false}
 )

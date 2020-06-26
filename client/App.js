@@ -1,3 +1,4 @@
+require('dotenv').config();
 // In App.js in a new project
 import 'react-native-gesture-handler';
 
@@ -10,9 +11,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SigninScreens from './src/screens/SigninScreen';
 import SignupScreens from './src/screens/SignupScreen';
 
+// Import context
+import { Provider as AuthProvider } from './src/context/AuthContext';
+
 const Stack = createStackNavigator();
 
-function App() {
+const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -23,4 +27,9 @@ function App() {
   );
 }
 
-export default App;
+export default () => {
+  return (
+    <AuthProvider>
+        <App />
+    </AuthProvider>)
+}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -10,39 +10,70 @@ import {
   StyleSheet
 } from 'react-native';
 
+// Style
+import { Input } from 'react-native-elements';
+
 // Import icon
 import { AntDesign } from '@expo/vector-icons'
 
+// Import context
+import { Context as AuthContext } from '../context/AuthContext';
+
 const MyForm = (props) => {
+  const { state, signup } = useContext(AuthContext);
+
+  console.log("signup :", signup, state);
+
   const { name, navigation, isLoggin } = props;
+  const [username, setUsername] = useState('');
+  const [password, setPasswor] = useState('');
+  const [email, setEmail] = useState('');
+
 
   return (
     <View style={Styles.container}>
+
+      {!isLoggin ?
+        <TextInput
+          value={username}
+          placeholder="Input username"
+          style={Styles.input}
+          onChange={e => setUsername(e.target.value)}
+        /> : null}
+
       <TextInput
         placeholder="Input email"
         style={Styles.input}
+        value={email}
+        onChange={e => setEmail(e.target.value)}
       />
+
       <TextInput
         placeholder="Input password"
         style={Styles.input}
+        secureTextEntry
+        value={password}
+        onChange={e => setPasswor(e.target.value)}
       />
 
-      <TouchableOpacity style={Styles.buttonContainer}>
+      <TouchableOpacity
+        onPress={() => signup({ username, email, password })}
+        style={Styles.buttonContainer}>
         <Text style={Styles.buttonText} >{name}</Text>
       </TouchableOpacity>
 
 
-      {isLoggin ? 
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Signup')}
-      ><Text style={Styles.noAccount}>
-        You don't have an account ? Create a new account
-        </Text></TouchableOpacity> : 
-        
+      {isLoggin ?
         <TouchableOpacity
-        onPress={() => navigation.push('Signin')}
-      ><Text style={Styles.noAccount}>
-        You have an account ? go to login
+          onPress={() => navigation.navigate('Signup')}
+        ><Text style={Styles.noAccount}>
+            You don't have an account ? Create a new account
+        </Text></TouchableOpacity> :
+
+        <TouchableOpacity
+          onPress={() => navigation.push('Signin')}
+        ><Text style={Styles.noAccount}>
+            You have an account ? go to login
         </Text></TouchableOpacity>}
 
       <Text style={Styles.txtLine}>___________ OR ____________</Text>

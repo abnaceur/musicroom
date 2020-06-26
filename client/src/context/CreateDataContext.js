@@ -9,12 +9,12 @@ export default (reducer, actions, defaultValue) => {
         const boundAction = {};
 
         for (let key in actions) {
-            boundAction[key] = actions[key][dispatch];
+            boundAction[key] = actions[key](dispatch);
         }
 
-        return (<context.Provider value={{state, ...boundAction}}>
+        return (<Context.Provider value={{state, ...boundAction}}>
             {children}
-        </context.Provider>)
+        </Context.Provider>)
     };
 
     return ({Context, Provider})
