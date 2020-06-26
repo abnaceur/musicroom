@@ -11,7 +11,7 @@ import {
 
 import MyForm from '../components/MyForm';
 
-const SignupScreens = () => {
+const SignupScreens = (props) => {
         return (
             <KeyboardAvoidingView style={Styles.container}>
                 <View style={Styles.logoContainer}>
@@ -21,7 +21,7 @@ const SignupScreens = () => {
                     <Text style={Styles.title}>MusicRoom</Text>
                 </View>
                 <View style={Styles.myForm}>
-                    <MyForm name="Signup" />
+                    <MyForm name="Signup" {...props} />
                 </View>
             </KeyboardAvoidingView>
         )

@@ -14,7 +14,7 @@ import {
 import { AntDesign } from '@expo/vector-icons'
 
 const MyForm = (props) => {
-  const { name } = props;
+  const { name, navigation, isLoggin } = props;
 
   return (
     <View style={Styles.container}>
@@ -31,9 +31,19 @@ const MyForm = (props) => {
         <Text style={Styles.buttonText} >{name}</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity><Text style={Styles.noAccount}>
+
+      {isLoggin ? 
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Signup')}
+      ><Text style={Styles.noAccount}>
         You don't have an account ? Create a new account
-        </Text></TouchableOpacity>
+        </Text></TouchableOpacity> : 
+        
+        <TouchableOpacity
+        onPress={() => navigation.push('Signin')}
+      ><Text style={Styles.noAccount}>
+        You have an account ? go to login
+        </Text></TouchableOpacity>}
 
       <Text style={Styles.txtLine}>___________ OR ____________</Text>
 
