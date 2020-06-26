@@ -2,16 +2,10 @@ import React, { useState, useContext } from 'react';
 import {
   View,
   Text,
-  ScrollView,
-  Dimensions,
-  Image,
   TextInput,
   TouchableOpacity,
   StyleSheet
 } from 'react-native';
-
-// Style
-import { Input } from 'react-native-elements';
 
 // Import icon
 import { AntDesign } from '@expo/vector-icons'
@@ -21,8 +15,6 @@ import { Context as AuthContext } from '../context/AuthContext';
 
 const MyForm = (props) => {
   const { state, signup } = useContext(AuthContext);
-
-  console.log("signup :", signup, state);
 
   const { name, navigation, isLoggin } = props;
   const [username, setUsername] = useState('');
