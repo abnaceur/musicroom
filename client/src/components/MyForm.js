@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import {
   View,
   Text,
+  Linking,
   TextInput,
   TouchableOpacity,
   StyleSheet
@@ -21,6 +22,19 @@ const MyForm = (props) => {
   const [password, setPasswor] = useState('');
   const [email, setEmail] = useState('');
 
+  const oauth2 = () => {
+    fetch("http://localhost:3000/auth/google", {
+      redirect: "manual"
+    }).then((res) => {
+      if (res.type === "opaqueredirect") {
+        // redirect to login page
+        window.location.href = res.url;
+      } else {
+        // handle normally / pass on to next handler
+        console.log("ccccc");
+      }
+    })
+  }
 
   return (
     <View style={Styles.container}>
@@ -77,7 +91,10 @@ const MyForm = (props) => {
 
       <Text style={Styles.txtLine}>___________ OR ____________</Text>
 
-      <TouchableOpacity style={Styles.socialBtn}>
+      <TouchableOpacity style={Styles.socialBtn}
+        // onPress={() => Linking.openURL('http://localhost:3000/auth/google')}
+        onPress={() => oauth2()}
+         >
         <Text style={Styles.buttonText} >
           <AntDesign style={Styles.socialMedia} name="google" />
        Google</Text>

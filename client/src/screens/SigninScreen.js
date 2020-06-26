@@ -12,19 +12,19 @@ import {
 import MyForm from '../components/MyForm';
 
 const SigninScreens = (props) => {
-        return (
-            <KeyboardAvoidingView style={Styles.container}>
-                <View style={Styles.logoContainer}>
-                    <Image style={Styles.logo}
-                        source={require('../assets/images/logo.png')}
-                    />
-                    <Text style={Styles.title}>MusicRoom</Text>
-                </View>
-                <View style={Styles.myForm}>
-                    <MyForm name="Signin" {...props} isLoggin={true} />
-                </View>
-            </KeyboardAvoidingView>
-        )
+    return (
+        <KeyboardAvoidingView style={Styles.container}>
+            <View style={Styles.logoContainer}>
+                <Image style={Styles.logo}
+                    source={require('../assets/images/logo.png')}
+                />
+                <Text style={Styles.title}>MusicRoom</Text>
+            </View>
+            <View style={Styles.myForm}>
+                <MyForm name="Signin" {...props} isLoggin={true} />
+            </View>
+        </KeyboardAvoidingView>
+    )
 }
 
 const Styles = StyleSheet.create({
@@ -48,7 +48,7 @@ const Styles = StyleSheet.create({
         color: '#fff',
         marginTop: 20,
         fontWeight: "100",
-        fontSize: 23    
+        fontSize: 23
     },
     myForm: {
         flex: 3

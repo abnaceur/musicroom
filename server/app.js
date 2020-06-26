@@ -12,9 +12,13 @@ let mongoose = require('mongoose');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./docs/openApiDocumentation/BasicInformation');
 
+const passport = require('passport');
+
 // Main app
 var app = express();
 
+// Initialize passprt
+app.use(passport.initialize());
 
 // Logs
 app.use(logger('dev'));
@@ -78,7 +82,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Call routes API
-app.use('/index', indexRouter);
+app.use('/', indexRouter);
 app.use('/api/v1/users', userRouter);
 
 app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
