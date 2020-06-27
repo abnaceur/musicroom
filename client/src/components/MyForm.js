@@ -39,6 +39,10 @@ const MyForm = (props) => {
   return (
     <View style={Styles.container}>
 
+      {state.error_msg !== "" ?
+        <Text style={Styles.errMsg}>{state.error_msg}</Text>
+        : null}
+
       {!isLoggin ?
         <TextInput
           value={username}
@@ -94,7 +98,7 @@ const MyForm = (props) => {
       <TouchableOpacity style={Styles.socialBtn}
         // onPress={() => Linking.openURL('http://localhost:3000/auth/google')}
         onPress={() => oauth2()}
-         >
+      >
         <Text style={Styles.buttonText} >
           <AntDesign style={Styles.socialMedia} name="google" />
        Google</Text>
@@ -142,6 +146,16 @@ const Styles = StyleSheet.create({
     color: '#fff',
     fontSize: 13,
     marginTop: 10
+  },
+  errMsg: {
+    color: '#fff',
+    textAlign: 'center',
+    paddingTop: 20,
+    paddingBottom: 20,
+    backgroundColor: 'red',
+    marginBottom: 10,
+    fontSize: 15,
+    fontWeight: '500'
   }
 })
 
