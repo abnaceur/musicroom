@@ -1,7 +1,10 @@
 // In App.js in a new project
 import 'react-native-gesture-handler';
+// Import context
+import { Context as AuthContext } from './src/context/AuthContext';
 
-import * as React from 'react';
+
+import React, {useContext} from 'react';
 import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -9,11 +12,25 @@ import { createStackNavigator } from '@react-navigation/stack';
 // Import screens
 import SigninScreens from './src/screens/SigninScreen';
 import SignupScreens from './src/screens/SignupScreen';
+import HomeScreens from './src/screens/HomeScreen';
+
+// Import context
+import { Provider as AuthProvider } from './src/context/AuthContext';
 
 const Stack = createStackNavigator();
 
-function App() {
-  return (
+const App = () => {
+  const { state } = useContext(AuthContext);
+
+  if (state.token)
+    return (
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen initialRouteName="Signin" name="Home" options={{ headerShown: false }} component={HomeScreens} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  else return (
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen initialRouteName="Signin" name="Signin" options={{ headerShown: false }} component={SigninScreens} />
@@ -23,4 +40,9 @@ function App() {
   );
 }
 
-export default App;
+export default () => {
+  return (
+    <AuthProvider>
+      <App />
+    </AuthProvider>)
+}
