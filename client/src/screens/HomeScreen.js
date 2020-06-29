@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     View,
     Text,
+    Button,
+    TouchableOpacity,
     ScrollView,
     Dimensions,
     Image,
@@ -9,19 +11,24 @@ import {
     StyleSheet
 } from 'react-native';
 
-import MyForm from '../components/MyForm';
+// Import context
+import { Context as AuthContext } from '../context/AuthContext';
 
-const SigninScreens = (props) => {
+
+const HomeScreens = (props) => {
+    const { signout } = useContext(AuthContext);
+
     return (
         <KeyboardAvoidingView style={Styles.container}>
             <View style={Styles.logoContainer}>
-                <Image style={Styles.logo}
-                    source={require('../assets/images/logo.png')}
-                />
-                <Text style={Styles.title}>MusicRoom</Text>
-            </View>
-            <View style={Styles.myForm}>
-                <MyForm name="Signin" {...props} isLoggin={true} />
+                <Text style={Styles.title}>Home page</Text>
+
+                <TouchableOpacity
+                    onPress={() => signout()}
+                >
+
+                    <Text style={Styles.title}>Logout</Text>
+                </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
     )
@@ -56,4 +63,4 @@ const Styles = StyleSheet.create({
 })
 
 
-export default SigninScreens;
+export default HomeScreens;

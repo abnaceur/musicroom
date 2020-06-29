@@ -166,6 +166,15 @@ npm install
 
 ## FAQ
 
+Error on your Android device :
+```
+Invalid varaition
+```
+Solution empty the cache
+```
+expo r -c
+```
+
 Error :
 ERROR: could not find an available, non-overlapping IPv4 address pool among the defaults to assign to the network
 
