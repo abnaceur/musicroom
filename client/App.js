@@ -1,4 +1,3 @@
-require('dotenv').config();
 // In App.js in a new project
 import 'react-native-gesture-handler';
 // Import context

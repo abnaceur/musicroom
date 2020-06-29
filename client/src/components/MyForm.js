@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 // Import icon
-import { AntDesign } from '@expo/vector-icons'
+// import { AntDesign } from '@expo/vector-icons'
 
 // Import context
 import { Context as AuthContext } from '../context/AuthContext';
@@ -100,7 +100,7 @@ const MyForm = (props) => {
         onPress={() => oauth2()}
       >
         <Text style={Styles.buttonText} >
-          <AntDesign style={Styles.socialMedia} name="google" />
+          {/* <AntDesign style={Styles.socialMedia} name="google" /> */}
        Google</Text>
       </TouchableOpacity>
     </View>
