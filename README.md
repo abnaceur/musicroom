@@ -9,7 +9,7 @@ A Spotify like music mobile application
 - Abdeljalil NACEUR **contact@naceur-abdeljalil.com**
 - Adrien Dacher **adr.dacher@gmail.com**
 - Sylvain Boeuf **sylvainboeuf@gmail.com**
-
+- Dove Palombo **contact@frenchgorilla.com**
 
 ## Technologies :
  - NodeJs/Express v12.11.4
@@ -22,11 +22,10 @@ A Spotify like music mobile application
 ## Git flow
 There are two branches:
  - Master - origin
- - Staging - Folow Master
- - Develop - follow Staging
+ - Develop - follow master
+ - Features/hotfix/support follow develop
 
 The *Master* branch is used for production. Only the features we know are perfectly working should be merged on *Master* 
-The *Staging* branch is were the cross testing are made before merging the master branch.
 The *Develop* branch is where new features are developped.
 
 ## Git Commit messages guidlines
@@ -45,6 +44,20 @@ This template can be used for the commit messages:
 > from it, etc...)
 > I alos explain WHY I did it.
   
+
+## Branch naming convention 
+The following branching strategies should be respected :
+
+Keep your branch strategy simple. Build your strategy from these three concepts:
+
+- Use feature branches for all new features : *** feature/featureName ***
+- Use bug fixes branches for all fixes : *** hotfix/fixName ***
+- Use support branches for all small addon to existing features : *** support/supportName ***
+- Merge branches into the develop branch using pull requests.
+- Keep a high quality, up-to-date master branch.
+
+A strategy that extends these concepts and avoids contradictions will result in a version control 
+workflow for your team that is consistent and easy to follow.
 
 ## Install the development environment
 
@@ -99,6 +112,7 @@ Install dependencies of the server
 npm i
 ```
 
+*** Skip this client build and build it locally ***
 Now navigate to client folder
 Copy the env variables for developement environment
 ```
@@ -109,6 +123,7 @@ Install dependencies of the client
 ```
 npm i
 ```
+*** -------------------------------------------- ***
 
 Go back to the root folder and
 build the project from the root directory
@@ -116,6 +131,11 @@ build the project from the root directory
 docker-compose up --build
 ```
 
+Userfull links :
+```
+# Php mongoClient
+localhost:3300
+```
 ### Help
 
 Stop and remove all containers
@@ -165,6 +185,12 @@ npm install
 ```
 
 ## FAQ
+
+Error for adb not found
+```
+# Install adb on your system dont depend on the enviroemnt variables
+apt-get install adb
+```
 
 Error on your Android device :
 ```

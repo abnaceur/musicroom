@@ -14,19 +14,20 @@ services:
     links:
       - mongo
   
-  app_dev:
-    container_name: ${PROJET_NAME}_app_dev
-    build: ./client/
-    environment:
-      - VIRTUAL_HOST=app.local.${PROJET_NAME}.local
-    volumes : 
-      - ./client/:/usr/src/app:rw
-    restart: always
-    ports:
-      - "5000:19006"
-    links:
-      - mongo
-    command: npm run web
+  # app_dev:
+  #   container_name: ${PROJET_NAME}_app_dev
+  #   build: ./client/
+  #   environment:
+  #     - VIRTUAL_HOST=app.local.${PROJET_NAME}.local
+  #   volumes : 
+  #     - ./client/:/usr/src/app:rw
+  #   restart: always
+  #   ports:
+  #     - "5000:19006"
+  #   links:
+  #     - mongo
+  #   command: npm run android
+  #   command: npm start
   
   mongo:
     container_name: ${PROJET_NAME}_mongo_dev
