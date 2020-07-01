@@ -12,7 +12,8 @@ import {
 import MyForm from '../components/MyForm';
 
 const SignupScreens = (props) => {
-        return (
+    return (
+        <ScrollView>
             <KeyboardAvoidingView style={Styles.container}>
                 <View style={Styles.logoContainer}>
                     <Image style={Styles.logo}
@@ -24,7 +25,8 @@ const SignupScreens = (props) => {
                     <MyForm name="Signup" {...props} />
                 </View>
             </KeyboardAvoidingView>
-        )
+        </ScrollView>
+    )
 }
 
 const Styles = StyleSheet.create({
@@ -48,7 +50,7 @@ const Styles = StyleSheet.create({
         color: '#fff',
         marginTop: 20,
         fontWeight: "100",
-        fontSize: 23    
+        fontSize: 23
     },
     myForm: {
         flex: 3

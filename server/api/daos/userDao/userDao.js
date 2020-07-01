@@ -1,6 +1,8 @@
 const User = require('../../models/User');
 const UserClass = require("../../class/UserClass"); 
 const utils = require('../../utils/utils');
+const userEmailsTemplate = require('../../emails/userEmails/accountValidationEmail');
+const emailSender = require('../../utils/emailSender');
 
 ifExistUserAccount = (email) => {
     return new Promise((resolve, reject) => {
@@ -25,10 +27,12 @@ ifExistUserAccountById = (id) => {
 }
 
 
-saveNewUserAccount = (data, photo) => {
+saveNewUserAccount = (data) => {
     return new Promise(async (resolve, reject) => {
         let user = new User(await UserClass.CreateNewUser(data));
         user.save().then(res => {
+            let msg = userEmailsTemplate.accountValidation();
+            emailSender.sendEmail("MUSICROOM TEAM", data.email, "Account validation", msg);
             resolve(true);
         }).catch(err => {
             console.log("saveNewUserAccount ERR :", err);
