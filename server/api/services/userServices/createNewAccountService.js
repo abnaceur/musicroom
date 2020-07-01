@@ -7,6 +7,14 @@ async function addNewUser(req, data, res) {
         // check if email exist
         if (await userDao.ifExistUserAccount(data.email) === 0) {
             if (await userDao.saveNewUserAccount(data)) {
+                console.log({
+                    success: true,
+                    data: {
+                        msg: "Account created with success."
+                    },
+                    code: 200
+                });
+
                 res.status(200).json({
                     success: true,
                     data: {
@@ -22,7 +30,7 @@ async function addNewUser(req, data, res) {
                 success: true,
                 data: {
                     valid: false,
-                    msg: "This account does not exists"
+                    msg: "This account already exists"
                 },
                 code: 406
             })

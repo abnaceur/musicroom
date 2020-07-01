@@ -5,6 +5,7 @@ createNewAccount = (req, res, next) => {
 }
 
 loginUser = (req, res, next) => {
+    console.log("Res bo :", req.body);
     userService.userLoginService.userLogin(req.body, res);
 }
 

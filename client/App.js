@@ -1,4 +1,5 @@
 // In App.js in a new project
+<script src="http://localhost:8097"></script>
 import 'react-native-gesture-handler';
 // Import context
 import { Context as AuthContext } from './src/context/AuthContext';
