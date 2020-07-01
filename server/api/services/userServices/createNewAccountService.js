@@ -22,7 +22,7 @@ async function addNewUser(req, data, res) {
                 success: true,
                 data: {
                     valid: false,
-                    msg: "This account does not exists"
+                    msg: "This account already exists"
                 },
                 code: 406
             })

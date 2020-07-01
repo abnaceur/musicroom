@@ -20,6 +20,10 @@ let userSchema = mongoose.Schema({
         type: String,
         require: true,
     },
+    validationToken: {
+        type: String,
+        require: true,
+    },
     dateOfCreation: {
         type: Date,
         default: Date.now,
