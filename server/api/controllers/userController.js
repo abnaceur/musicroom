@@ -5,11 +5,17 @@ createNewAccount = (req, res, next) => {
 }
 
 loginUser = (req, res, next) => {
-    console.log("Res bo :", req.body);
     userService.userLoginService.userLogin(req.body, res);
+}
+
+
+validateAccount = (req, res, next) => {
+    let token = req.params.token;
+    userService.userAccountValidationService.validateEmailAddress(res, token);
 }
 
 module.exports = {
     createNewAccount,
+    validateAccount,
     loginUser
 }
