@@ -8,7 +8,14 @@ loginUser = (req, res, next) => {
     userService.userLoginService.userLogin(req.body, res);
 }
 
+
+validateAccount = (req, res, next) => {
+    let token = req.params.token;
+    userService.userAccountValidationService.validateEmailAddress(res, token);
+}
+
 module.exports = {
     createNewAccount,
+    validateAccount,
     loginUser
 }
