@@ -20,4 +20,10 @@ router.post('/signup', userController.createNewAccount)
 // @access  Public
 router.post('/signin', userController.loginUser)
 
+
+// @desc    Signin  user
+// @route   POST /api/v1/users/validation/:token
+// @access  Public
+router.get('/validation/:token', userController.validateAccount)
+
 module.exports = router;
