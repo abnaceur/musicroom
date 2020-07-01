@@ -14,6 +14,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SigninScreens from './src/screens/SigninScreen';
 import SignupScreens from './src/screens/SignupScreen';
 import HomeScreens from './src/screens/HomeScreen';
+import ResetPwdScreens from './src/screens/ResetPwdScreen';
 
 // Import context
 import { Provider as AuthProvider } from './src/context/AuthContext';
@@ -36,6 +37,7 @@ const App = () => {
       <Stack.Navigator>
         <Stack.Screen initialRouteName="Signin" name="Signin" options={{ headerShown: false }} component={SigninScreens} />
         <Stack.Screen name="Signup" options={{ headerShown: false }} component={SignupScreens} />
+        <Stack.Screen name="ResetPwd" options={{ headerShown: false }} component={ResetPwdScreens} />
       </Stack.Navigator>
     </NavigationContainer>
   );
