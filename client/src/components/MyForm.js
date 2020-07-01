@@ -79,6 +79,13 @@ const MyForm = (props) => {
         </TouchableOpacity>}
 
 
+        {isLoggin ?
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ResetPwd')}
+        ><Text style={Styles.noAccount}>
+            Forget your password ? 
+        </Text></TouchableOpacity> : ""}
+
 
       {isLoggin ?
         <TouchableOpacity
