@@ -22,19 +22,19 @@ const MyForm = (props) => {
   const [password, setPasswor] = useState('');
   const [email, setEmail] = useState('');
 
-  const oauth2 = () => {
-    fetch("http://localhost:3000/auth/google", {
-      redirect: "manual"
-    }).then((res) => {
-      if (res.type === "opaqueredirect") {
-        // redirect to login page
-        window.location.href = res.url;
-      } else {
-        // handle normally / pass on to next handler
-        console.log("ccccc");
-      }
-    })
-  }
+  // const oauth2 = () => {
+  //   fetch("http://localhost:3000/auth/google", {
+  //     redirect: "manual"
+  //   }).then((res) => {
+  //     if (res.type === "opaqueredirect") {
+  //       // redirect to login page
+  //       window.location.href = res.url;
+  //     } else {
+  //       // handle normally / pass on to next handler
+  //       console.log("ccccc");
+  //     }
+  //   })
+  // }
 
   return (
     <View style={Styles.container}>
@@ -48,14 +48,14 @@ const MyForm = (props) => {
           value={username}
           placeholder="Input username"
           style={Styles.input}
-          onChange={e => setUsername(e.target.value)}
+          onChangeText={(value) => { setUsername(value) }}
         /> : null}
 
       <TextInput
         placeholder="Input email"
         style={Styles.input}
         value={email}
-        onChange={e => setEmail(e.target.value)}
+        onChangeText={(value) => { setEmail(value) }}
       />
 
       <TextInput
@@ -63,7 +63,7 @@ const MyForm = (props) => {
         style={Styles.input}
         secureTextEntry
         value={password}
-        onChange={e => setPasswor(e.target.value)}
+        onChangeText={(value) => { setPasswor(value) }}
       />
 
       {!isLoggin ?
