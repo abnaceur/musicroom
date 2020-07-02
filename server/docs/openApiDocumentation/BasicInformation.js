@@ -15,36 +15,20 @@ const swaggerDocument = {
     "produces": ["application/json"],
     "consumes": "application/json",
     "paths": {
-        "/api/v1/users/validate/account": {
+        "/api/v1/users/signup": {
             "post": {
                 "x-swagger-router-controller": "users",
                 "operationId": "users",
-                "summary": "Validate the email account",
-                "description": 'Validate user emil',
+                "summary": "Create a new user",
+                "description": 'Create a new user',
                 "tags": ["User"],
-                "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/validate/account"})`,
+                "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
                 "parameters": [
                     // {
-                    //     "name": "fullname",
+                    //     "name": "username",
                     //     "in": "formData",
                     //     "type": "string",
-                    //     // "collectionFormat": "multi",
                     //     "required": true
-                    //     // "items": {
-                    //     //     "type": "string"
-                    //     // },
-                    // },
-                    // {
-                    //     "name": "lastname",
-                    //     "in": "formData",
-                    //     "required": true,
-                    //     "type": "string"
-                    // },
-                    // {
-                    //     "name": "password",
-                    //     "in": "formData",
-                    //     "required": true,
-                    //     "type": "password"
                     // },
                     // {
                     //     "name": "email",
@@ -53,12 +37,38 @@ const swaggerDocument = {
                     //     "type": "string"
                     // },
                     // {
-                    //     "name": "file",
+                    //     "name": "password",
                     //     "in": "formData",
-                    //     "type": "file",
-                    //     "required": "true"
-                    // }
+                    //     "required": true,
+                    //     "type": "string"
+                    // },
                     {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "username": {
+                                    "type": "string",
+                                    "example": "JohnDao"
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "example": 'john.dao@musicroom.io'
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "example": "IamPassword123!"
+                                },
+                            }
+                        }
+
+                    }
+                ],
+                "responses": {
+                    '406': {
+                        "description": "This account already exists",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -68,25 +78,34 @@ const swaggerDocument = {
                                 "data": {
                                     "type": "object",
                                     "properties": {
-                                        "fullname": {
-                                            "type": "string",
-                                            "example": "John Dao"
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
                                         },
-                                        "email": {
-                                            "type": "string",
-                                            "example": 'john.dao@pagex.io'
+                                        "data": {
+                                            "properties": {
+                                                "valid": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "This account already exists"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 406
                                         }
 
                                     }
                                 }
                             }
                         }
-
-                    }
-                ],
-                "responses": {
-                    '302': {
-                        "description": "This user email already exists",
+                    },
+                    '407': {
+                        "description": "Data validation",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -100,22 +119,30 @@ const swaggerDocument = {
                                             "type": "booleon",
                                             "example": true
                                         },
-                                        "msg": {
-                                            "type": "string",
-                                            "example": "Account exists"
-                                        },
                                         "code": {
                                             "type": "number",
-                                            "example": 302
+                                            "example": 407
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "valid": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Password must include more than 08 characters.'
+                                                }
+                                            }
                                         }
 
                                     }
                                 }
                             }
-                        }
+                        },
                     },
                     '200': {
-                        "description": "Validation code for user account has been generated succesfully",
+                        "description": "User account has been created succesfully",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -135,13 +162,9 @@ const swaggerDocument = {
                                         },
                                         "data": {
                                             "properties": {
-                                                "id": {
+                                                "msg": {
                                                     "type": "string",
-                                                    "example": "_3456785445675"
-                                                },
-                                                "validationCode": {
-                                                    "type": "string",
-                                                    "example": '98789'
+                                                    "example": 'Account created with success.'
                                                 }
                                             }
                                         }

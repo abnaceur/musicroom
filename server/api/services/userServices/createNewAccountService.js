@@ -14,7 +14,7 @@ async function addNewUser(req, data, res) {
                     },
                     code: 200
                 })
-            } else {
+            } else { 
                 res.status(500);
             }
         } else {

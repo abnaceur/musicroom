@@ -11,7 +11,7 @@ const userController = require('../controllers/userController');
 
 
 // @desc    Signup new user
-// @route   POST /api/v1/users/signup
+// @route   POST /api/v1/users/signup 
 // @access  Public
 router.post('/signup', userController.createNewAccount)
 
