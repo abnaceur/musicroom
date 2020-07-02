@@ -14,8 +14,14 @@ validateAccount = (req, res, next) => {
     userService.userAccountValidationService.validateEmailAddress(res, token);
 }
 
+resetPassword = (req, res, next) => {
+    let email = req.body.email.email;
+    userService.resetPwdService.resetPwd(email, res);
+}
+
 module.exports = {
     createNewAccount,
     validateAccount,
+    resetPassword,
     loginUser
 }

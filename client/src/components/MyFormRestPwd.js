@@ -8,9 +8,6 @@ import {
     StyleSheet
 } from 'react-native';
 
-// Import icon
-// import { AntDesign } from '@expo/vector-icons'
-
 // Import context
 import { Context as AuthContext } from '../context/AuthContext';
 

@@ -26,4 +26,10 @@ router.post('/signin', userController.loginUser)
 // @access  Public
 router.get('/validation/:token', userController.validateAccount)
 
+
+// @desc    Signin  user
+// @route   POST /api/v1/users/resetpwd
+// @access  Public
+router.post('/resetpwd', userController.resetPassword)
+
 module.exports = router;

@@ -7,7 +7,8 @@ async function userLogin(userInfo, res) {
     const accessTokenDao = new AccessToken();
 
     User.find({
-        "email": userInfo.email
+        email: userInfo.email,
+        active: true,
     })
         .exec()
         .then(async userData => {
