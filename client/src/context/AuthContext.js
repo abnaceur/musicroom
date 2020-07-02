@@ -12,18 +12,31 @@ const authReducer = (state, action) => {
             return { error_msg: '', token: null };
         case 'resetPwd_error':
             return { error_msg: action.payload, response_msg: "", token: null };
-        case resetPwd:
+        case 'resetPwd':
             return { response_msg: action.payload, error_msg: "", token: null };
+        case 'signup':
+            return { response_msg: action.payload, error_msg: "", token: null };
+        case 'hideMsg':
+            return { response_msg: "", error_msg: "" };
         default:
             return state;
     }
 };
 
+const hideMessages = dispatch => async () => {
+    setTimeout(() => {
+        dispatch({ type: "hideMsg" })
+    }, 2000)
+}
+
 const signup = dispatch => async ({ username, email, password }) => {
     try {
         let response = await userApi.post('/users/signup', { username, email, password });
-        if (response.data.code !== 200)
+        if (response.data.code !== 200) {
             dispatch({ type: "add_error", payload: response.data.data.msg })
+        } else if (response.data.code === 200) {
+            dispatch({ type: "signup", payload: response.data.data.msg });
+        }
     } catch (err) {
         dispatch({ type: "add_error", payload: "Sorry, something went wrong with signup" })
         console.error(err.message)
@@ -33,8 +46,9 @@ const signup = dispatch => async ({ username, email, password }) => {
 const signin = dispatch => async ({ email, password }) => {
     try {
         let response = await userApi.post('/users/signin', { email, password });
-        if (response.data.code !== 200)
+        if (response.data.code !== 200) {
             dispatch({ type: "add_error", payload: response.data.data.msg })
+        }
         if (response.data.code == 200) {
             await AsyncStorage.setItem('token_id', response.data.data.token);
             await AsyncStorage.setItem('userInfo', response.data.data);
@@ -55,10 +69,11 @@ const signout = dispatch => async () => {
 const resetPwd = dispatch => async (email) => {
     try {
         let response = await userApi.post('/users/resetpwd', { email });
-        if (response.data.code !== 200)
+        if (response.data.code !== 200) {
             dispatch({ type: "resetPwd_error", payload: response.data.data.msg })
+        }
         if (response.data.code == 200) {
-            dispatch({ type: 'resetPwd', payload: response.data.data.token })
+            dispatch({ type: 'resetPwd', payload: response.data.data.msg })
         }
     } catch (err) {
         dispatch({ type: "resetPwd_error", payload: "Sorry, something went wrong with signin" })
@@ -68,7 +83,7 @@ const resetPwd = dispatch => async (email) => {
 
 export const { Context, Provider } = creatDataContext(
     authReducer,
-    { signup, signin, signout, resetPwd },
+    { signup, signin, signout, resetPwd, hideMessages },
     {
         token: null,
         error_msg: "",
