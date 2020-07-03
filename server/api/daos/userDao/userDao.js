@@ -82,7 +82,7 @@ getUserByEmail = (email) => {
 }
 
 resetPassword = async (email) => {
-    return new Promise( async(resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         //    Generate new pwd
         try {
             const newPwd = await utils.generateRandomPassword();
@@ -91,7 +91,7 @@ resetPassword = async (email) => {
             // Get user
             let user = await getUserByEmail(email);
             user[0].password = hashedPwd;
-    
+
             // update the new password
             User.findByIdAndUpdate(
                 user[0]._id,
@@ -105,10 +105,23 @@ resetPassword = async (email) => {
                     resolve(true);
                 }
             )
-        } catch(err) {
+        } catch (err) {
             resolve(false)
         }
-        
+    })
+}
+
+getUserById = (id) => {
+    return new Promise((resolve, reject) => {
+        User.findOne({
+            _id: id
+        }).exec()
+            .then(response => {
+                resolve(response);
+            }).catch(err => {
+                console.log("getUserById ERR :", err)
+                reject(err)
+            });
     })
 }
 
@@ -118,5 +131,6 @@ module.exports = {
     accountValidation,
     resetPassword,
     ifExistUserAccountById,
+    getUserById,
     saveNewUserAccount
 }

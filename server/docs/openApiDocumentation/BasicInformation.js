@@ -180,6 +180,154 @@ const swaggerDocument = {
                 }
             }
         },
+        "/api/v1/users/id/{id}": {
+            "get": {
+                "x-swagger-router-controller": "users",
+                "operationId": "users",
+                "summary": "Get User by Id",
+                "description": 'Get data of user by sending userId',
+                "tags": ["User"],
+                "description": `[Get user by id link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/id/{id}"})`,
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                        },
+                        "required": true,
+                        "description": " ID of the user to get",
+                    }
+                ],
+                "responses": {
+                    '406': {
+                        "description": "Bad id format",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Bad id format"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 406
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '202': {
+                        "description": "User not found",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "User not found"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 202
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '444': {
+                        "description": "Bad id format",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Error Unknow + err"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 444
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '200': {
+                        "description": "Return user data of userId",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "user": {
+                                                    "type": "User",
+                                                    "example": '{"firstname":"","lastname":"","active":false, "blocked":false,"_id":"5efe6c572fb2010021e735ab","email":"john.dao@musicroom.io","validationToken":"__token__","password":"__encodePasswd__","dateOfCreation":"2020-07-02T23:23:03.355Z","dateOfLastUpdate":"2020-07-02T23:23:03.355Z","__v":0}'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '500': {
+                        "description": "An error has occured",
+                    },
+                }
+            }
+        },
+
         // "/api/v1/users/validate/code": {
         //     "post": {
         //         "x-swagger-router-controller": "users",
