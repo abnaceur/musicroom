@@ -262,7 +262,7 @@ const swaggerDocument = {
                         }
                     },
                     '444': {
-                        "description": "Bad id format",
+                        "description": "Error Unknow + err",
                         "schema": {
                             "type": "object",
                             "properties": {
