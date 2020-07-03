@@ -32,4 +32,9 @@ router.get('/validation/:token', userController.validateAccount)
 // @access  Public
 router.post('/resetpwd', userController.resetPassword)
 
+// @desc    Get user by id
+// @route   POST /api/v1/users/id/:id
+// @access  Public
+router.get('/id/:id', userController.getUserById)
+
 module.exports = router;
