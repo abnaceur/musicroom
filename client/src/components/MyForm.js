@@ -1,26 +1,37 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   View,
   Text,
   Linking,
   TextInput,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  Animated
 } from 'react-native';
-
-// Import icon
-// import { AntDesign } from '@expo/vector-icons'
 
 // Import context
 import { Context as AuthContext } from '../context/AuthContext';
 
 const MyForm = (props) => {
-  const { state, signup, signin } = useContext(AuthContext);
+  const { state, signup, signin, hideMessages } = useContext(AuthContext);
 
   const { name, navigation, isLoggin } = props;
   const [username, setUsername] = useState('');
   const [password, setPasswor] = useState('');
   const [email, setEmail] = useState('');
+  const [animation, setAnimation] = useState(new Animated.Value(0));
+
+  // TODO Add animation
+  const startAnimation = () => {
+    Animated.timing(animation, {
+      toValue: 0,
+      duration: 350
+    }).start();
+  }
+
+  useEffect(() => {
+    hideMessages()
+  }, [state.error_msg, state.response_msg]);
 
   // const oauth2 = () => {
   //   fetch("http://localhost:3000/auth/google", {
@@ -40,7 +51,11 @@ const MyForm = (props) => {
     <View style={Styles.container}>
 
       {state.error_msg !== "" ?
-        <Text style={Styles.errMsg}>{state.error_msg}</Text>
+        <Text style={[Styles.errMsg, startAnimation]}>{state.error_msg}</Text>
+        : null}
+
+      {state.response_msg !== "" ?
+        <Text style={Styles.response_msg}>{state.response_msg}</Text>
         : null}
 
       {!isLoggin ?
@@ -78,6 +93,13 @@ const MyForm = (props) => {
           <Text style={Styles.buttonText} >{name}</Text>
         </TouchableOpacity>}
 
+
+      {isLoggin ?
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ResetPwd')}
+        ><Text style={Styles.noAccount}>
+            Forget your password ?
+        </Text></TouchableOpacity> : null}
 
 
       {isLoggin ?
@@ -156,7 +178,17 @@ const Styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 15,
     fontWeight: '500'
-  }
+  },
+  response_msg: {
+    color: '#fff',
+    textAlign: 'center',
+    paddingTop: 20,
+    paddingBottom: 20,
+    backgroundColor: 'green',
+    marginBottom: 10,
+    fontSize: 15,
+    fontWeight: '500'
+  },
 })
 
 export default MyForm;

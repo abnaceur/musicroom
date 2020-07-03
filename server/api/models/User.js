@@ -28,6 +28,10 @@ let userSchema = mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    active: {
+        type: Boolean,
+        default: false
+    },
     blocked: {
         type: Boolean,
         default: false,

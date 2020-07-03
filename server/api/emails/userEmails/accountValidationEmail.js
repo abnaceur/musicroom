@@ -8,6 +8,18 @@ const accountValidation = (token) => {
     return msg
 }
 
+
+const resetPassword = (pwd) => {
+    let msg = `Hello ! \n  \
+    \n Here is your new password : \
+    \n  ${"Password : " + pwd} \
+    \n MUSICROOM TEAM`
+
+    return msg
+}
+
+
 module.exports = {
+    resetPassword,
     accountValidation
 }

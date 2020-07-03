@@ -10,7 +10,7 @@ hashPassword = (password) => {
 
 generateRandomPassword = () => {
     return new Promise((resolve, reject) => {
-        resolve(Math.random().toString(36).slice(-8));
+        resolve(Math.random().toString(36).slice(-8) + 'A!b');
     })
 }
 
