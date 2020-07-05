@@ -186,6 +186,9 @@ npm install
 
 ## FAQ
 
+How can I expose my localhost on a public doamin
+- Try to install and use pagekite
+
 Error for adb not found
 ```
 # Install adb on your system dont depend on the enviroemnt variables

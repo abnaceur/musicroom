@@ -15,6 +15,23 @@ async function CreateNewUser(data, token) {
 
 }
 
+async function creatNewOauth2User(data) {
+    return new Promise(async (resolve, reject) => {
+        let hashedPwd = await utils.hashPassword(data.password);
+        resolve({
+            _id: new mongoose.Types.ObjectId,
+            username: data.displayName,
+            email: data.emails[0].value,
+            googlePhoto: data.photos[0].value,
+            validationToken: data.id,
+            googleId: data.id,
+            active: true,
+        }) 
+    })
+
+}
+
 module.exports = {
-    CreateNewUser
+    CreateNewUser,
+    creatNewOauth2User
 }

@@ -21,6 +21,13 @@ const MyForm = (props) => {
   const [email, setEmail] = useState('');
   const [animation, setAnimation] = useState(new Animated.Value(0));
 
+  useEffect(() => {
+    // Your code here
+    const url = Linking.getInitialURL();
+    console.log(url);
+
+  }, []);
+
   // TODO Add animation
   const startAnimation = () => {
     Animated.timing(animation, {
@@ -29,9 +36,15 @@ const MyForm = (props) => {
     }).start();
   }
 
+
+  console.log("navigation: ", navigation.state);
+  useEffect(() => {
+    console.log("navigation HHH : ", navigation.state);
+  });
+
   useEffect(() => {
     hideMessages()
-  }, [state.error_msg, state.response_msg]);
+  }, [state.error_msg, state.response_msg, navigation]);
 
   // const oauth2 = () => {
   //   fetch("http://localhost:3000/auth/google", {
@@ -49,7 +62,8 @@ const MyForm = (props) => {
 
   return (
     <View style={Styles.container}>
-
+      { console.log("navigation: ", navigation.dangerouslyGetState())
+}
       {state.error_msg !== "" ?
         <Text style={[Styles.errMsg, startAnimation]}>{state.error_msg}</Text>
         : null}
@@ -118,8 +132,8 @@ const MyForm = (props) => {
       <Text style={Styles.txtLine}>___________ OR ____________</Text>
 
       <TouchableOpacity style={Styles.socialBtn}
-        // onPress={() => Linking.openURL('http://localhost:3000/auth/google')}
-        onPress={() => oauth2()}
+        onPress={() => Linking.openURL('https://42music.pagekite.me/auth/google')}
+      // onPress={() => oauth2()}
       >
         <Text style={Styles.buttonText} >
           {/* <AntDesign style={Styles.socialMedia} name="google" /> */}
