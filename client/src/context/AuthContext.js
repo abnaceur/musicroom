@@ -1,9 +1,9 @@
 import creatDataContext from './CreateDataContext';
 import userApi from '../api/user';
 import AsyncStorage from '@react-native-community/async-storage';
+import { navigate } from '../helpers/NavigationRef';
 
 const authReducer = (state, action) => {
-    console.log("dtate = ", state, action);
 
     switch (action.type) {
         case "add_error":
@@ -19,7 +19,7 @@ const authReducer = (state, action) => {
         case 'signup':
             return { response_msg: action.payload, error_msg: "", token: null };
         case 'hideMsg':
-            return {...state, response_msg: "", error_msg: ""};
+            return { ...state, response_msg: "", error_msg: "" };
         default:
             return state;
     }
@@ -54,7 +54,7 @@ const signin = dispatch => async ({ email, password }) => {
         if (response.data.code == 200) {
             await AsyncStorage.setItem('token_id', response.data.data.token);
             await AsyncStorage.setItem('userInfo', JSON.stringify(response.data.data));
-            dispatch({ type: 'addToken', payload: response.data.data.token })
+            dispatch({ type: 'addToken', payload: response.data.data.token });
         }
     } catch (err) {
         dispatch({ type: "add_error", payload: "Sorry, something went wrong with signin" })
@@ -65,6 +65,7 @@ const signin = dispatch => async ({ email, password }) => {
 const signout = dispatch => async () => {
     await AsyncStorage.removeItem('token_id');
     await AsyncStorage.removeItem('userInfo');
+    await AsyncStorage.clear();
     dispatch({ type: 'rmToken', payload: null });
 }
 
