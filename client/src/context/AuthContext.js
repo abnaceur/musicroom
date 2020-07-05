@@ -1,15 +1,17 @@
 import creatDataContext from './CreateDataContext';
 import userApi from '../api/user';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const authReducer = (state, action) => {
+    console.log("dtate = ", state, action);
+
     switch (action.type) {
         case "add_error":
             return { ...state, error_msg: action.payload };
         case 'addToken':
-            return { error_msg: '', token: action.payload };
+            return { ...state, error_msg: '', token: action.payload };
         case 'rmToken':
-            return { error_msg: '', token: null };
+            return { ...state, error_msg: '', token: null };
         case 'resetPwd_error':
             return { error_msg: action.payload, response_msg: "", token: null };
         case 'resetPwd':
@@ -17,7 +19,7 @@ const authReducer = (state, action) => {
         case 'signup':
             return { response_msg: action.payload, error_msg: "", token: null };
         case 'hideMsg':
-            return { response_msg: "", error_msg: "" };
+            return {...state, response_msg: "", error_msg: ""};
         default:
             return state;
     }
@@ -51,7 +53,7 @@ const signin = dispatch => async ({ email, password }) => {
         }
         if (response.data.code == 200) {
             await AsyncStorage.setItem('token_id', response.data.data.token);
-            await AsyncStorage.setItem('userInfo', response.data.data);
+            await AsyncStorage.setItem('userInfo', JSON.stringify(response.data.data));
             dispatch({ type: 'addToken', payload: response.data.data.token })
         }
     } catch (err) {

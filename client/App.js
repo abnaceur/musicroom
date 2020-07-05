@@ -24,6 +24,7 @@ const Stack = createStackNavigator();
 const App = () => {
   const { state } = useContext(AuthContext);
 
+  console.log("state.token :", state.token);
   if (state.token)
     return (
       <NavigationContainer>
