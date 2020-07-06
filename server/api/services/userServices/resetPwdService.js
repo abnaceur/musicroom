@@ -1,7 +1,16 @@
 const userDao = require('../../daos/userDao/userDao');
+const utils = require('../../utils/utils')
 
 async function resetPwd(email, res) {
-    if (await userDao.ifExistUserAccount(email) > 0) {
+    if (utils.mailRegex.test(email) === false) {
+        res.status(200).json({
+            success: false,
+            data: {
+                msg: "Regex error"
+            },
+            code: 407
+        })
+    } else if (await userDao.ifExistUserAccount(email) > 0) {
         if (await userDao.resetPassword(email)) {
             res.status(200).json({
                 success: true,
