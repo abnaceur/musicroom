@@ -29,6 +29,9 @@ defaultError = (res, err) => {
 }
 
 module.exports = {
+    userNameRegex,
+    mailRegex,
+    passwordRegex,
     defaultError,
     generateRandomPassword,
     hashPassword,
