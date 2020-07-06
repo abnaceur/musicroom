@@ -10,7 +10,7 @@ async function addNewUser(req, data, res) {
             data: {
                 msg: "Regex error mail"
             },
-            code: 407
+            code: 408
         })
     } else if (!data || !data.username || utils.userNameRegex.test(data.username) === false) {
         res.status(200).json({
@@ -18,7 +18,7 @@ async function addNewUser(req, data, res) {
             data: {
                 msg: "Regex error username"
             },
-            code: 408
+            code: 409
         })
     } else if (!data || !data.password || utils.passwordRegex.test(data.password) === false) {
         res.status(200).json({
@@ -26,7 +26,7 @@ async function addNewUser(req, data, res) {
             data: {
                 msg: "Regex error password"
             },
-            code: 409
+            code: 410
         })
     } else if (data.password && data.password.length > 8) {
         // check if email exist
