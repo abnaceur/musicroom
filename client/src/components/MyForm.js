@@ -13,13 +13,24 @@ import {
 import { Context as AuthContext } from '../context/AuthContext';
 
 const MyForm = (props) => {
-  const { state, signup, signin, hideMessages } = useContext(AuthContext);
+  const { state, signup, signin, hideMessages, oauth2google } = useContext(AuthContext);
 
   const { name, navigation, isLoggin } = props;
   const [username, setUsername] = useState('');
   const [password, setPasswor] = useState('');
   const [email, setEmail] = useState('');
   const [animation, setAnimation] = useState(new Animated.Value(0));
+
+  const handleOpenURL = ({ url }) => {
+    let token = url.substring(url.indexOf("?token=") + 7, url.indexOf("&userId="));
+    let userId = url.substring(url.indexOf("&userId=") + 9, url.indexOf("&givenName="));
+    oauth2google({token, userId});
+  };
+
+  useEffect(() => {
+    // Your code here
+    Linking.addEventListener('url', handleOpenURL);
+  }, []);
 
   // TODO Add animation
   const startAnimation = () => {
@@ -31,21 +42,7 @@ const MyForm = (props) => {
 
   useEffect(() => {
     hideMessages()
-  }, [state.error_msg, state.response_msg]);
-
-  // const oauth2 = () => {
-  //   fetch("http://localhost:3000/auth/google", {
-  //     redirect: "manual"
-  //   }).then((res) => {
-  //     if (res.type === "opaqueredirect") {
-  //       // redirect to login page
-  //       window.location.href = res.url;
-  //     } else {
-  //       // handle normally / pass on to next handler
-  //       console.log("ccccc");
-  //     }
-  //   })
-  // }
+  }, [state.error_msg, state.response_msg, navigation]);
 
   return (
     <View style={Styles.container}>
@@ -118,8 +115,8 @@ const MyForm = (props) => {
       <Text style={Styles.txtLine}>___________ OR ____________</Text>
 
       <TouchableOpacity style={Styles.socialBtn}
-        // onPress={() => Linking.openURL('http://localhost:3000/auth/google')}
-        onPress={() => oauth2()}
+        onPress={() => Linking.openURL('https://42music.pagekite.me/auth/google')}
+      // onPress={() => oauth2()}
       >
         <Text style={Styles.buttonText} >
           {/* <AntDesign style={Styles.socialMedia} name="google" /> */}
