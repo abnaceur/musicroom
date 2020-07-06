@@ -27,21 +27,19 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function (req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
-  });
+// router.get('/auth/google/callback',
+//   passport.authenticate('google', { failureRedirect: '/login' }),
+//   function (req, res) {
+//     // Successful authentication, redirect home.
+//     res.redirect('/');
+//   });
 
 // Googe Oauth2
 router.get('/auth/google', passport.authenticate('google', {
   scope: ['profile', 'email'],
-}), (res, req, next) => {
-  console.log("==============================")
-});
+}));
 
 // Google Oauth2 callback url
-// router.get('/auth/google/callback', passport.authenticate('google'), oauth2Controller.googleOauth2);
+router.get('/auth/google/callback', passport.authenticate('google'), oauth2Controller.googleOauth2);
 
 module.exports = router;
