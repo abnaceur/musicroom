@@ -7,7 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('backoffice:server');
 var http = require('http');
-
+const socket = require('socket.io')
 /**
  * Get port from environment and store in Express.
  */
@@ -15,11 +15,28 @@ var http = require('http');
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
+
 /**
  * Create HTTP server.
  */
 
 var server = http.createServer(app);
+
+/**
+ * Add socket IO
+ */
+
+app.io = socket(server, {
+  pingTimeout: 500000,
+  cookie: false
+});
+
+app.io.on('connection', socket => {
+  console.log(`new connection: ${socket.id}`);
+  socket.on('disconnect', async (reason) => {
+    console.log(`${socket.id} disconnected because: ${reason}`);
+  });
+});
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -67,11 +84,9 @@ function onError(error) {
     case 'EACCES':
       console.error(bind + ' requires elevated privileges');
       process.exit(1);
-      break;
     case 'EADDRINUSE':
       console.error(bind + ' is already in use');
       process.exit(1);
-      break;
     default:
       throw error;
   }
