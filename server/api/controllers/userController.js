@@ -24,6 +24,11 @@ getUserById = (req, res, next) => {
     userService.getUserService.getUserById(res, id);
 }
 
+resetPassword = (req, res, next) => {
+    userService.resetPwdService.resetPwd(req.body.email.email, res);
+}
+
+
 module.exports = {
     createNewAccount,
     validateAccount,
