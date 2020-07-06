@@ -13,7 +13,7 @@ import {
 import { Context as AuthContext } from '../context/AuthContext';
 
 const MyForm = (props) => {
-  const { state, signup, signin, hideMessages } = useContext(AuthContext);
+  const { state, signup, signin, hideMessages, oauth2google } = useContext(AuthContext);
 
   const { name, navigation, isLoggin } = props;
   const [username, setUsername] = useState('');
@@ -21,11 +21,15 @@ const MyForm = (props) => {
   const [email, setEmail] = useState('');
   const [animation, setAnimation] = useState(new Animated.Value(0));
 
+  const handleOpenURL = ({ url }) => {
+    let token = url.substring(url.indexOf("?token=") + 7, url.indexOf("&userId="));
+    let userId = url.substring(url.indexOf("&userId=") + 9, url.indexOf("&givenName="));
+    oauth2google({token, userId});
+  };
+
   useEffect(() => {
     // Your code here
-    const url = Linking.getInitialURL();
-    console.log(url);
-
+    Linking.addEventListener('url', handleOpenURL);
   }, []);
 
   // TODO Add animation
@@ -36,34 +40,13 @@ const MyForm = (props) => {
     }).start();
   }
 
-
-  console.log("navigation: ", navigation.state);
-  useEffect(() => {
-    console.log("navigation HHH : ", navigation.state);
-  });
-
   useEffect(() => {
     hideMessages()
   }, [state.error_msg, state.response_msg, navigation]);
 
-  // const oauth2 = () => {
-  //   fetch("http://localhost:3000/auth/google", {
-  //     redirect: "manual"
-  //   }).then((res) => {
-  //     if (res.type === "opaqueredirect") {
-  //       // redirect to login page
-  //       window.location.href = res.url;
-  //     } else {
-  //       // handle normally / pass on to next handler
-  //       console.log("ccccc");
-  //     }
-  //   })
-  // }
-
   return (
     <View style={Styles.container}>
-      { console.log("navigation: ", navigation.dangerouslyGetState())
-}
+
       {state.error_msg !== "" ?
         <Text style={[Styles.errMsg, startAnimation]}>{state.error_msg}</Text>
         : null}
