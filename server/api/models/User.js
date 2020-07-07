@@ -22,6 +22,9 @@ let userSchema = mongoose.Schema({
     validationToken: {
         type: String,
     },
+    deleteToken: {
+        type: String,
+    },
     dateOfCreation: {
         type: Date,
         default: Date.now,

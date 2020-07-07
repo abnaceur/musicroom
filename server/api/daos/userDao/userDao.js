@@ -3,6 +3,7 @@ const UserClass = require("../../class/UserClass");
 const utils = require('../../utils/utils');
 const userEmailsTemplate = require('../../emails/userEmails/accountValidationEmail');
 const emailSender = require('../../utils/emailSender');
+const uniqId = require('uniqid')
 const AccessToken = require('../../class/accessTokenClass');
 
 ifExistUserAccount = (email) => {
@@ -32,7 +33,8 @@ saveNewUserAccount = (data) => {
     return new Promise(async (resolve, reject) => {
         const accessTokenDao = new AccessToken();
         const token = await accessTokenDao.generateToken(data.email, data.username);
-        let user = new User(await UserClass.CreateNewUser(data, token));
+        const deleteToken = uniqId() + uniqId() + uniqId() + uniqId();
+        let user = new User(await UserClass.CreateNewUser(data, token, deleteToken));
         user.save().then(res => {
             let msg = userEmailsTemplate.accountValidation(token);
             emailSender.sendEmail("MUSICROOM TEAM", data.email, "Account validation", msg);
@@ -113,9 +115,7 @@ resetPassword = async (email) => {
 
 getUserById = (id) => {
     return new Promise((resolve, reject) => {
-        User.findOne({
-            _id: id
-        }).exec()
+        User.findById(id).exec()
             .then(response => {
                 resolve(response);
             }).catch(err => {
@@ -125,12 +125,38 @@ getUserById = (id) => {
     })
 }
 
+deleteUserById = (id) => {
+    return new Promise((resolve, reject) => {
+        User.findByIdAndDelete(id).exec()
+            .then(response => {
+                resolve(response);
+            }).catch(err => {
+                console.log("getUserById ERR :", err)
+                reject(err)
+            });
+    })
+}
+
+verifUserToken = (data) => {
+    return new Promise(async (resolve, reject) => {
+        getUserById(data.id).then(user => {
+            if (!user || !data.token || data.token !== user) {
+                resolve(false)
+            } else {
+                resolve(true)
+            }
+        }).catch(err => { resolve(false) })
+    })
+}
+
 module.exports = {
+    verifUserToken,
     getUserByEmail,
     ifExistUserAccount,
     accountValidation,
     resetPassword,
     ifExistUserAccountById,
     getUserById,
+    deleteUserById,
     saveNewUserAccount
 }

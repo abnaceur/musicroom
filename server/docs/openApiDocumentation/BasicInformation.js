@@ -291,6 +291,241 @@ const swaggerDocument = {
                 }
             }
         },
+        "/api/v1/users/delete": {
+            "post": {
+                "x-swagger-router-controller": "users",
+                "operationId": "users",
+                "summary": "Delete user",
+                "description": 'Delete user',
+                "tags": ["User"],
+                "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
+                "parameters": [
+                    // {
+                    //     "name": "username",
+                    //     "in": "formData",
+                    //     "type": "string",
+                    //     "required": true
+                    // },
+                    // {
+                    //     "name": "email",
+                    //     "in": "formData",
+                    //     "required": true,
+                    //     "type": "string"
+                    // },
+                    // {
+                    //     "name": "password",
+                    //     "in": "formData",
+                    //     "required": true,
+                    //     "type": "string"
+                    // },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "example": "aaaaaaaaaaaaaaaaaaaaaaa"
+                                },
+                                "token": {
+                                    "type": "string",
+                                    "example": 'dfgsdf54g6sd4gesr'
+                                },
+                            }
+                        }
+
+                    }
+                ],
+                "responses": {
+                    '406': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 406
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "valid": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad id format'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '407': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 407
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "valid": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad token'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '202': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 202
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "valid": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'User not found'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '444': {
+                        "description": "This account already exists",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "valid": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Error Unknow  + err"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 444
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '200': {
+                        "description": "User account has been created succesfully",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Account deleted with success.'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '500': {
+                        "description": "An error has occured",
+                    },
+                }
+            }
+        },
         "/api/v1/users/id/{id}": {
             "get": {
                 "x-swagger-router-controller": "users",
