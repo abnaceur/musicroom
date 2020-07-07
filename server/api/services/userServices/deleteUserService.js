@@ -9,7 +9,7 @@ const deleteUser = (res, data) => {
             },
             code: 406
         })
-    else if (!data.token || !userDao.verifUserToken(data)) {
+    else if (!data.token || userDao.verifUserToken(data)) {
         res.status(200).json({
             success: false,
             data: {

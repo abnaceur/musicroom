@@ -26,7 +26,6 @@ getUserById = (req, res, next) => {
 
 deleteUserById = (req, res, next) => {
     let data = { id: req.body.id, token: req.body.token }
-    console.log("dove", data);
     userService.deleteUserService.deleteUser(res, data);
 }
 

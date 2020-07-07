@@ -15,6 +15,7 @@ const swaggerDocument = {
     "produces": ["application/json"],
     "consumes": "application/json",
     "paths": {
+        /// User 
         "/api/v1/users/signup": {
             "post": {
                 "x-swagger-router-controller": "users",
@@ -298,7 +299,7 @@ const swaggerDocument = {
                 "summary": "Delete user",
                 "description": 'Delete user',
                 "tags": ["User"],
-                "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
+                "description": `[Delete user link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/delete"})`,
                 "parameters": [
                     // {
                     //     "name": "username",
@@ -673,6 +674,539 @@ const swaggerDocument = {
                 }
             }
         },
+
+        /// PlayList
+        "/api/v1/playlist/id/{id}": {
+            "get": {
+                "x-swagger-router-controller": "playlist",
+                "operationId": "playlist",
+                "summary": "Get playlist by Id",
+                "description": 'Get data of playlist by sending playlist ',
+                "tags": ["playlist"],
+                "description": `[Get playlist by id link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/playlist/id/{id}"})`,
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                        },
+                        "required": true,
+                        "description": " ID of the playlist to get",
+                    }
+                ],
+                "responses": {
+                    '406': {
+                        "description": "Bad id format",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Bad id format"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 406
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '202': {
+                        "description": "User not found",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "playlist not found"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 202
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '444': {
+                        "description": "Error Unknow + err",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Error Unknow + err"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 444
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '200': {
+                        "description": "Return user data of userId",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "playlist": {
+                                                    "type": "Playlist",
+                                                    "example": '{...........}'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '500': {
+                        "description": "An error has occured",
+                    },
+                }
+            }
+        },
+        "/api/v1/playlist/getAllPublic": {
+            "get": {
+                "x-swagger-router-controller": "playlist",
+                "operationId": "playlist",
+                "summary": "Get all public playlist",
+                "description": 'Get data of all public playlist',
+                "tags": ["playlist"],
+                "description": `[Get user public playlist link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/playlist/getAllPublic"})`,
+                "responses": {
+                    '406': {
+                        "description": "Bad id format",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Bad id format"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 406
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '202': {
+                        "description": "User not found",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "error data"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 202
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '444': {
+                        "description": "Error Unknow + err",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Error Unknow + err"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 444
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '200': {
+                        "description": "Return user data of userId",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "user": {
+                                                    "type": "Playlist Array",
+                                                    "example": '[{Playlist}, {Playlist}]'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '500': {
+                        "description": "An error has occured",
+                    },
+                }
+            }
+        },
+        "/api/v1/playlist/new": {
+            "post": {
+                "x-swagger-router-controller": "playlist",
+                "operationId": "playlist",
+                "summary": "Delete user",
+                "description": 'Delete user',
+                "tags": ["playlist"],
+                "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "creator": {
+                                    "type": "string",
+                                    "example": "userID"
+                                },
+                                "public": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": 'testPlaylist'
+                                },
+                            }
+                        }
+
+                    }
+                ],
+                "responses": {
+                    '406': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 406
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "valid": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad id format'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '407': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 407
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "valid": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad token'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '202': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 202
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "valid": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'User not found'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '444': {
+                        "description": "This account already exists",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "valid": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Error Unknow  + err"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 444
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '200': {
+                        "description": "User account has been created succesfully",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Account deleted with success.'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '500': {
+                        "description": "An error has occured",
+                    },
+                }
+            }
+        },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // "/api/v1/users/validate/code": {
         //     "post": {
