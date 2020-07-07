@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const utils = require('../utils/utils');
 
-async function CreateNewUser(data, token, deleteToken) {
+async function CreateNewUser(data, token) {
     return new Promise(async (resolve, reject) => {
         let hashedPwd = await utils.hashPassword(data.password);
         resolve({
@@ -9,7 +9,6 @@ async function CreateNewUser(data, token, deleteToken) {
             username: data.fullname,
             email: data.email,
             validationToken: token,
-            deleteToken: deleteToken,
             password: hashedPwd,
         })
     })

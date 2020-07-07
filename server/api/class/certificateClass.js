@@ -1,18 +1,17 @@
 const mongoose = require('mongoose');
 const utils = require('../utils/utils');
 
-async function CreateNewPlaylist(data) {
+async function CreateNewCertificate(userId, playlistId) {
     return new Promise(async (resolve, reject) => {
         resolve({
             _id: new mongoose.Types.ObjectId,
-            name: data.name,
-            public: data.public,
-            creator: data.creator,
+            userId: userId,
+            playlistId: playlistId,
         })
     })
 }
 
 
 module.exports = {
-    CreateNewPlaylist
+    CreateNewCertificate
 }

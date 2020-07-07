@@ -1,7 +1,7 @@
 let mongoose = require('mongoose');
 
 // Playlist schema
-let playlistchema = mongoose.Schema({
+let playlistSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     name: {
         type: String,
@@ -29,4 +29,4 @@ let playlistchema = mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model('Playlist', playlistchema);
+module.exports = mongoose.model('Playlist', playlistSchema);

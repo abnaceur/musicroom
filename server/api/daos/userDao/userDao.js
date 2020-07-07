@@ -33,8 +33,7 @@ saveNewUserAccount = (data) => {
     return new Promise(async (resolve, reject) => {
         const accessTokenDao = new AccessToken();
         const token = await accessTokenDao.generateToken(data.email, data.username);
-        const deleteToken = uniqId() + uniqId() + uniqId() + uniqId();
-        let user = new User(await UserClass.CreateNewUser(data, token, deleteToken));
+        let user = new User(await UserClass.CreateNewUser(data, token));
         user.save().then(res => {
             let msg = userEmailsTemplate.accountValidation(token);
             emailSender.sendEmail("MUSICROOM TEAM", data.email, "Account validation", msg);
@@ -140,11 +139,10 @@ deleteUserById = (id) => {
 verifUserToken = (data) => {
     return new Promise(async (resolve, reject) => {
         getUserById(data.id).then(user => {
-            if (!user || !data.token || data.token !== user) {
-                resolve(false)
-            } else {
-                resolve(true)
-            }
+            /**
+             * test user token here
+             */
+            resolve(false)
         }).catch(err => { resolve(false) })
     })
 }
