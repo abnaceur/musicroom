@@ -115,12 +115,15 @@ const MyForm = (props) => {
       <Text style={Styles.txtLine}>___________ OR ____________</Text>
 
       <TouchableOpacity style={Styles.socialBtn}
-        onPress={() => Linking.openURL('https://42music.pagekite.me/auth/google')}
-      // onPress={() => oauth2()}
-      >
+        onPress={() => Linking.openURL('https://42music.pagekite.me/auth/google')}>
         <Text style={Styles.buttonText} >
-          {/* <AntDesign style={Styles.socialMedia} name="google" /> */}
        Google</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={Styles.social42Btn}
+        onPress={() => Linking.openURL('https://42music.pagekite.me/login/42')}>
+        <Text style={Styles.buttonText} >
+       42 LOGIN</Text>
       </TouchableOpacity>
     </View>
   )
@@ -156,6 +159,12 @@ const Styles = StyleSheet.create({
     marginTop: 30,
     backgroundColor: '#1f5c9e',
     paddingVertical: 10,
+  },
+  social42Btn: {
+    marginTop: 10,
+    backgroundColor: 'black',
+    paddingVertical: 10,
+    marginBottom: 50,
   },
   socialMedia: {
     marginRight: 10,

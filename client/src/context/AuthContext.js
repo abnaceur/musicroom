@@ -86,7 +86,7 @@ const resetPwd = dispatch => async (email) => {
 
 const oauth2google = dispatch => async ({token, userId}) => {
     await AsyncStorage.setItem('token_id', token);
-    await AsyncStorage.setItem('userInfo', JSON.stringify({_id: userId}));
+    await AsyncStorage.setItem('userInfo', JSON.stringify({userId: userId}));
     dispatch({ type: 'addToken', payload: token })
 }
 
