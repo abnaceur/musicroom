@@ -24,6 +24,12 @@ getUserById = (req, res, next) => {
     userService.getUserService.getUserById(res, id);
 }
 
+deleteUserById = (req, res, next) => {
+    let data = { id: req.body.id, token: req.body.token }
+    console.log("dove", data);
+    userService.deleteUserService.deleteUser(res, data);
+}
+
 resetPassword = (req, res, next) => {
     userService.resetPwdService.resetPwd(req.body.email.email, res);
 }
@@ -32,6 +38,7 @@ resetPassword = (req, res, next) => {
 module.exports = {
     createNewAccount,
     validateAccount,
+    deleteUserById,
     resetPassword,
     getUserById,
     loginUser

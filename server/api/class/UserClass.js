@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const utils = require('../utils/utils');
 
-async function CreateNewUser(data, token) {
+async function CreateNewUser(data, token, deleteToken) {
     return new Promise(async (resolve, reject) => {
         let hashedPwd = await utils.hashPassword(data.password);
         resolve({
@@ -9,8 +9,9 @@ async function CreateNewUser(data, token) {
             username: data.fullname,
             email: data.email,
             validationToken: token,
+            deleteToken: deleteToken,
             password: hashedPwd,
-        }) 
+        })
     })
 
 }
@@ -26,12 +27,12 @@ async function creatNewOauth2User(data) {
             validationToken: data.id,
             googleId: data.id,
             active: true,
-        }) 
+        })
     })
 
 }
 
-async function creatNewOauth2UserVia42 (userInfo) {
+async function creatNewOauth2UserVia42(userInfo) {
     return new Promise(async (resolve, reject) => {
         resolve({
             _id: new mongoose.Types.ObjectId,

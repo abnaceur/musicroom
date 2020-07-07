@@ -37,4 +37,10 @@ router.post('/resetpwd', userController.resetPassword)
 // @access  Public
 router.get('/id/:id', userController.getUserById)
 
+// @desc    Get user by id
+// @route   POST /api/v1/users/delete/
+// @access  Private / Token
+router.post('/delete', userController.deleteUserById)
+
+
 module.exports = router;
