@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 // @react-native-community/masked-view
 import org.reactnative.maskedview.RNCMaskedViewPackage;
+// @react-native-community/slider
+import com.reactnativecommunity.slider.ReactSliderPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 // react-native-reanimated
@@ -23,6 +25,8 @@ import com.swmansion.reanimated.ReanimatedPackage;
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 // react-native-screens
 import com.swmansion.rnscreens.RNScreensPackage;
+// react-native-sound
+import com.zmxv.RNSound.RNSoundPackage;
 
 public class PackageList {
   private Application application;
@@ -70,10 +74,12 @@ public class PackageList {
       new MainReactPackage(mConfig),
       new AsyncStoragePackage(),
       new RNCMaskedViewPackage(),
+      new ReactSliderPackage(),
       new RNGestureHandlerPackage(),
       new ReanimatedPackage(),
       new SafeAreaContextPackage(),
-      new RNScreensPackage()
+      new RNScreensPackage(),
+      new RNSoundPackage()
     ));
   }
 }
