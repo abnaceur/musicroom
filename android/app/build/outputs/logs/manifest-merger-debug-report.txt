@@ -8,7 +8,9 @@ MERGED from /home/sylvain/Bureau/test/android/app/src/main/AndroidManifest.xml:1
 MERGED from [com.facebook.flipper:flipper:0.33.1] /home/sylvain/.gradle/caches/transforms-2/files-2.1/752c19f48b082a1b1baefc1a27bc96a9/jetified-flipper-0.33.1/AndroidManifest.xml:8:1-18:12
 MERGED from [com.facebook.flipper:flipper-network-plugin:0.33.1] /home/sylvain/.gradle/caches/transforms-2/files-2.1/fa9d249d56579007dba70f8ee4dd5b3f/flipper-network-plugin-0.33.1/AndroidManifest.xml:8:1-15:12
 MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.33.1] /home/sylvain/.gradle/caches/transforms-2/files-2.1/5a1065d4748ae359265a740b2069d44b/flipper-fresco-plugin-0.33.1/AndroidManifest.xml:8:1-15:12
+MERGED from [:react-native-community_async-storage] /home/sylvain/Bureau/test/node_modules/@react-native-community/async-storage/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-community_masked-view] /home/sylvain/Bureau/test/node_modules/@react-native-community/masked-view/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-community_slider] /home/sylvain/Bureau/test/node_modules/@react-native-community/slider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-gesture-handler] /home/sylvain/Bureau/test/node_modules/react-native-gesture-handler/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-reanimated] /home/sylvain/Bureau/test/node_modules/react-native-reanimated/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-safe-area-context] /home/sylvain/Bureau/test/node_modules/react-native-safe-area-context/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-9:12
@@ -160,8 +162,12 @@ MERGED from [com.facebook.flipper:flipper-network-plugin:0.33.1] /home/sylvain/.
 MERGED from [com.facebook.flipper:flipper-network-plugin:0.33.1] /home/sylvain/.gradle/caches/transforms-2/files-2.1/fa9d249d56579007dba70f8ee4dd5b3f/flipper-network-plugin-0.33.1/AndroidManifest.xml:11:5-13:41
 MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.33.1] /home/sylvain/.gradle/caches/transforms-2/files-2.1/5a1065d4748ae359265a740b2069d44b/flipper-fresco-plugin-0.33.1/AndroidManifest.xml:11:5-13:41
 MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.33.1] /home/sylvain/.gradle/caches/transforms-2/files-2.1/5a1065d4748ae359265a740b2069d44b/flipper-fresco-plugin-0.33.1/AndroidManifest.xml:11:5-13:41
+MERGED from [:react-native-community_async-storage] /home/sylvain/Bureau/test/node_modules/@react-native-community/async-storage/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_async-storage] /home/sylvain/Bureau/test/node_modules/@react-native-community/async-storage/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-community_masked-view] /home/sylvain/Bureau/test/node_modules/@react-native-community/masked-view/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-community_masked-view] /home/sylvain/Bureau/test/node_modules/@react-native-community/masked-view/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_slider] /home/sylvain/Bureau/test/node_modules/@react-native-community/slider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_slider] /home/sylvain/Bureau/test/node_modules/@react-native-community/slider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-gesture-handler] /home/sylvain/Bureau/test/node_modules/react-native-gesture-handler/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-gesture-handler] /home/sylvain/Bureau/test/node_modules/react-native-gesture-handler/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-reanimated] /home/sylvain/Bureau/test/node_modules/react-native-reanimated/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41

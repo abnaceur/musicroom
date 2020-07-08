@@ -8,7 +8,7 @@ import {
   Platform,
   Alert,
 } from "react-native";
-import Slider from "react-native-slider";
+import Slider from "@react-native-community/slider";
 import Sound from "react-native-sound";
 
 const styles = StyleSheet.create({
@@ -120,7 +120,6 @@ const Player = ({route, navigation}) => {
       setPlay("playing");
     } else {
       const filePath = pathUrl;
-      console.log("[play]", filePath);
       sound.current = new Sound(filePath, "", (error) => {
         if (error) {
           console.log("fail ", error);
