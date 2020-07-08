@@ -1,3 +1,4 @@
+const Music = require('./music')
 let mongoose = require('mongoose');
 
 // Playlist schema

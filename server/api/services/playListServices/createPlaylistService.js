@@ -1,7 +1,7 @@
 const playListDao = require('../../daos/playListDao/playListDao');
 const certificateDao = require('../../daos/certificateDao/certificateDao')
 
-async function createPlaylist(res, data, user) {
+async function createPlaylist(req, res, data, user) {
     if (!data || data.public === undefined || !data.name || !user || !user.id) {
         res.status(200).json({
             success: false,
@@ -12,7 +12,9 @@ async function createPlaylist(res, data, user) {
         })
     } else {
         playListDao.createPlaylist(data.public, data.name, user.id).then(playList => {
-            certificateDao.newCertificate(user.id, playList.id).then(
+            certificateDao.newCertificate(user.id, playList.id).then(certificate => {
+                req.app.io.emit('newPlaylist', playList)
+                req.app.io.emit('newCertificate', certificate)
                 res.status(200).json({
                     success: true,
                     data: {
@@ -20,7 +22,7 @@ async function createPlaylist(res, data, user) {
                     },
                     code: 200
                 })
-            ).catch(err => {
+            }).catch(err => {
                 res.status(200).json({
                     success: false,
                     data: {

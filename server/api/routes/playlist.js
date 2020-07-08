@@ -6,33 +6,34 @@ const passport = require('passport')
 const checkIfUserIsLog = passport.authenticate('jwt', { session: false });
 //=> End of declared dependencies
 
-// @desc    Signup new user
-// @route   POST /api/v1/playlist/sigvar express = require('express');
-
-// @desc    Get user by id
+// @desc    getPlaylistById
 // @route   POST /api/v1/playlist/id/:id
-// @access  Public
+// @access  Private
 router.get('/id/:id', checkIfUserIsLog, playListController.getPlaylistById)
 
-// @desc    Get user by id
+// @desc    getAllPublicPlaylist
 // @route   POST /api/v1/playlist/getAllPublic
-// @access  Public
+// @access  Private
 router.get('/getAllPublic', checkIfUserIsLog, playListController.getAllPublicPlaylist)
 
-// @desc    Signin  user
+// @desc    createPlaylist
 // @route   POST /api/v1/playlist/new
-// @access  Public
+// @access  Private
 router.post('/new', checkIfUserIsLog, playListController.createPlaylist)
 
-// @desc    Signin  user
+// @desc    getMine = get playlist who i'm creator
+// @route   GET /api/v1/playlist/mine
+// @access  Private
+router.get('/mine', checkIfUserIsLog, playListController.getMine)
+
+// @desc    updatePlaylist
 // @route   POST /api/v1/playlist/update
-// @access  Public
+// @access  Private
 router.post('/update', checkIfUserIsLog, playListController.updatePlaylist)
 
-// @desc    Signin  user
+// @desc    deletePlaylist
 // @route   POST /api/v1/playlist/delete
-// @access  Public
+// @access  Private
 router.post('/delete', checkIfUserIsLog, playListController.deletePlaylist)
-
 
 module.exports = router;
