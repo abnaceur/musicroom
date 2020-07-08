@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useContext, useEffect} from "react";
 import {
   StyleSheet,
   View,
@@ -9,6 +9,10 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+
+
+// Import context
+import { Context as playlistReducer } from '../context/PlayListContext';
 
 import Deezer from "../../Deezer";
 
@@ -44,10 +48,15 @@ const PlayList = ({navigation}) => {
   const [display, setDisplay] = useState(buttons[0]);
   const [loading, setLoading] = useState(false);
 
+  const { state, storeTrack } = useContext(playlistReducer);
+
   useEffect(() => {
     getListArtist();
     getListAlbum();
   }, []);
+
+  // TODO TO BE CHANGED
+  storeTrack(["test"]);
 
   const getListArtist = async () => {
     let i = 0;
