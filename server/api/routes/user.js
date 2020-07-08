@@ -13,7 +13,6 @@ const checkIfUserIsLog = passport.authenticate('jwt', { session: false });
 // @access  Public
 // router.post('/signup', multer.upload.any(), userController.createNewAccount)
 
-
 // @desc    Signup new user
 // @route   POST /api/v1/users/signup 
 // @access  Public
@@ -24,24 +23,22 @@ router.post('/signup', userController.createNewAccount)
 // @access  Public
 router.post('/signin', userController.loginUser)
 
-
-// @desc    Signin  user
+// @desc    validateAccount
 // @route   POST /api/v1/users/validation/:token
 // @access  Public
 router.get('/validation/:token', userController.validateAccount)
 
-
-// @desc    Signin  user
+// @desc    resetPassword
 // @route   POST /api/v1/users/resetpwd
 // @access  Public
 router.post('/resetpwd', userController.resetPassword)
 
-// @desc    Get user by id
+// @desc    getUserById
 // @route   GET /api/v1/users/id/:id
-// @access  Public
+// @access  Private
 router.get('/id/:id', checkIfUserIsLog, userController.getUserById)
 
-// @desc    Get user by id
+// @desc    deleteUserById
 // @route   POST /api/v1/users/delete/
 // @access  Private / Token
 router.post('/delete', checkIfUserIsLog, userController.deleteUserById)
