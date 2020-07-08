@@ -16,6 +16,11 @@ import SigninScreens from './src/screens/SigninScreen';
 import SignupScreens from './src/screens/SignupScreen';
 import HomeScreens from './src/screens/HomeScreen';
 import ResetPwdScreens from './src/screens/ResetPwdScreen';
+import PlayList from "./src/components/PlayList";
+import PlayListEditor from "./src/components/PlayListEditor";
+import MusicList from "./src/components/MusicList";
+import Player from "./src/components/Player";
+import AddMusic from "./src/components/AddMusic";
 
 // Import helpers
 import checkAuth from './src/helpers/PrivateRoute';
@@ -48,7 +53,12 @@ const App = () => {
       if (exp) {
         return <NavigationContainer>
           <Stack.Navigator>
-            <Stack.Screen initialRouteName="Home" name="Home" options={{ headerShown: false }} component={HomeScreens} />
+            {/* <Stack.Screen name="Home" options={{ headerShown: false }} component={HomeScreens} /> */}
+            <Stack.Screen initialRouteName="PlayList" name="PlayList" component={PlayList} />
+            <Stack.Screen name="AddMusic" component={AddMusic} />
+            <Stack.Screen name="PlayListEditor" component={PlayListEditor} />
+            <Stack.Screen name="MusicList" component={MusicList} />
+            <Stack.Screen name="Player" component={Player} />
           </Stack.Navigator>
         </NavigationContainer>
       } else {
