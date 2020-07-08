@@ -34,7 +34,7 @@ router.get('/validation/:token', userController.validateAccount)
 // @desc    Signin  user
 // @route   POST /api/v1/users/resetpwd
 // @access  Public
-router.post('/resetpwd', checkIfUserIsLog, userController.resetPassword)
+router.post('/resetpwd', userController.resetPassword)
 
 // @desc    Get user by id
 // @route   GET /api/v1/users/id/:id

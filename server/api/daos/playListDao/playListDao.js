@@ -25,9 +25,9 @@ const getAllPublic = () => {
     })
 }
 
-const createPlaylist = (data) => {
+const createPlaylist = (public, name, userId) => {
     return new Promise(async (resolve, reject) => {
-        let playList = new Playlist(await PlaylistClass.CreateNewPlaylist(data));
+        let playList = new Playlist(await PlaylistClass.CreateNewPlaylist(public, name, userId));
         playList.save().then(res => {
             resolve(playList);
         }).catch(err => {

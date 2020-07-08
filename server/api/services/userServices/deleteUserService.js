@@ -1,7 +1,7 @@
 const userDao = require('../../daos/userDao/userDao');
 
-const deleteUser = (res, data) => {
-    if (String(data.id).length !== 24)
+const deleteUser = (res, id) => {
+    if (String(id).length !== 24)
         res.status(200).json({
             success: false,
             data: {
@@ -18,7 +18,7 @@ const deleteUser = (res, data) => {
             code: 407
         })
     } else {
-        userDao.deleteUserById(data.id).then(data => {
+        userDao.deleteUserById(id).then(data => {
             if (data) {
                 res.status(200).json({
                     success: true,
