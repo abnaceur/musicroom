@@ -6,6 +6,35 @@ const keys = require('../../config/googleOath2');
 const oauth2Controller = require('../../api/controllers/oauth2Controller');
 var FortyTwoStrategy = require('passport-42').Strategy;
 
+const userDao = require('../daos/userDao/userDao')
+
+
+/**
+ * Jwt Passport for secure routes
+ * ex : Authorization : bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQ2xpZW50IiwiX2lkIjoiNWUzN2NkMGI4YTAxNjEwNWNhMmFjZjYwIiwiZW1haWwiOiJwcmFqYWt0YUBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRzWXN4MGcyWGsybWdSTHNaZXBEYkV1MklRcGhVOURkNnczeTBHaUxMWHJVeW5aazlUR0xKSyIsIl9fdiI6MCwiaWF0IjoxNTgwNzE5ODE3LCJleHAiOjE1ODA3Mjk4OTd9.38x2wztqJWz9EH8_lN0ca-L-8mTQvW36iF2bfGk_ydg
+ */
+const passportJWT = require('passport-jwt');
+const JwtStrategy = passportJWT.Strategy;
+const { ExtractJwt } = passportJWT;
+
+const opts = {};
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = process.env.JWT_KEY;
+passport.use(new JwtStrategy(opts, async (jwtPayload, done) => {
+
+  userDao.getUserById(jwtPayload.id)
+    .then(data => {
+      if (data)
+        return done(null, data)
+      else
+        return done(null, false);
+    })
+    .catch((err) => { return done(null, false); });
+
+})
+);
+// End of :  Jwt Passport for secure routes
+
 passport.serializeUser((user, done) => {
   done(null, user);
 })

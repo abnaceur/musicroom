@@ -2,6 +2,10 @@ var express = require('express');
 const router = express.Router();
 const multer = require('../middleware/FileUpload');
 const userController = require('../controllers/userController');
+
+const passport = require('passport')
+const checkIfUserIsLog = passport.authenticate('jwt', { session: false });
+
 //=> End of declared dependencies
 
 // @desc    Signup new user
@@ -30,17 +34,17 @@ router.get('/validation/:token', userController.validateAccount)
 // @desc    Signin  user
 // @route   POST /api/v1/users/resetpwd
 // @access  Public
-router.post('/resetpwd', userController.resetPassword)
+router.post('/resetpwd', checkIfUserIsLog, userController.resetPassword)
 
 // @desc    Get user by id
 // @route   GET /api/v1/users/id/:id
 // @access  Public
-router.get('/id/:id', userController.getUserById)
+router.get('/id/:id', checkIfUserIsLog, userController.getUserById)
 
 // @desc    Get user by id
 // @route   POST /api/v1/users/delete/
 // @access  Private / Token
-router.post('/delete', userController.deleteUserById)
+router.post('/delete', checkIfUserIsLog, userController.deleteUserById)
 
 
 module.exports = router;
