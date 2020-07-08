@@ -296,8 +296,8 @@ const swaggerDocument = {
             "post": {
                 "x-swagger-router-controller": "users",
                 "operationId": "users",
-                "summary": "Delete user",
-                "description": 'Delete user',
+                "summary": "Delete user / Need header Authorization : bearer -> token",
+                "description": 'Delete user / Need header Authorization : bearer -> token',
                 "tags": ["User"],
                 "description": `[Delete user link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/delete"})`,
                 "parameters": [
@@ -323,19 +323,7 @@ const swaggerDocument = {
                         "name": "body",
                         "in": "body",
                         "required": true,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "id": {
-                                    "type": "string",
-                                    "example": "aaaaaaaaaaaaaaaaaaaaaaa"
-                                },
-                                "token": {
-                                    "type": "string",
-                                    "example": 'dfgsdf54g6sd4gesr'
-                                },
-                            }
-                        }
+                        "schema": {}
 
                     }
                 ],
@@ -452,7 +440,7 @@ const swaggerDocument = {
                         },
                     },
                     '444': {
-                        "description": "This account already exists",
+                        "description": "Data validation",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -489,7 +477,7 @@ const swaggerDocument = {
                         }
                     },
                     '200': {
-                        "description": "User account has been created succesfully",
+                        "description": "User account has been deleted succesfully",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -531,8 +519,8 @@ const swaggerDocument = {
             "get": {
                 "x-swagger-router-controller": "users",
                 "operationId": "users",
-                "summary": "Get User by Id",
-                "description": 'Get data of user by sending userId',
+                "summary": "Get User by Id / Need header Authorization : bearer -> token",
+                "description": 'Get data of user by sending userId / Need header Authorization : bearer -> token',
                 "tags": ["User"],
                 "description": `[Get user by id link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/id/{id}"})`,
                 "parameters": [
@@ -680,8 +668,8 @@ const swaggerDocument = {
             "get": {
                 "x-swagger-router-controller": "playlist",
                 "operationId": "playlist",
-                "summary": "Get playlist by Id",
-                "description": 'Get data of playlist by sending playlist ',
+                "summary": "Get playlist by Id / Need header Authorization : bearer -> token",
+                "description": 'Get data of playlist by sending playlist / Need header Authorization : bearer -> token',
                 "tags": ["playlist"],
                 "description": `[Get playlist by id link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/playlist/id/{id}"})`,
                 "parameters": [
@@ -728,7 +716,7 @@ const swaggerDocument = {
                         }
                     },
                     '202': {
-                        "description": "User not found",
+                        "description": "playlist not found",
                         "schema": {
                             "type": "object",
                             "properties": {
@@ -788,7 +776,7 @@ const swaggerDocument = {
                         }
                     },
                     '200': {
-                        "description": "Return user data of userId",
+                        "description": "Return playlist data",
                         "schema": {
                             "type": "object",
                             "properties": {
@@ -827,8 +815,8 @@ const swaggerDocument = {
             "get": {
                 "x-swagger-router-controller": "playlist",
                 "operationId": "playlist",
-                "summary": "Get all public playlist",
-                "description": 'Get data of all public playlist',
+                "summary": "Get all public playlist / Need header Authorization : bearer -> token",
+                "description": 'Get data of all public playlist / Need header Authorization : bearer -> token',
                 "tags": ["playlist"],
                 "description": `[Get user public playlist link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/playlist/getAllPublic"})`,
                 "responses": {
@@ -863,7 +851,7 @@ const swaggerDocument = {
                         }
                     },
                     '202': {
-                        "description": "User not found",
+                        "description": "error data",
                         "schema": {
                             "type": "object",
                             "properties": {
@@ -923,7 +911,7 @@ const swaggerDocument = {
                         }
                     },
                     '200': {
-                        "description": "Return user data of userId",
+                        "description": "Return playlist []",
                         "schema": {
                             "type": "object",
                             "properties": {
@@ -940,7 +928,7 @@ const swaggerDocument = {
                                         },
                                         "data": {
                                             "properties": {
-                                                "user": {
+                                                "playListArray": {
                                                     "type": "Playlist Array",
                                                     "example": '[{Playlist}, {Playlist}]'
                                                 }
@@ -961,9 +949,9 @@ const swaggerDocument = {
         "/api/v1/playlist/new": {
             "post": {
                 "x-swagger-router-controller": "playlist",
-                "operationId": "playlist",
-                "summary": "Delete user",
-                "description": 'Delete user',
+                "operationId": "playlist / Need header Authorization : bearer -> token",
+                "summary": "Create playlist / Need header Authorization : bearer -> token",
+                "description": 'Create playlist',
                 "tags": ["playlist"],
                 "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
                 "parameters": [
@@ -974,10 +962,6 @@ const swaggerDocument = {
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "creator": {
-                                    "type": "string",
-                                    "example": "userID"
-                                },
                                 "public": {
                                     "type": "boolean",
                                     "example": false
@@ -1005,7 +989,7 @@ const swaggerDocument = {
                                     "properties": {
                                         "success": {
                                             "type": "booleon",
-                                            "example": true
+                                            "example": false
                                         },
                                         "code": {
                                             "type": "number",
@@ -1013,10 +997,6 @@ const swaggerDocument = {
                                         },
                                         "data": {
                                             "properties": {
-                                                "valid": {
-                                                    "type": "boolean",
-                                                    "example": false
-                                                },
                                                 "msg": {
                                                     "type": "string",
                                                     "example": 'Bad id format'
@@ -1042,7 +1022,7 @@ const swaggerDocument = {
                                     "properties": {
                                         "success": {
                                             "type": "booleon",
-                                            "example": true
+                                            "example": false
                                         },
                                         "code": {
                                             "type": "number",
@@ -1050,10 +1030,6 @@ const swaggerDocument = {
                                         },
                                         "data": {
                                             "properties": {
-                                                "valid": {
-                                                    "type": "boolean",
-                                                    "example": false
-                                                },
                                                 "msg": {
                                                     "type": "string",
                                                     "example": 'Bad token'
@@ -1079,7 +1055,7 @@ const swaggerDocument = {
                                     "properties": {
                                         "success": {
                                             "type": "booleon",
-                                            "example": true
+                                            "example": false
                                         },
                                         "code": {
                                             "type": "number",
@@ -1087,13 +1063,9 @@ const swaggerDocument = {
                                         },
                                         "data": {
                                             "properties": {
-                                                "valid": {
-                                                    "type": "boolean",
-                                                    "example": false
-                                                },
                                                 "msg": {
                                                     "type": "string",
-                                                    "example": 'User not found'
+                                                    "example": 'not found'
                                                 }
                                             }
                                         }
@@ -1104,7 +1076,7 @@ const swaggerDocument = {
                         },
                     },
                     '444': {
-                        "description": "This account already exists",
+                        "description": "error",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -1120,10 +1092,6 @@ const swaggerDocument = {
                                         },
                                         "data": {
                                             "properties": {
-                                                "valid": {
-                                                    "type": "boolean",
-                                                    "example": false
-                                                },
                                                 "msg": {
                                                     "type": "string",
                                                     "example": "Error Unknow  + err"
@@ -1141,7 +1109,7 @@ const swaggerDocument = {
                         }
                     },
                     '200': {
-                        "description": "User account has been created succesfully",
+                        "description": "playlist",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -1161,9 +1129,9 @@ const swaggerDocument = {
                                         },
                                         "data": {
                                             "properties": {
-                                                "msg": {
-                                                    "type": "string",
-                                                    "example": 'Account deleted with success.'
+                                                "playlist": {
+                                                    "type": "playlist",
+                                                    "example": '{}'
                                                 }
                                             }
                                         }

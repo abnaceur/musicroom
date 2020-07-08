@@ -11,17 +11,20 @@ const getAllPublicPlaylist = (req, res, next) => {
 
 const createPlaylist = (req, res, next) => {
     let data = req.body
-    playListService.createPlaylistService.createPlaylist(res, data);
+    let user = req.user
+    playListService.createPlaylistService.createPlaylist(res, data, user);
 }
 
 const updatePlaylist = (req, res, next) => {
     let data = req.body
-    playListService.updatePlaylistService.updatePlaylist(res, data);
+    let user = req.user
+    playListService.updatePlaylistService.updatePlaylist(res, data, user);
 }
 
 const deletePlaylist = (req, res, next) => {
     let data = req.body
-    playListService.updatePlaylistService.deletePlaylist(res, data);
+    let user = req.user
+    playListService.updatePlaylistService.deletePlaylist(res, data, user);
 }
 
 module.exports = {

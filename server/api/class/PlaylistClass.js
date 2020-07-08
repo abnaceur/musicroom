@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const utils = require('../utils/utils');
 
-async function CreateNewPlaylist(data) {
+async function CreateNewPlaylist(public, name, userId) {
     return new Promise(async (resolve, reject) => {
         resolve({
             _id: new mongoose.Types.ObjectId,
-            name: data.name,
-            public: data.public,
-            creator: data.creator,
+            name: name,
+            public: public,
+            creator: userId,
         })
     })
 }

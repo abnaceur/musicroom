@@ -25,8 +25,8 @@ getUserById = (req, res, next) => {
 }
 
 deleteUserById = (req, res, next) => {
-    let data = { id: req.body.id, token: req.body.token }
-    userService.deleteUserService.deleteUser(res, data);
+    let id = req.user.id
+    userService.deleteUserService.deleteUser(res, id);
 }
 
 resetPassword = (req, res, next) => {
