@@ -41,27 +41,30 @@ async function updatePlaylist(req, res, data, user) {
 async function deletePlaylist(req, res, data, user) {
     playListDao.getPlayListById(data.playlistId)
         .then(playlist => {
-            if (playlist.creator === user.id) {
-                playListDao.deletePlaylist(playlist.id)
-                    .then(removedPlaylist => {
-                        req.app.io.emit('deletePlaylist', removedPlaylist)
+            certificateDao.testCertificate(user.id, playlist.id)
+                .then(haveCertificate => {
+                    if (haveCertificate) {
+                        playListDao.deletePlaylist(playlist.id)
+                            .then(removedPlaylist => {
+                                req.app.io.emit('deletePlaylist', removedPlaylist)
+                                res.status(200).json({
+                                    success: true,
+                                    data: {
+                                        playlist: playList
+                                    },
+                                    code: 200
+                                })
+                            })
+                    } else {
                         res.status(200).json({
-                            success: true,
+                            success: false,
                             data: {
-                                playlist: playList
+                                msg: 'Error you dont have certificate'
                             },
-                            code: 200
+                            code: 406
                         })
-                    })
-            } else {
-                res.status(200).json({
-                    success: false,
-                    data: {
-                        msg: 'Error you are not creator'
-                    },
-                    code: 406
+                    }
                 })
-            }
         }).catch(err => { return err })
 }
 
