@@ -15,6 +15,94 @@ const swaggerDocument = {
     "produces": ["application/json"],
     "consumes": "application/json",
     "paths": {
+        // Socket 
+        "LIST OF SOCKET": {
+            "get": {
+                "x-swagger-router-controller": "socket.emit",
+                "operationId": "socket.emit",
+                "summary": "socket.emit",
+                "description": 'socket.emit',
+                "tags": ["Socket"],
+                "responses": {
+                    '1': {
+                        "description": "event name : newCertificate",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "certificate": {
+                                    "type": "certificate",
+                                    "example": {}
+                                }
+                            }
+                        },
+                    },
+                    '2': {
+                        "description": "event name : deleteCertificate",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "certificate": {
+                                    "type": "certificate",
+                                    "example": {}
+                                }
+                            }
+                        },
+                    },
+                    '3': {
+                        "description": "event name : newPlaylist",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "playList": {
+                                    "type": "playList",
+                                    "example": {}
+                                }
+                            }
+                        },
+                    },
+                    '4': {
+                        "description": "event name : updatePlaylist",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "playList": {
+                                    "type": "playList",
+                                    "example": {}
+                                }
+                            }
+                        },
+                    },
+                    '5': {
+                        "description": "event name : deletePlaylist",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "playList": {
+                                    "type": "playList",
+                                    "example": {}
+                                }
+                            }
+                        },
+                    }
+                }
+            }
+        },
+
         /// User 
         "/api/v1/users/signup": {
             "post": {
@@ -946,212 +1034,1515 @@ const swaggerDocument = {
                 }
             }
         },
-        "/api/v1/playlist/new": {
-            "post": {
-                "x-swagger-router-controller": "playlist",
-                "operationId": "playlist / Need header Authorization : bearer -> token",
-                "summary": "Create playlist / Need header Authorization : bearer -> token",
-                "description": 'Create playlist',
-                "tags": ["playlist"],
-                "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "public": {
-                                    "type": "boolean",
-                                    "example": false
-                                },
-                                "name": {
-                                    "type": "string",
-                                    "example": 'testPlaylist'
-                                },
-                            }
-                        }
-
-                    }
-                ],
-                "responses": {
-                    '406': {
-                        "description": "Data validation",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "data": {
-                                    "type": "object",
-                                    "properties": {
-                                        "success": {
-                                            "type": "booleon",
-                                            "example": false
-                                        },
-                                        "code": {
-                                            "type": "number",
-                                            "example": 406
-                                        },
-                                        "data": {
-                                            "properties": {
-                                                "msg": {
-                                                    "type": "string",
-                                                    "example": 'Bad id format'
-                                                }
-                                            }
-                                        }
-
-                                    }
-                                }
-                            }
-                        },
-                    },
-                    '407': {
-                        "description": "Data validation",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "data": {
-                                    "type": "object",
-                                    "properties": {
-                                        "success": {
-                                            "type": "booleon",
-                                            "example": false
-                                        },
-                                        "code": {
-                                            "type": "number",
-                                            "example": 407
-                                        },
-                                        "data": {
-                                            "properties": {
-                                                "msg": {
-                                                    "type": "string",
-                                                    "example": 'Bad token'
-                                                }
-                                            }
-                                        }
-
-                                    }
-                                }
-                            }
-                        },
-                    },
-                    '202': {
-                        "description": "Data validation",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "data": {
-                                    "type": "object",
-                                    "properties": {
-                                        "success": {
-                                            "type": "booleon",
-                                            "example": false
-                                        },
-                                        "code": {
-                                            "type": "number",
-                                            "example": 202
-                                        },
-                                        "data": {
-                                            "properties": {
-                                                "msg": {
-                                                    "type": "string",
-                                                    "example": 'not found'
-                                                }
-                                            }
-                                        }
-
-                                    }
-                                }
-                            }
-                        },
-                    },
-                    '444': {
-                        "description": "error",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "data": {
-                                    "type": "object",
-                                    "properties": {
-                                        "success": {
-                                            "type": "booleon",
-                                            "example": false
-                                        },
-                                        "data": {
-                                            "properties": {
-                                                "msg": {
-                                                    "type": "string",
-                                                    "example": "Error Unknow  + err"
-                                                },
-                                            }
-                                        },
-                                        "code": {
-                                            "type": "number",
-                                            "example": 444
-                                        }
-
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    '200': {
-                        "description": "playlist",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "data": {
-                                    "type": "object",
-                                    "properties": {
-                                        "success": {
-                                            "type": "booleon",
-                                            "example": true
-                                        },
-                                        "code": {
-                                            "type": "number",
-                                            "example": 200
-                                        },
-                                        "data": {
-                                            "properties": {
-                                                "playlist": {
-                                                    "type": "playlist",
-                                                    "example": '{}'
-                                                }
-                                            }
-                                        }
-
-                                    }
-                                }
-                            }
-                        },
-                    },
-                    '500': {
-                        "description": "An error has occured",
-                    },
-                }
-            }
-        },
 
 
-
-
-
+        /*   
+          "/api/v1/playlist/new": {
+               "post": {
+                   "x-swagger-router-controller": "playlist",
+                   "operationId": "playlist / Need header Authorization : bearer -> token",
+                   "summary": "Create playlist / Need header Authorization : bearer -> token",
+                   "description": 'Create playlist',
+                   "tags": ["playlist"],
+                   "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
+                   "parameters": [
+                       {
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "public": {
+                                       "type": "boolean",
+                                       "example": false
+                                   },
+                                   "name": {
+                                       "type": "string",
+                                       "example": 'testPlaylist'
+                                   },
+                               }
+                           }
+   
+                       }
+                   ],
+                   "responses": {
+                       '406': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 406
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'Bad id format'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '407': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 407
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'Bad token'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '202': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 202
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'not found'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '444': {
+                           "description": "error",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": "Error Unknow  + err"
+                                                   },
+                                               }
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 444
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '200': {
+                           "description": "playlist",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": true
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 200
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "playlist": {
+                                                       "type": "playlist",
+                                                       "example": '{}'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '500': {
+                           "description": "An error has occured",
+                       },
+                   }
+               }
+           },
+        "/api/v1/playlist/mine": {
+               "get": {
+                   "x-swagger-router-controller": "playlist",
+                   "operationId": "playlist",
+                   "summary": "Get playlist by Id / Need header Authorization : bearer -> token",
+                   "description": 'Get data of playlist by sending playlist / Need header Authorization : bearer -> token',
+                   "tags": ["playlist"],
+                   "description": `[Get playlist by id link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/playlist/id/{id}"})`,
+                   "parameters": [
+                       {
+                           "name": "id",
+                           "in": "path",
+                           "required": true,
+                           "schema": {
+                               "type": "string",
+                           },
+                           "required": true,
+                           "description": " ID of the playlist to get",
+                       }
+                   ],
+                   "responses": {
+                       '406': {
+                           "description": "Bad id format",
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": "Bad id format"
+                                                   },
+                                               }
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 406
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '202': {
+                           "description": "playlist not found",
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": "playlist not found"
+                                                   },
+                                               }
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 202
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '444': {
+                           "description": "Error Unknow + err",
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": "Error Unknow + err"
+                                                   },
+                                               }
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 444
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '200': {
+                           "description": "Return playlist data",
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": true
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 200
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "playlist": {
+                                                       "type": "Playlist",
+                                                       "example": '{...........}'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '500': {
+                           "description": "An error has occured",
+                       },
+                   }
+               }
+           },
+           "/api/v1/playlist/new": {
+               "post": {
+                   "x-swagger-router-controller": "playlist",
+                   "operationId": "playlist / Need header Authorization : bearer -> token",
+                   "summary": "Create playlist / Need header Authorization : bearer -> token",
+                   "description": 'Create playlist',
+                   "tags": ["playlist"],
+                   "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
+                   "parameters": [
+                       {
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "public": {
+                                       "type": "boolean",
+                                       "example": false
+                                   },
+                                   "name": {
+                                       "type": "string",
+                                       "example": 'testPlaylist'
+                                   },
+                               }
+                           }
+   
+                       }
+                   ],
+                   "responses": {
+                       '406': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 406
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'Bad id format'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '407': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 407
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'Bad token'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '202': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 202
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'not found'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '444': {
+                           "description": "error",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": "Error Unknow  + err"
+                                                   },
+                                               }
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 444
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '200': {
+                           "description": "playlist",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": true
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 200
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "playlist": {
+                                                       "type": "playlist",
+                                                       "example": '{}'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '500': {
+                           "description": "An error has occured",
+                       },
+                   }
+               }
+           },
+           "/api/v1/playlist/update": {
+               "post": {
+                   "x-swagger-router-controller": "playlist",
+                   "operationId": "playlist / Need header Authorization : bearer -> token",
+                   "summary": "Create playlist / Need header Authorization : bearer -> token",
+                   "description": 'Create playlist',
+                   "tags": ["playlist"],
+                   "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
+                   "parameters": [
+                       {
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "public": {
+                                       "type": "boolean",
+                                       "example": false
+                                   },
+                                   "name": {
+                                       "type": "string",
+                                       "example": 'testPlaylist'
+                                   },
+                               }
+                           }
+   
+                       }
+                   ],
+                   "responses": {
+                       '406': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 406
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'Bad id format'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '407': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 407
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'Bad token'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '202': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 202
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'not found'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '444': {
+                           "description": "error",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": "Error Unknow  + err"
+                                                   },
+                                               }
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 444
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '200': {
+                           "description": "playlist",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": true
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 200
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "playlist": {
+                                                       "type": "playlist",
+                                                       "example": '{}'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '500': {
+                           "description": "An error has occured",
+                       },
+                   }
+               }
+           },
+           "/api/v1/playlist/delete": {
+               "post": {
+                   "x-swagger-router-controller": "playlist",
+                   "operationId": "playlist / Need header Authorization : bearer -> token",
+                   "summary": "Create playlist / Need header Authorization : bearer -> token",
+                   "description": 'Create playlist',
+                   "tags": ["playlist"],
+                   "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
+                   "parameters": [
+                       {
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "public": {
+                                       "type": "boolean",
+                                       "example": false
+                                   },
+                                   "name": {
+                                       "type": "string",
+                                       "example": 'testPlaylist'
+                                   },
+                               }
+                           }
+   
+                       }
+                   ],
+                   "responses": {
+                       '406': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 406
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'Bad id format'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '407': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 407
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'Bad token'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '202': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 202
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'not found'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '444': {
+                           "description": "error",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": "Error Unknow  + err"
+                                                   },
+                                               }
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 444
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '200': {
+                           "description": "playlist",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": true
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 200
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "playlist": {
+                                                       "type": "playlist",
+                                                       "example": '{}'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '500': {
+                           "description": "An error has occured",
+                       },
+                   }
+               }
+           },
+   
+           /// Certificate
+           "/api/v1/certificate/delete": {
+               "post": {
+                   "x-swagger-router-controller": "playlist",
+                   "operationId": "playlist / Need header Authorization : bearer -> token",
+                   "summary": "Create playlist / Need header Authorization : bearer -> token",
+                   "description": 'Create playlist',
+                   "tags": ["Certificate"],
+                   "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
+                   "parameters": [
+                       {
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "public": {
+                                       "type": "boolean",
+                                       "example": false
+                                   },
+                                   "name": {
+                                       "type": "string",
+                                       "example": 'testPlaylist'
+                                   },
+                               }
+                           }
+   
+                       }
+                   ],
+                   "responses": {
+                       '406': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 406
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'Bad id format'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '407': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 407
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'Bad token'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '202': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 202
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'not found'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '444': {
+                           "description": "error",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": "Error Unknow  + err"
+                                                   },
+                                               }
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 444
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '200': {
+                           "description": "playlist",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": true
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 200
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "playlist": {
+                                                       "type": "playlist",
+                                                       "example": '{}'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '500': {
+                           "description": "An error has occured",
+                       },
+                   }
+               }
+           },
+           "/api/v1/certificate/new": {
+               "post": {
+                   "x-swagger-router-controller": "playlist",
+                   "operationId": "playlist / Need header Authorization : bearer -> token",
+                   "summary": "Create playlist / Need header Authorization : bearer -> token",
+                   "description": 'Create playlist',
+                   "tags": ["Certificate"],
+                   "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
+                   "parameters": [
+                       {
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "public": {
+                                       "type": "boolean",
+                                       "example": false
+                                   },
+                                   "name": {
+                                       "type": "string",
+                                       "example": 'testPlaylist'
+                                   },
+                               }
+                           }
+   
+                       }
+                   ],
+                   "responses": {
+                       '406': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 406
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'Bad id format'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '407': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 407
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'Bad token'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '202': {
+                           "description": "Data validation",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 202
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": 'not found'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '444': {
+                           "description": "error",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": "Error Unknow  + err"
+                                                   },
+                                               }
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 444
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '200': {
+                           "description": "playlist",
+                           "name": "body",
+                           "in": "body",
+                           "required": true,
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": true
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 200
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "playlist": {
+                                                       "type": "playlist",
+                                                       "example": '{}'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '500': {
+                           "description": "An error has occured",
+                       },
+                   }
+               }
+           },
+           "/api/v1/certificate/myCertificate": {
+               "get": {
+                   "x-swagger-router-controller": "playlist",
+                   "operationId": "playlist",
+                   "summary": "Get playlist by Id / Need header Authorization : bearer -> token",
+                   "description": 'Get data of playlist by sending playlist / Need header Authorization : bearer -> token',
+                   "tags": ["Certificate"],
+                   "description": `[Get playlist by id link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/playlist/id/{id}"})`,
+                   "parameters": [
+                       {
+                           "name": "id",
+                           "in": "path",
+                           "required": true,
+                           "schema": {
+                               "type": "string",
+                           },
+                           "required": true,
+                           "description": " ID of the playlist to get",
+                       }
+                   ],
+                   "responses": {
+                       '406': {
+                           "description": "Bad id format",
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": "Bad id format"
+                                                   },
+                                               }
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 406
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '202': {
+                           "description": "playlist not found",
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": "playlist not found"
+                                                   },
+                                               }
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 202
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '444': {
+                           "description": "Error Unknow + err",
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": false
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "msg": {
+                                                       "type": "string",
+                                                       "example": "Error Unknow + err"
+                                                   },
+                                               }
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 444
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           }
+                       },
+                       '200': {
+                           "description": "Return playlist data",
+                           "schema": {
+                               "type": "object",
+                               "properties": {
+                                   "data": {
+                                       "type": "object",
+                                       "properties": {
+                                           "success": {
+                                               "type": "booleon",
+                                               "example": true
+                                           },
+                                           "code": {
+                                               "type": "number",
+                                               "example": 200
+                                           },
+                                           "data": {
+                                               "properties": {
+                                                   "playlist": {
+                                                       "type": "Playlist",
+                                                       "example": '{...........}'
+                                                   }
+                                               }
+                                           }
+   
+                                       }
+                                   }
+                               }
+                           },
+                       },
+                       '500': {
+                           "description": "An error has occured",
+                       },
+                   }
+               }
+           },
+   
+   
+   
+   */
 
 
 

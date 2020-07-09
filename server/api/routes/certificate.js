@@ -19,7 +19,7 @@ router.post('/delete', checkIfUserIsLog, certificateController.deleteCertificate
 // @desc    Get if i have a certificate for playlist
 // @route   Get /api/v1/certificate/myCertificate/
 // @access  private
-router.get('/myCertificate/', checkIfUserIsLog, certificateController.myCertificate)
+router.get('/myCertificate', checkIfUserIsLog, certificateController.myCertificate)
 
 
 module.exports = router;
