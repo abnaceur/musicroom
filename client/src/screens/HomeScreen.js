@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import {
     View,
     Text,
-    Button,
     TouchableOpacity,
     ScrollView,
     Dimensions,
@@ -13,24 +12,45 @@ import {
 
 // Import context
 import { Context as AuthContext } from '../context/AuthContext';
-
+import { Card, ListItem, Button, Icon } from 'react-native-elements';
 
 const HomeScreens = (props) => {
     const { signout } = useContext(AuthContext);
 
     return (
-        <KeyboardAvoidingView style={Styles.container}>
-            <View style={Styles.logoContainer}>
-                <Text style={Styles.title}>Home page</Text>
+        <ScrollView style={Styles.container}>
+            <View>
 
-                <TouchableOpacity
-                    onPress={() => signout()}
+                <Card
+                    style={Styles.cardStyle}
+                    image={require('../assets/music.jpg')}
                 >
+                    <Button
+                        buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
+                        title='ALBUM / ARTISTS' />
+                </Card>
 
-                    <Text style={Styles.title}>Logout</Text>
-                </TouchableOpacity>
+                <Card
+                    style={Styles.cardStyle}
+                    image={require('../assets/favorit.jpg')}
+                >
+                    <Button
+                        buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
+                        title='FAVORIS' />
+                </Card>
+
+
+                <Card
+                    style={Styles.cardStyle}
+                    image={require('../assets/settings.jpg')}
+                >
+                    <Button
+                        buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
+                        title='SETTINGS' />
+                </Card>
+
             </View>
-        </KeyboardAvoidingView>
+        </ScrollView>
     )
 }
 
@@ -59,7 +79,8 @@ const Styles = StyleSheet.create({
     },
     myForm: {
         flex: 3
-    }
+    },
+
 })
 
 
