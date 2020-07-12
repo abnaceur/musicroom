@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -38,10 +38,10 @@ const styles = StyleSheet.create({
 
 const limitMusic = 15;
 
-const MusicList = ({route, navigation}) => {
+const MusicList = ({ route, navigation }) => {
   const [musicList, setMusicList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const {list, id, image, name} = route.params;
+  const { list, id, image, name } = route.params;
 
   useEffect(() => {
     getMusicList();
@@ -54,12 +54,12 @@ const MusicList = ({route, navigation}) => {
       if (list === "artist") {
         response = await Deezer.musicArtistList(
           id,
-          limitMusic + musicList.length,
+          limitMusic + musicList.length
         );
       } else {
         response = await Deezer.musicAlbumList(id);
       }
-      const {data, error} = response.data;
+      const { data, error } = response.data;
       if (!error) {
         data.forEach((music) => {
           if (!musicList.find((element) => element.id === music.id)) {
@@ -74,47 +74,52 @@ const MusicList = ({route, navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, marginTop: 15}}>
-      <View style={{alignItems: "center"}}>
+    <View style={{ flex: 1, marginTop: 15 }}>
+      <View style={{ alignItems: "center" }}>
         <View>
           <Text
             numberOfLines={1}
-            ellipsizeMode="tail">{`${list}: ${name}`}</Text>
+            ellipsizeMode="tail"
+          >{`${list}: ${name}`}</Text>
         </View>
         <Image
-          source={{uri: image}}
-          style={{width: 200, height: 180}}
+          source={{ uri: image }}
+          style={{ width: 200, height: 180 }}
           resizeMethod="resize"
         />
       </View>
-      <View style={{flex: 0.8, marginTop: 10}}>
+      <View style={{ flex: 0.8, marginTop: 10 }}>
         <FlatList
           data={musicList}
-          renderItem={({item}) => {
-            const {title, rank, preview} = item;
+          renderItem={({ item }) => {
+            const { title, rank, preview } = item;
+            console.log(item);
             return (
               <View style={[styles.container]}>
-                <View style={{flex: 0.5}}>
+                <View style={{ flex: 0.5 }}>
                   <Text
                     numberOfLines={1}
                     ellipsizeMode="tail"
                     style={{
                       paddingLeft: 20,
-                    }}>{`Title: ${title} Rank: ${rank}`}</Text>
+                    }}
+                  >{`Title: ${title} Rank: ${rank}`}</Text>
                 </View>
                 <View style={styles.buttonsContainer}>
                   <TouchableOpacity
                     onPress={() =>
-                      navigation.navigate("Player", {pathUrl: preview})
+                      navigation.navigate("Player", { pathUrl: preview })
                     }
-                    style={styles.buttonAddMusic}>
+                    style={styles.buttonAddMusic}
+                  >
                     <Text style={styles.text}>Play music</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() =>
-                      navigation.navigate("PlayListEditor", {music: item})
+                      navigation.navigate("PlayListEditor", { music: item })
                     }
-                    style={styles.buttonAddMusic}>
+                    style={styles.buttonAddMusic}
+                  >
                     <Text style={styles.text}>Add music</Text>
                   </TouchableOpacity>
                 </View>
@@ -125,7 +130,7 @@ const MusicList = ({route, navigation}) => {
         />
       </View>
       {list === "artist" ? (
-        <View style={{flex: 0.1, alignItems: "center", top: 10}}>
+        <View style={{ flex: 0.1, alignItems: "center", top: 10 }}>
           <Button
             title="Load more music !"
             onPress={() => (!loading ? getMusicList() : null)}
