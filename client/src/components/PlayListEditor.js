@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   Button,
@@ -8,67 +8,16 @@ import {
   TouchableOpacity,
   Alert,
   Image,
+  FlatList,
+  CheckBox,
 } from "react-native";
+// Import context
+import { Context as playlistReducer } from "../context/PlayListContext";
+import { Context as AuthContext } from "../context/AuthContext";
 
-const forTest = {
-  album: {
-    cover: "https://api.deezer.com/album/6861104/image",
-    cover_big:
-      "https://cdns-images.dzcdn.net/images/cover/dcb57e195538467662fbce4492f89c20/500x500-000000-80-0-0.jpg",
-    cover_medium:
-      "https://cdns-images.dzcdn.net/images/cover/dcb57e195538467662fbce4492f89c20/250x250-000000-80-0-0.jpg",
-    cover_small:
-      "https://cdns-images.dzcdn.net/images/cover/dcb57e195538467662fbce4492f89c20/56x56-000000-80-0-0.jpg",
-    cover_xl:
-      "https://cdns-images.dzcdn.net/images/cover/dcb57e195538467662fbce4492f89c20/1000x1000-000000-80-0-0.jpg",
-    id: 6861104,
-    title: "Combat Rock (Remastered)",
-    tracklist: "https://api.deezer.com/album/6861104/tracks",
-    type: "album",
-  },
-  artist: {
-    id: 2,
-    name: "The Clash",
-    tracklist: "https://api.deezer.com/artist/2/top?limit=50",
-    type: "artist",
-  },
-  contributors: [
-    {
-      id: 2,
-      link: "https://www.deezer.com/artist/2",
-      name: "The Clash",
-      picture: "https://api.deezer.com/artist/2/image",
-      picture_big:
-        "https://cdns-images.dzcdn.net/images/artist/82a5fe6ba783cf618d5394ae0b8129b9/500x500-000000-80-0-0.jpg",
-      picture_medium:
-        "https://cdns-images.dzcdn.net/images/artist/82a5fe6ba783cf618d5394ae0b8129b9/250x250-000000-80-0-0.jpg",
-      picture_small:
-        "https://cdns-images.dzcdn.net/images/artist/82a5fe6ba783cf618d5394ae0b8129b9/56x56-000000-80-0-0.jpg",
-      picture_xl:
-        "https://cdns-images.dzcdn.net/images/artist/82a5fe6ba783cf618d5394ae0b8129b9/1000x1000-000000-80-0-0.jpg",
-      radio: true,
-      role: "Main",
-      share:
-        "https://www.deezer.com/artist/2?utm_source=deezer&utm_content=artist-2&utm_term=0_1594072469&utm_medium=web",
-      tracklist: "https://api.deezer.com/artist/2/top?limit=50",
-      type: "artist",
-    },
-  ],
-  duration: 188,
-  explicit_content_cover: 0,
-  explicit_content_lyrics: 0,
-  explicit_lyrics: false,
-  id: 69962764,
-  link: "https://www.deezer.com/track/69962764",
-  preview:
-    "https://cdns-preview-e.dzcdn.net/stream/c-ecc0ed464ac3e078b0b224710f77900a-5.mp3",
-  rank: 921309,
-  readable: true,
-  title: "Should I Stay or Should I Go (Remastered)",
-  title_short: "Should I Stay or Should I Go",
-  title_version: "(Remastered)",
-  type: "track",
-};
+import Deezer from "../../Deezer";
+import { TextInput } from "react-native-gesture-handler";
+import userApi from "../api/user";
 
 const styles = StyleSheet.create({
   modalContainer: {
@@ -111,138 +60,301 @@ const styles = StyleSheet.create({
     borderBottomColor: "grey",
     borderBottomWidth: 1,
     paddingBottom: 10,
-    // justifyContent: "center",
+  },
+  textInput: {
+    flex: 0.75,
+    height: 40,
+    borderColor: "grey",
+    borderWidth: 1,
+  },
+  textInputContainer: {
+    flexDirection: "row",
+    marginTop: 10,
+  },
+  text: {
+    marginLeft: 10,
+    flex: 0.2,
   },
 });
 
-const PlayListEditor = ({navigation, route}) => {
-  const [musicList, setMusicList] = useState([]);
-  const [publicPlayList, setPublicPlayList] = useState(true);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [dataMusic, setDataMusic] = useState({});
+const PlayListEditor = ({ navigation, route }) => {
+  const [name, setName] = useState("");
+  const [preview, setPreview] = useState("");
+  const [title, setTitle] = useState("");
+  const [modalOptionsVisible, setModalOptionsVisible] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
+  const [titlePlayList, setTitlePlayList] = useState("");
+  const [description, setDescription] = useState("");
+  const [modalContributorVisible, setModalContributorVisible] = useState(false);
+  const [contributor, setContributor] = useState("");
+  const [contributors, setContributors] = useState([]);
+
+  const {
+    state: { trackList },
+    storeTrack,
+    deleteTrack,
+  } = useContext(playlistReducer);
+  const {
+    state: { token },
+  } = useContext(AuthContext);
 
   useEffect(() => {
-    // Get music in redux
     if (route.params?.music) {
-      // console.log(route.params?.music, " play");
-      setMusicList([...musicList, route.params?.music]);
+      storeTrack(route.params?.music);
     }
   }, [route.params?.music]);
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <Button
-          onPress={() => setPublicPlayList(!publicPlayList)}
-          title={publicPlayList ? "Public" : " Private"}
-          color="red"
-        />
+        <View style={{ flexDirection: "row" }}>
+          <View style={{ marginRight: 10 }}>
+            <Button
+              onPress={() => console.log("Delete")}
+              title={"Delete"}
+              color="red"
+            />
+          </View>
+          <View style={{ marginRight: 10 }}>
+            <Button onPress={() => teste()} title={"Save"} color="red" />
+          </View>
+        </View>
       ),
     });
-  }, [publicPlayList]);
-
-  useEffect(() => {
-    // getPlayList();
   }, []);
 
-  useEffect(() => {
-    // Get if playlist is public or private
-  }, []);
-
-  const showModal = () => {
-    setDataMusic(forTest);
-    setModalVisible(true);
+  const teste = async () => {
+    try {
+      let response = await userApi.post(
+        `/playlist/new`,
+        {
+          creator: 1,
+          public: true,
+          name: "test",
+        },
+        token
+      );
+      if (response.data.code === 200) {
+        console.log("playlist created");
+      }
+    } catch (error) {
+      console.log(error, " error");
+    }
   };
 
+  const getMusics = async (name) => {
+    try {
+      const response = await Deezer.searchByArtist(name);
+      const { total, data } = response.data;
+      if (total > 0) {
+        navigation.navigate("MusicList", {
+          list: "artist",
+          id: data[0].artist.id,
+          image: data[0].artist.picture_medium,
+          name: data[0].artist.name,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const showModal = (title, preview, name) => {
+    setTitle(title);
+    setPreview(preview);
+    setName(name);
+    setModalOptionsVisible(true);
+  };
+
+  useEffect(() => {
+    console.log(contributors);
+  }, [contributors]);
+
   return (
-    <View style={{flex: 1}}>
-      {modalVisible ? (
+    <View style={{ flex: 1 }}>
+      {modalOptionsVisible ? (
         <View>
           <Modal
             animationType="slide"
             transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => Alert.alert("Modal has been closed !")}>
+            visible={modalOptionsVisible}
+            onRequestClose={() => Alert.alert("Modal has been closed !")}
+          >
             <View style={styles.modalContainer}>
               {/* set width and height with dimensions */}
-              <View style={[styles.textContainer, {width: 300, height: 300}]}>
+              <View style={[styles.textContainer, { width: 300, height: 300 }]}>
                 <Text
-                  onPress={() => console.log(forTest.preview)}
-                  style={styles.textOptions}>
+                  onPress={() => {
+                    setModalOptionsVisible(false);
+                    navigation.navigate("Player", { pathUrl: preview });
+                  }}
+                  style={styles.textOptions}
+                >
                   Play
                 </Text>
                 <Text
-                  onPress={() => console.log(forTest.artist.name)}
-                  style={styles.textOptions}>
+                  onPress={() => {
+                    setModalOptionsVisible(false);
+                    getMusics(name);
+                  }}
+                  style={styles.textOptions}
+                >
                   Show artist
                 </Text>
                 <Text
-                  onPress={() => console.log(forTest.album.title)}
-                  style={styles.textOptions}>
+                  onPress={() => {
+                    setModalOptionsVisible(false);
+                    console.log(title);
+                  }}
+                  style={styles.textOptions}
+                >
                   Show album
                 </Text>
                 <Text
-                  onPress={() => console.log("Comment")}
-                  style={styles.textOptions}>
-                  Comment
-                </Text>
-                <Text
-                  onPress={() => console.log("Delete")}
-                  style={styles.textOptions}>
+                  onPress={() => {
+                    setModalOptionsVisible(false);
+                    deleteTrack(title);
+                  }}
+                  style={styles.textOptions}
+                >
                   Delete
                 </Text>
                 <TouchableOpacity
                   style={styles.buttonModal}
-                  onPress={() => setModalVisible(false)}>
-                  <Text style={{textAlign: "center"}}>Close options</Text>
+                  onPress={() => setModalOptionsVisible(false)}
+                >
+                  <Text style={{ textAlign: "center" }}>Close options</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </Modal>
         </View>
       ) : null}
-      <View style={{marginTop: 15, flex: 0.1}}>
+      {modalContributorVisible ? (
+        <View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalContributorVisible}
+            onRequestClose={() => Alert.alert("Modal has been closed !")}
+          >
+            <View style={styles.modalContainer}>
+              <View style={[styles.textContainer, { width: 300, height: 200 }]}>
+                {/* set width and height with dimensions */}
+                <TextInput
+                  onChangeText={(text) => setContributor(text)}
+                  value={contributor}
+                  style={styles.textInput}
+                />
+                <View style={{ marginTop: 10 }}>
+                  <Button
+                    title="Add contributor"
+                    onPress={() => {
+                      setContributor("");
+                      setContributors([...contributors, contributor]);
+                      setModalContributorVisible(false);
+                    }}
+                  />
+                </View>
+                <View style={{ marginTop: 10 }}>
+                  <Button
+                    title="Close"
+                    onPress={() => setModalContributorVisible(false)}
+                  />
+                </View>
+              </View>
+            </View>
+          </Modal>
+        </View>
+      ) : null}
+      <View style={styles.textInputContainer}>
+        <Text style={styles.text}>Title</Text>
+        <TextInput
+          onChangeText={(text) => setTitlePlayList(text)}
+          value={titlePlayList}
+          style={styles.textInput}
+        />
+      </View>
+      <View style={styles.textInputContainer}>
+        <Text style={styles.text}>Description</Text>
+        <TextInput
+          onChangeText={(text) => setDescription(text)}
+          value={description}
+          style={styles.textInput}
+        />
+      </View>
+      <View style={{ marginTop: 15, flex: 0.1 }}>
         <Button
           title="Add music"
           color="blue"
           onPress={() => navigation.navigate("AddMusic")}
         />
       </View>
-      <View style={{flex: 0.8, backgroundColor: "red"}}>
-        {/* {musicList.map((music, index) => (
-          <View style={{backgroundColor: "blue"}} key={index}>
-            <Text>{music.title}</Text>
-          </View>
-        ))} */}
-        <View style={{backgroundColor: "blue", flex: 1, flexDirection: "row"}}>
-          <View style={[styles.optionsContainer]}>
-            <View style={{flex: 0.8, alignItems: "center"}}>
-              <Text
-                numberOfLines={1}
-                ellipsizeMode="tail"
+      <View style={{ flex: 0.8, backgroundColor: "red" }}>
+        <FlatList
+          data={trackList}
+          renderItem={({ item }) => {
+            const {
+              rank,
+              title,
+              preview,
+              artist: { name },
+            } = item;
+            return (
+              <View
                 style={{
-                  paddingLeft: 20,
-                }}>{`Title: ${forTest.album.title} Rank: ${
-                forTest.rank
-              }`}</Text>
-            </View>
-            <View style={{flex: 0.2, alignItems: "center"}}>
-              <TouchableOpacity onPress={() => showModal()}>
-                <Image
-                  style={{width: 25, height: 25}}
-                  source={require("../../resources/ui_options.jpg")}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+                  backgroundColor: "blue",
+                  flex: 1,
+                  flexDirection: "row",
+                }}
+              >
+                <View style={[styles.optionsContainer]}>
+                  <View style={{ flex: 0.8, alignItems: "center" }}>
+                    <Text
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                      style={{
+                        paddingLeft: 20,
+                      }}
+                    >{`Title: ${title} Rank: ${rank}`}</Text>
+                  </View>
+                  <View style={{ flex: 0.2, alignItems: "center" }}>
+                    <TouchableOpacity
+                      onPress={() => showModal(title, preview, name)}
+                    >
+                      <Image
+                        style={{ width: 25, height: 25 }}
+                        source={require("../../resources/ui_options.jpg")}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            );
+          }}
+          keyExtractor={(item, index) => index.toString()}
+        />
       </View>
-      <View style={{marginTop: 15, flex: 0.1}}>
+      <View style={{ marginTop: 15, flex: 0.1 }}>
         <Button
-          title="Create playlist"
-          onPress={() => setModalVisible(!modalVisible)}
+          title="Invite user to contribute in my playlist"
+          onPress={() => setModalContributorVisible(true)}
           color="blue"
         />
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <CheckBox
+          style={{ flex: 0.1 }}
+          value={isPrivate}
+          onValueChange={setIsPrivate}
+        />
+        <Text>Set private !</Text>
       </View>
     </View>
   );

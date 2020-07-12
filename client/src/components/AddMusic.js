@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
 const limitMusics = 15;
 const startIdAlbum = 50000;
 
-const PlayList = ({navigation}) => {
+const PlayList = ({ navigation }) => {
   const [artistList, setArtistList] = useState([]);
   const [albums, setAlbums] = useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -49,14 +49,16 @@ const PlayList = ({navigation}) => {
     getListAlbum();
   }, []);
 
+  // TODO TO BE CHANGED
+
   const getListArtist = async () => {
     let i = 0;
     let j = i;
     while (i - j < limitMusics) {
       try {
         const response = await Deezer.artist(i + artistList.length);
-        const {data} = response;
-        const {error, id} = data;
+        const { data } = response;
+        const { error, id } = data;
         if (!error && !artistList.find((element) => element.id === id)) {
           setArtistList((prevState) => [...prevState, data]);
         } else {
@@ -76,8 +78,8 @@ const PlayList = ({navigation}) => {
     while (i - j < limitMusics) {
       try {
         const response = await Deezer.album(i + albums.length);
-        const {data} = response;
-        const {error, id} = data;
+        const { data } = response;
+        const { error, id } = data;
         if (!error && !albums.find((element) => element.id === id)) {
           setAlbums((prevState) => [...prevState, data]);
         } else {
@@ -94,8 +96,8 @@ const PlayList = ({navigation}) => {
   const displayArtistList = () => (
     <FlatList
       data={artistList}
-      renderItem={({item}) => {
-        const {id, picture_medium, name, nb_album} = item;
+      renderItem={({ item }) => {
+        const { id, picture_medium, name, nb_album } = item;
         return (
           <TouchableOpacity
             style={styles.containerList}
@@ -106,12 +108,13 @@ const PlayList = ({navigation}) => {
                 image: picture_medium,
                 name,
               })
-            }>
-            <View style={{flex: 0.5}}>
+            }
+          >
+            <View style={{ flex: 0.5 }}>
               <Image
-                style={{flex: 1}}
+                style={{ flex: 1 }}
                 resizeMethod="resize"
-                source={{uri: picture_medium}}
+                source={{ uri: picture_medium }}
               />
             </View>
             <View
@@ -119,7 +122,8 @@ const PlayList = ({navigation}) => {
                 flex: 0.5,
                 flexDirection: "row",
                 justifyContent: "center",
-              }}>
+              }}
+            >
               <View>
                 <Text>{`Name: ${name}`}</Text>
                 <Text>{`Nb_akbum: ${nb_album}`}</Text>
@@ -135,8 +139,8 @@ const PlayList = ({navigation}) => {
   const displayAlbumList = () => (
     <FlatList
       data={albums}
-      renderItem={({item}) => {
-        const {id, cover_medium, rating, fans, release_date, title} = item;
+      renderItem={({ item }) => {
+        const { id, cover_medium, rating, fans, release_date, title } = item;
         return (
           <TouchableOpacity
             style={styles.containerList}
@@ -147,18 +151,20 @@ const PlayList = ({navigation}) => {
                 image: cover_medium,
                 name: title,
               })
-            }>
-            <View style={{flex: 0.5}}>
+            }
+          >
+            <View style={{ flex: 0.5 }}>
               <Image
                 resizeMethod="resize"
-                style={{flex: 1}}
-                source={{uri: cover_medium}}
+                style={{ flex: 1 }}
+                source={{ uri: cover_medium }}
               />
             </View>
-            <View style={{flex: 0.5, flexDirection: "column", left: 20}}>
+            <View style={{ flex: 0.5, flexDirection: "column", left: 20 }}>
               <Text
                 numberOfLines={1}
-                ellipsizeMode="tail">{`Title: ${title}`}</Text>
+                ellipsizeMode="tail"
+              >{`Title: ${title}`}</Text>
               <Text>{`Rating: ${rating}`}</Text>
               <Text>{`Fans: ${fans}`}</Text>
               <Text>{"Genre"}</Text>
@@ -174,7 +180,7 @@ const PlayList = ({navigation}) => {
   const getMusics = async () => {
     try {
       const response = await Deezer.searchByArtist(searchValue);
-      const {total, data} = response.data;
+      const { total, data } = response.data;
       if (total > 0) {
         navigation.navigate("MusicList", {
           list: "artist",
@@ -216,7 +222,6 @@ const PlayList = ({navigation}) => {
 
   const addMoreArtistOrAlbums = (value) => {
     setLoading(true);
-    console.log(1);
     switch (value) {
       case "Artist":
         getListArtist();
@@ -232,12 +237,12 @@ const PlayList = ({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, flexDirection: "column"}}>
+    <View style={{ flex: 1, flexDirection: "column" }}>
       <View style={styles.buttonsContainer}>
         <FlatList
           data={buttons}
-          renderItem={({item}) => (
-            <View style={{marginLeft: 10}}>
+          renderItem={({ item }) => (
+            <View style={{ marginLeft: 10 }}>
               <Button onPress={() => setDisplay(item)} title={item} />
             </View>
           )}
@@ -245,9 +250,9 @@ const PlayList = ({navigation}) => {
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
-      <View style={{flex: 0.8}}>{displayList(display)}</View>
+      <View style={{ flex: 0.8 }}>{displayList(display)}</View>
       {display !== "Search" ? (
-        <View style={{flex: 0.1, marginTop: 15, alignItems: "center"}}>
+        <View style={{ flex: 0.1, marginTop: 15, alignItems: "center" }}>
           <Button
             title={`Add more ${display}`}
             onPress={() => (!loading ? addMoreArtistOrAlbums(display) : null)}
