@@ -9,73 +9,30 @@ import {
   Alert,
   Image,
   FlatList,
-  CheckBox,
 } from "react-native";
+
+import CheckBox from '@react-native-community/checkbox';
+import Save from 'react-native-vector-icons/Entypo';
+import Delete from 'react-native-vector-icons/AntDesign';
+
+import BackWard from 'react-native-vector-icons/Ionicons';
+
+// Import services 
+import { savePlayListService } from '../service/playListService';
+
 // Import context
 import { Context as playlistReducer } from "../context/PlayListContext";
 import { Context as AuthContext } from "../context/AuthContext";
 
+import { Card, ListItem, Header, Icon } from 'react-native-elements';
+
 import Deezer from "../../Deezer";
 import { TextInput } from "react-native-gesture-handler";
-import userApi from "../api/user";
 
-const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-  },
-  textOptions: {
-    marginTop: 10,
-    paddingBottom: 10,
-    borderBottomColor: "grey",
-    borderBottomWidth: 1,
-  },
-  textContainer: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  buttonModal: {
-    marginTop: 10,
-    backgroundColor: "#F194FF",
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  optionsContainer: {
-    flex: 1,
-    flexDirection: "row",
-    marginTop: 10,
-    borderBottomColor: "grey",
-    borderBottomWidth: 1,
-    paddingBottom: 10,
-  },
-  textInput: {
-    flex: 0.75,
-    height: 40,
-    borderColor: "grey",
-    borderWidth: 1,
-  },
-  textInputContainer: {
-    flexDirection: "row",
-    marginTop: 10,
-  },
-  text: {
-    marginLeft: 10,
-    flex: 0.2,
-  },
-});
+
+// TODO Hide invite collaborators if isPrivate = false
+// TODO Add for validation to ensure that data is not empty
+// TODO FOR SYLVAIN
 
 const PlayListEditor = ({ navigation, route }) => {
   const [name, setName] = useState("");
@@ -94,6 +51,7 @@ const PlayListEditor = ({ navigation, route }) => {
     storeTrack,
     deleteTrack,
   } = useContext(playlistReducer);
+
   const {
     state: { token },
   } = useContext(AuthContext);
@@ -104,42 +62,24 @@ const PlayListEditor = ({ navigation, route }) => {
     }
   }, [route.params?.music]);
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <View style={{ flexDirection: "row" }}>
-          <View style={{ marginRight: 10 }}>
-            <Button
-              onPress={() => console.log("Delete")}
-              title={"Delete"}
-              color="red"
-            />
-          </View>
-          <View style={{ marginRight: 10 }}>
-            <Button onPress={() => teste()} title={"Save"} color="red" />
-          </View>
-        </View>
-      ),
-    });
-  }, []);
+  // Handl private change
+  const handlIsprivate = async (isPrivate) => {
+    if (isPrivate === true)
+      await setIsPrivate(false)
+    else
+      await setIsPrivate(true);
+  }
 
-  const teste = async () => {
-    try {
-      let response = await userApi.post(
-        `/playlist/new`,
-        {
-          creator: 1,
-          public: true,
-          name: "test",
-        },
-        token
-      );
-      if (response.data.code === 200) {
-        console.log("playlist created");
-      }
-    } catch (error) {
-      console.log(error, " error");
+  const savePlayList = async (trackList) => {
+    let data = {
+      titlePlayList,
+      description,
+      trackList,
+      contributors,
+      isPrivate
     }
+
+    savePlayListService(data, token);
   };
 
   const getMusics = async (name) => {
@@ -172,6 +112,34 @@ const PlayListEditor = ({ navigation, route }) => {
 
   return (
     <View style={{ flex: 1 }}>
+      <Header
+
+        backgroundColor="#633689"
+        centerComponent={{ text: 'PlayList', style: { color: '#fff' } }}
+        leftComponent={
+          <BackWard
+            onPress={() => navigation.goBack()}
+            name="md-arrow-back"
+            size={24}
+            color="white" />}
+
+        rightComponent={
+          // <View style={styles.rightIcons}>
+          <Save
+            onPress={() => savePlayList(trackList)}
+            name="save"
+            size={24}
+            color="white" />
+
+          //   <Delete
+          //     name="delete"
+          //     size={24}
+          //     color="white" />
+
+          // </View>
+        }
+      />
+
       {modalOptionsVisible ? (
         <View>
           <Modal
@@ -349,15 +317,90 @@ const PlayListEditor = ({ navigation, route }) => {
           justifyContent: "center",
         }}
       >
+
         <CheckBox
           style={{ flex: 0.1 }}
+          // disabled={false}
           value={isPrivate}
-          onValueChange={setIsPrivate}
+          onChange={() => handlIsprivate(isPrivate)}
         />
+
+        {/* <CheckBox
+          disabled={false}
+          value={isPrivate}
+          onChange={() => isPrivate ? setIsPrivate(false) : setIsPrivate(true)} */}
+        {/* /> */}
+
         <Text>Set private !</Text>
       </View>
     </View>
   );
 };
+
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  textOptions: {
+    marginTop: 10,
+    paddingBottom: 10,
+    borderBottomColor: "grey",
+    borderBottomWidth: 1,
+  },
+  textContainer: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  buttonModal: {
+    marginTop: 10,
+    backgroundColor: "#F194FF",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  optionsContainer: {
+    flex: 1,
+    flexDirection: "row",
+    marginTop: 10,
+    borderBottomColor: "grey",
+    borderBottomWidth: 1,
+    paddingBottom: 10,
+  },
+  textInput: {
+    flex: 0.75,
+    height: 40,
+    borderColor: "grey",
+    borderWidth: 1,
+  },
+  textInputContainer: {
+    flexDirection: "row",
+    marginTop: 10,
+  },
+  text: {
+    marginLeft: 10,
+    flex: 0.2,
+  },
+  rightIcons: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    top: 13
+  }
+});
+
 
 export default PlayListEditor;

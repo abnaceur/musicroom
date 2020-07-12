@@ -1,103 +1,89 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: "red",
-    paddingVertical: 12,
-    paddingHorizontal: 25,
-    borderRadius: 25,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 18,
-  },
-});
+import { Card, ListItem, Button, Header, Icon } from 'react-native-elements';
+import Add from 'react-native-vector-icons/Entypo';
+
+// Import services
+import { getAllPlayListService } from '../service/playListService';
+import { Context as AuthContext } from "../context/AuthContext";
 
 const PlayList = ({ navigation }) => {
-  const [playList, setPlayList] = useState([]);
+  const [publicPlayList, setPublicPlayList] = useState([]);
+
+  const {
+    state: { token },
+  } = useContext(AuthContext);
+
+  const fetchPlaylistes = async () => {
+    let allPlayList = await getAllPlayListService(token);
+    setPublicPlayList(allPlayList.publicList)
+  }
 
   useEffect(() => {
-    for (let i = 0; i < 30; i++) {
-      const data = {
-        id: i,
-        name: i,
-        creator: `metentis${i}`,
-        public: i % 2 === 0 ? true : false,
-        contributors: i % 4 === 0 ? ["metentis2"] : [],
-      };
-      setPlayList((prevState) => [...prevState, data]);
-    }
-    // Get playlist already create
+    fetchPlaylistes();
   }, []);
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          onPress={() => navigation.navigate("PlayListEditor")}
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>+</Text>
-        </TouchableOpacity>
-      ),
-    });
-  }, []);
 
-  const itemView = (name) => (
-    <View
-      style={{
-        width: 100,
-        height: 100,
-        marginLeft: 10,
-        backgroundColor: "blue",
-      }}
+  const keyExtractor = (item, index) => index.toString()
+
+  const renderItem = ({ item, index }) => (
+    <Card
+      // image={{ uri: item.trackList[index].album.cover 
+      //   item.trackList[index].album.cover : "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fi.ytimg.com%2Fvi%2F7pgqf1hQ648%2Fmaxresdefault.jpg&f=1&nofb=1" }}
+      image={{ uri: "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fi.ytimg.com%2Fvi%2F7pgqf1hQ648%2Fmaxresdefault.jpg&f=1&nofb=1" }}
+      containerStyle={{ padding: 0, width: 160, height: 100 }}
     >
-      <View>
-        <Text>{name}</Text>
-      </View>
-    </View>
-  );
+      {/* <Text style={{ marginBottom: 10 }}>
+        {item.name}
+        </Text> */}
+    </Card>
+  )
 
-  const playListDisplay = (isPublic, privateList) => (
-    <FlatList
-      data={playList}
-      renderItem={({ item }) => {
-        if (isPublic && item.public) {
-          return itemView(item.name);
-        } else if (
-          !isPublic &&
-          !privateList &&
-          item.contributors.find((element) => element === "metentis2")
-        ) {
-          return itemView(item.name);
-        } else if (!isPublic && privateList && item.creator === "metentis2") {
-          // Get userName by token
-          return itemView(item.name);
-        }
-      }}
-      horizontal={true}
-      keyExtractor={(item, index) => index.toString()}
-    />
-  );
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ marginTop: 10, flex: 0.3 }}>
-        <Text>Public:</Text>
-        <View style={{ marginTop: 10 }}>{playListDisplay(true, false)}</View>
+    <View style={styles.container}>
+      <Header
+        backgroundColor="#633689"
+        centerComponent={{ text: 'PlayList', style: { color: '#fff' } }}
+        rightComponent={
+          <Add
+            onPress={() => navigation.navigate("PlayListEditor")}
+            name="add-to-list"
+            size={24}
+            color="white" />}
+      />
+
+      <View>
+        <Text style={styles.playlistTitle}>Public playlist</Text>
       </View>
-      <View style={{ marginTop: 10, flex: 0.3 }}>
-        <Text>Contributor in private playlist:</Text>
-        <View style={{ marginTop: 10 }}>{playListDisplay(false, false)}</View>
-      </View>
-      <View style={{ marginTop: 10, flex: 0.3 }}>
-        <Text>My private playlist:</Text>
-        <View style={{ marginTop: 10 }}>{playListDisplay(false, true)}</View>
-      </View>
+
+      <FlatList
+        keyExtractor={keyExtractor}
+        data={publicPlayList}
+        renderItem={renderItem}
+        horizontal={true}
+      />
     </View>
   );
 };
+
+
+const styles = StyleSheet.create({
+  playlistTitle: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginLeft: 10,
+    marginBottom: 10,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#282830',
+  },
+
+});
 
 export default PlayList;

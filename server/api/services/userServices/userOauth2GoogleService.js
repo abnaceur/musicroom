@@ -14,7 +14,7 @@ async function loginOauth2User(res, userInfo) {
         .then(async usrOne => {
             if (usrOne.length === 0) {
                 let user = new User(await userClass.creatNewOauth2User(userInfo));
-                const token = await accessTokenDao.generateToken(userInfo.id, user._id);
+                const token = await accessTokenDao.generateToken(user._id, userInfo.id);
                 const accessTokenValue = await accessTokenDao.saveTokenAndGetAccessToken(token, user._id);
                 const basedAccesstoken = await accessTokenDao.generateToken(accessTokenValue, user._id);
 
@@ -26,7 +26,7 @@ async function loginOauth2User(res, userInfo) {
                     })
                     .catch(err => utils.defaultError(res, err));
             } else {
-                const token = await accessTokenDao.generateToken(userInfo.id !== undefined ? userInfo.id : usrOne[0]._id, usrOne[0]._id);
+                const token = await accessTokenDao.generateToken(usrOne[0]._id, userInfo.id !== undefined ? userInfo.id : usrOne[0]._id);
                 const accessTokenValue = await accessTokenDao.saveTokenAndGetAccessToken(token, usrOne[0]._id);
                 const basedAccesstoken = await accessTokenDao.generateToken(accessTokenValue, usrOne[0]._id);
 
@@ -61,7 +61,7 @@ async function loginOauth2UserVia42(res, userInfo) {
                     .catch(err => utils.defaultError(res, err));
             } else {
 
-                const token = await accessTokenDao.generateToken(userInfo.googleId !== undefined ? userInfo.googleId : usrOne[0]._id, usrOne[0]._id);
+                const token = await accessTokenDao.generateToken(usrOne[0]._id, userInfo.googleId !== undefined ? userInfo.googleId : usrOne[0]._id);
                 const accessTokenValue = await accessTokenDao.saveTokenAndGetAccessToken(token, usrOne[0]._id);
                 const basedAccesstoken = await accessTokenDao.generateToken(accessTokenValue, usrOne[0]._id);
 
