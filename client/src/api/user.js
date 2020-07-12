@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import Axios from "axios";
 
 const BASE_URL = process.env.BASE_URL;
 const VERSION_API = process.env.REACT_APP_API_VERSION;

@@ -1,9 +1,9 @@
 // In App.js in a new project
-<script src="http://localhost:8097"></script>
-import 'react-native-gesture-handler';
+<script src="http://localhost:8097" />;
+import "react-native-gesture-handler";
 // Import context
-import { Context as AuthContext } from './src/context/AuthContext';
-import decode from 'jwt-decode';
+import { Context as AuthContext } from "./src/context/AuthContext";
+import decode from "jwt-decode";
 
 
 import React, { useContext } from 'react';
@@ -17,10 +17,10 @@ import Event from 'react-native-vector-icons/MaterialIcons';
 import PlayListMusic from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Import screens
-import SigninScreens from './src/screens/SigninScreen';
-import SignupScreens from './src/screens/SignupScreen';
-import HomeScreens from './src/screens/HomeScreen';
-import ResetPwdScreens from './src/screens/ResetPwdScreen';
+import SigninScreens from "./src/screens/SigninScreen";
+import SignupScreens from "./src/screens/SignupScreen";
+import HomeScreens from "./src/screens/HomeScreen";
+import ResetPwdScreens from "./src/screens/ResetPwdScreen";
 import PlayList from "./src/components/PlayList";
 import PlayListEditor from "./src/components/PlayListEditor";
 import MusicList from "./src/components/MusicList";
@@ -30,11 +30,12 @@ import EventScreen from './src/screens/EventScreen';
 import FavorisScreen from './src/screens/FavorisScreen';
 
 // Import helpers
-import checkAuth from './src/helpers/PrivateRoute';
-import setNavigator from './src/helpers/NavigationRef';
+import checkAuth from "./src/helpers/PrivateRoute";
+import setNavigator from "./src/helpers/NavigationRef";
 
 // Import context
-import { Provider as AuthProvider } from './src/context/AuthContext';
+import { Provider as AuthProvider } from "./src/context/AuthContext";
+import { Provider as PlayListProvider } from "./src/context/PlayListContext";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -90,7 +91,6 @@ function TabStack() {
 }
 
 const App = () => {
-
   const { state } = useContext(AuthContext);
   const token = state.token;
 
@@ -126,33 +126,62 @@ const App = () => {
           </Stack.Navigator>
         </NavigationContainer>
       } else {
-        return <NavigationContainer>
+        return (
+          <NavigationContainer>
+            <Stack.Navigator>
+              <Stack.Screen
+                initialRouteName="Signin"
+                name="Signin"
+                options={{ headerShown: false }}
+                component={SigninScreens}
+              />
+              <Stack.Screen
+                name="Signup"
+                options={{ headerShown: false }}
+                component={SignupScreens}
+              />
+              <Stack.Screen
+                name="ResetPwd"
+                options={{ headerShown: false }}
+                component={ResetPwdScreens}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        );
+      }
+    } catch (e) {
+      return (
+        <NavigationContainer>
           <Stack.Navigator>
-            <Stack.Screen initialRouteName="Signin" name="Signin" options={{ headerShown: false }} component={SigninScreens} />
-            <Stack.Screen name="Signup" options={{ headerShown: false }} component={SignupScreens} />
-            <Stack.Screen name="ResetPwd" options={{ headerShown: false }} component={ResetPwdScreens} />
+            <Stack.Screen
+              initialRouteName="Signin"
+              name="Signin"
+              options={{ headerShown: false }}
+              component={SigninScreens}
+            />
+            <Stack.Screen
+              name="Signup"
+              options={{ headerShown: false }}
+              component={SignupScreens}
+            />
+            <Stack.Screen
+              name="ResetPwd"
+              options={{ headerShown: false }}
+              component={ResetPwdScreens}
+            />
           </Stack.Navigator>
         </NavigationContainer>
-      }
-
-    } catch (e) {
-      return <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen initialRouteName="Signin" name="Signin" options={{ headerShown: false }} component={SigninScreens} />
-          <Stack.Screen name="Signup" options={{ headerShown: false }} component={SignupScreens} />
-          <Stack.Screen name="ResetPwd" options={{ headerShown: false }} component={ResetPwdScreens} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      );
     }
   }
-
-
-
-}
+};
 
 export default () => {
   return (
     <AuthProvider>
-      <App />
-    </AuthProvider>)
-}
+      <PlayListProvider>
+        <App />
+      </PlayListProvider>
+    </AuthProvider>
+  );
+};
