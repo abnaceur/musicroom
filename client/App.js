@@ -97,7 +97,7 @@ const App = () => {
 
   if (!token) {
     return <NavigationContainer>
-      <Stack.Navigator
+      {/* <Stack.Navigator
         initialRouteName="Home"
         screenOptions={{
           headerStyle: { backgroundColor: '#633689' },
@@ -109,12 +109,12 @@ const App = () => {
         <Stack.Screen name="PlayListEditor" component={PlayListEditor} />
         <Stack.Screen name="MusicList" component={MusicList} />
         <Stack.Screen name="Player" component={Player} />
-      </Stack.Navigator>
-      {/* <Stack.Navigator >
+      </Stack.Navigator> */}
+      <Stack.Navigator >
         <Stack.Screen initialRouteName="Signin" name="Signin" options={{ headerShown: false }} component={SigninScreens} />
         <Stack.Screen name="Signup" options={{ headerShown: false }} component={SignupScreens} />
         <Stack.Screen name="ResetPwd" options={{ headerShown: false }} component={ResetPwdScreens} />
-      </Stack.Navigator> */}
+      </Stack.Navigator>
     </NavigationContainer>
   } else {
     try {
