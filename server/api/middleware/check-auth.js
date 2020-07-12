@@ -13,7 +13,7 @@ module.exports = async (req, res, next) => {
         const getAccessToken = jwt.decode(token);
         const tokenInfo = await accessToken.getTokenByAccessToken(getAccessToken.id)
         const decode = jwt.verify(tokenInfo, process.env.JWT_KEY);
-        req.userData = decode;
+        req.user = decode;
         next();
         }
     } catch (error) {
