@@ -22,7 +22,7 @@ opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.JWT_KEY;
 passport.use(new JwtStrategy(opts, async (jwtPayload, done) => {
 
-  userDao.getUserById(jwtPayload.id)
+  userDao.getUserById(jwtPayload.user_id)
     .then(data => {
       if (data)
         return done(null, data)
