@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
+import { Card, ListItem, Button, Header, Icon } from 'react-native-elements';
+import Add from 'react-native-vector-icons/Entypo';
+
 const styles = StyleSheet.create({
   button: {
     backgroundColor: "red",
@@ -13,6 +16,31 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
   },
+  container: {
+    flex: 1,
+    backgroundColor: '#282830',
+  },
+
+  private: {
+    backgroundColor: '#fff',
+    marginTop: 10,
+    marginLeft: 10,
+    flex: 0.3,
+  },
+
+  myPrivate: {
+    backgroundColor: '#fff',
+    marginTop: 10,
+    marginLeft: 10,
+    flex: 0.3,
+  },
+
+  public: {
+    backgroundColor: '#fff',
+    marginTop: 10,
+    marginLeft: 10,
+    flex: 0.3,
+  }
 });
 
 const PlayList = ({ navigation }) => {
@@ -61,6 +89,7 @@ const PlayList = ({ navigation }) => {
   );
 
   const playListDisplay = (isPublic, privateList) => (
+
     <FlatList
       data={playList}
       renderItem={({ item }) => {
@@ -83,16 +112,27 @@ const PlayList = ({ navigation }) => {
   );
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ marginTop: 10, flex: 0.3 }}>
+    <View style={styles.container}>
+      <Header
+        backgroundColor="#633689"
+        centerComponent={{ text: 'PlayList', style: { color: '#fff' } }}
+        rightComponent={
+          <Add
+            onPress={() => navigation.navigate("PlayListEditor")}
+            name="add-to-list"
+            size={24}
+            color="white" />}
+      />
+
+      <View style={styles.public}>
         <Text>Public:</Text>
         <View style={{ marginTop: 10 }}>{playListDisplay(true, false)}</View>
       </View>
-      <View style={{ marginTop: 10, flex: 0.3 }}>
+      <View style={styles.private}>
         <Text>Contributor in private playlist:</Text>
         <View style={{ marginTop: 10 }}>{playListDisplay(false, false)}</View>
       </View>
-      <View style={{ marginTop: 10, flex: 0.3 }}>
+      <View style={styles.myPrivate}>
         <Text>My private playlist:</Text>
         <View style={{ marginTop: 10 }}>{playListDisplay(false, true)}</View>
       </View>
