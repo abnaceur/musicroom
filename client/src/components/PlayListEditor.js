@@ -18,64 +18,7 @@ import { Context as AuthContext } from "../context/AuthContext";
 import Deezer from "../../Deezer";
 import { TextInput } from "react-native-gesture-handler";
 import userApi from "../api/user";
-
-const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-  },
-  textOptions: {
-    marginTop: 10,
-    paddingBottom: 10,
-    borderBottomColor: "grey",
-    borderBottomWidth: 1,
-  },
-  textContainer: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  buttonModal: {
-    marginTop: 10,
-    backgroundColor: "#F194FF",
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  optionsContainer: {
-    flex: 1,
-    flexDirection: "row",
-    marginTop: 10,
-    borderBottomColor: "grey",
-    borderBottomWidth: 1,
-    paddingBottom: 10,
-  },
-  textInput: {
-    flex: 0.75,
-    height: 40,
-    borderColor: "grey",
-    borderWidth: 1,
-  },
-  textInputContainer: {
-    flexDirection: "row",
-    marginTop: 10,
-  },
-  text: {
-    marginLeft: 10,
-    flex: 0.2,
-  },
-});
+import authHeader from "../api/authHeader";
 
 const PlayListEditor = ({ navigation, route }) => {
   const [name, setName] = useState("");
@@ -94,6 +37,7 @@ const PlayListEditor = ({ navigation, route }) => {
     storeTrack,
     deleteTrack,
   } = useContext(playlistReducer);
+
   const {
     state: { token },
   } = useContext(AuthContext);
@@ -116,14 +60,20 @@ const PlayListEditor = ({ navigation, route }) => {
             />
           </View>
           <View style={{ marginRight: 10 }}>
-            <Button onPress={() => teste()} title={"Save"} color="red" />
+            <Button onPress={() => teste(trackList)} title={"Save"} color="red" />
           </View>
         </View>
       ),
     });
   }, []);
 
-  const teste = async () => {
+  const teste = async (trackList) => {
+    console.log("titlePlayList :", titlePlayList);
+    console.log("description :", description);
+    console.log("trackList :", trackList);
+    console.log("contributor ", contributors)
+
+
     try {
       let response = await userApi.post(
         `/playlist/new`,
@@ -132,7 +82,9 @@ const PlayListEditor = ({ navigation, route }) => {
           public: true,
           name: "test",
         },
-        token
+        {
+          headers: authHeader(token)
+        }
       );
       if (response.data.code === 200) {
         console.log("playlist created");
@@ -359,5 +311,65 @@ const PlayListEditor = ({ navigation, route }) => {
     </View>
   );
 };
+
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  textOptions: {
+    marginTop: 10,
+    paddingBottom: 10,
+    borderBottomColor: "grey",
+    borderBottomWidth: 1,
+  },
+  textContainer: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  buttonModal: {
+    marginTop: 10,
+    backgroundColor: "#F194FF",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  optionsContainer: {
+    flex: 1,
+    flexDirection: "row",
+    marginTop: 10,
+    borderBottomColor: "grey",
+    borderBottomWidth: 1,
+    paddingBottom: 10,
+  },
+  textInput: {
+    flex: 0.75,
+    height: 40,
+    borderColor: "grey",
+    borderWidth: 1,
+  },
+  textInputContainer: {
+    flexDirection: "row",
+    marginTop: 10,
+  },
+  text: {
+    marginLeft: 10,
+    flex: 0.2,
+  },
+});
+
 
 export default PlayListEditor;
