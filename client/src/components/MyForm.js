@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,68 +6,87 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Animated
-} from 'react-native';
+  Animated,
+} from "react-native";
 
 // Import context
-import { Context as AuthContext } from '../context/AuthContext';
+import { Context as AuthContext } from "../context/AuthContext";
 
 const MyForm = (props) => {
-  const { state, signup, signin, hideMessages, oauth2google } = useContext(AuthContext);
+  const { state, signup, signin, hideMessages, oauth2google } = useContext(
+    AuthContext
+  );
 
   const { name, navigation, isLoggin } = props;
-  const [username, setUsername] = useState('');
-  const [password, setPasswor] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPasswor] = useState("");
+  const [email, setEmail] = useState("");
   const [animation, setAnimation] = useState(new Animated.Value(0));
+  const [validEmail, setValidEmail] = useState(false);
+
+  const validateEmail = (email) => {
+    var re = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
+    setValidEmail(re.test(email));
+  };
 
   const handleOpenURL = ({ url }) => {
-    let token = url.substring(url.indexOf("?token=") + 7, url.indexOf("&userId="));
-    let userId = url.substring(url.indexOf("&userId=") + 9, url.indexOf("&givenName="));
-    oauth2google({token, userId});
+    let token = url.substring(
+      url.indexOf("?token=") + 7,
+      url.indexOf("&userId=")
+    );
+    let userId = url.substring(
+      url.indexOf("&userId=") + 9,
+      url.indexOf("&givenName=")
+    );
+    oauth2google({ token, userId });
   };
 
   useEffect(() => {
     // Your code here
-    Linking.addEventListener('url', handleOpenURL);
+    Linking.addEventListener("url", handleOpenURL);
   }, []);
 
   // TODO Add animation
   const startAnimation = () => {
     Animated.timing(animation, {
       toValue: 0,
-      duration: 350
+      duration: 350,
     }).start();
-  }
+  };
 
   useEffect(() => {
-    hideMessages()
+    hideMessages();
   }, [state.error_msg, state.response_msg, navigation]);
 
   return (
     <View style={Styles.container}>
-
-      {state.error_msg !== "" ?
+      {state.error_msg !== "" ? (
         <Text style={[Styles.errMsg, startAnimation]}>{state.error_msg}</Text>
-        : null}
+      ) : null}
 
-      {state.response_msg !== "" ?
+      {state.response_msg !== "" ? (
         <Text style={Styles.response_msg}>{state.response_msg}</Text>
-        : null}
+      ) : null}
 
-      {!isLoggin ?
+      {!isLoggin ? (
         <TextInput
           value={username}
           placeholder="Input username"
           style={Styles.input}
-          onChangeText={(value) => { setUsername(value) }}
-        /> : null}
+          onChangeText={(value) => {
+            setUsername(value);
+          }}
+        />
+      ) : null}
 
       <TextInput
         placeholder="Input email"
         style={Styles.input}
         value={email}
-        onChangeText={(value) => { setEmail(value) }}
+        onChangeText={(value) => {
+          setEmail(value);
+          validateEmail(value);
+        }}
       />
 
       <TextInput
@@ -75,126 +94,142 @@ const MyForm = (props) => {
         style={Styles.input}
         secureTextEntry
         value={password}
-        onChangeText={(value) => { setPasswor(value) }}
+        onChangeText={(value) => {
+          setPasswor(value);
+        }}
       />
 
-      {!isLoggin ?
+      {!isLoggin ? (
         <TouchableOpacity
-          onPress={() => signup({ username, email, password })}
-          style={Styles.buttonContainer}>
-          <Text style={Styles.buttonText} >{name}</Text>
-        </TouchableOpacity> :
+          onPress={() => {
+            validEmail ? signup({ username, email, password }) : null;
+          }}
+          style={validEmail ? Styles.buttonContainer : Styles.buttonEmailError}
+        >
+          <Text style={Styles.buttonText}>{name}</Text>
+        </TouchableOpacity>
+      ) : (
         <TouchableOpacity
-          onPress={() => signin({ email, password })}
-          style={Styles.buttonContainer}>
-          <Text style={Styles.buttonText} >{name}</Text>
-        </TouchableOpacity>}
+          onPress={() => {
+            validEmail ? signin({ email, password }) : null;
+          }}
+          style={validEmail ? Styles.buttonContainer : Styles.buttonEmailError}
+        >
+          <Text style={Styles.buttonText}>{name}</Text>
+        </TouchableOpacity>
+      )}
 
+      {isLoggin ? (
+        <TouchableOpacity onPress={() => navigation.navigate("ResetPwd")}>
+          <Text style={Styles.noAccount}>Forget your password ?</Text>
+        </TouchableOpacity>
+      ) : null}
 
-      {isLoggin ?
-        <TouchableOpacity
-          onPress={() => navigation.navigate('ResetPwd')}
-        ><Text style={Styles.noAccount}>
-            Forget your password ?
-        </Text></TouchableOpacity> : null}
-
-
-      {isLoggin ?
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Signup')}
-        ><Text style={Styles.noAccount}>
+      {isLoggin ? (
+        <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+          <Text style={Styles.noAccount}>
             You don't have an account ? Create a new account
-        </Text></TouchableOpacity> :
-
-        <TouchableOpacity
-          onPress={() => navigation.push('Signin')}
-        ><Text style={Styles.noAccount}>
+          </Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity onPress={() => navigation.push("Signin")}>
+          <Text style={Styles.noAccount}>
             You have an account ? go to login
-        </Text></TouchableOpacity>}
+          </Text>
+        </TouchableOpacity>
+      )}
 
       <Text style={Styles.txtLine}>___________ OR ____________</Text>
 
-      <TouchableOpacity style={Styles.socialBtn}
-        onPress={() => Linking.openURL('https://42music.pagekite.me/auth/google')}>
-        <Text style={Styles.buttonText} >
-       Google</Text>
+      <TouchableOpacity
+        style={Styles.socialBtn}
+        onPress={() =>
+          Linking.openURL("https://42music.pagekite.me/auth/google")
+        }
+      >
+        <Text style={Styles.buttonText}>Google</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={Styles.social42Btn}
-        onPress={() => Linking.openURL('https://42music.pagekite.me/login/42')}>
-        <Text style={Styles.buttonText} >
-       42 LOGIN</Text>
+      <TouchableOpacity
+        style={Styles.social42Btn}
+        onPress={() => Linking.openURL("https://42music.pagekite.me/login/42")}
+      >
+        <Text style={Styles.buttonText}>42 LOGIN</Text>
       </TouchableOpacity>
     </View>
-  )
-}
+  );
+};
 
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20
+    padding: 20,
   },
   input: {
     height: 40,
-    backgroundColor: 'rgba(255,255,255, 0.8)',
+    backgroundColor: "rgba(255,255,255, 0.8)",
     paddingLeft: 20,
-    marginBottom: 15
+    marginBottom: 15,
   },
 
   buttonContainer: {
-    backgroundColor: '#27ae60',
-    paddingVertical: 10
+    backgroundColor: "#27ae60",
+    paddingVertical: 10,
+  },
+  buttonEmailError: {
+    backgroundColor: "grey",
+    paddingVertical: 10,
   },
   buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    textAlign: 'center'
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
   },
   txtLine: {
-    color: '#fff',
-    textAlign: 'center',
-    marginTop: 20
+    color: "#fff",
+    textAlign: "center",
+    marginTop: 20,
   },
   socialBtn: {
     marginTop: 30,
-    backgroundColor: '#1f5c9e',
+    backgroundColor: "#1f5c9e",
     paddingVertical: 10,
   },
   social42Btn: {
     marginTop: 10,
-    backgroundColor: 'black',
+    backgroundColor: "black",
     paddingVertical: 10,
     marginBottom: 50,
   },
   socialMedia: {
     marginRight: 10,
-    fontSize: 20
+    fontSize: 20,
   },
   noAccount: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 13,
-    marginTop: 10
+    marginTop: 10,
   },
   errMsg: {
-    color: '#fff',
-    textAlign: 'center',
+    color: "#fff",
+    textAlign: "center",
     paddingTop: 20,
     paddingBottom: 20,
-    backgroundColor: 'red',
+    backgroundColor: "red",
     marginBottom: 10,
     fontSize: 15,
-    fontWeight: '500'
+    fontWeight: "500",
   },
   response_msg: {
-    color: '#fff',
-    textAlign: 'center',
+    color: "#fff",
+    textAlign: "center",
     paddingTop: 20,
     paddingBottom: 20,
-    backgroundColor: 'green',
+    backgroundColor: "green",
     marginBottom: 10,
     fontSize: 15,
-    fontWeight: '500'
+    fontWeight: "500",
   },
-})
+});
 
 export default MyForm;
