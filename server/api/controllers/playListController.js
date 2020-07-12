@@ -17,7 +17,7 @@ const getMine = (req, res, next) => {
 const createPlaylist = (req, res, next) => {
     let data = req.body
     let user = req.user
-
+    
     playListService.createPlaylistService.createPlaylist(req, res, data, user);
 }
 

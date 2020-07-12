@@ -8,17 +8,25 @@ let playlistSchema = mongoose.Schema({
         type: String,
         default: "",
     },
+    desctiption: {
+        type: String,
+        default: "",
+    },
     public: {
         type: Boolean,
-        default: false,
+        default: true,
     },
     creator: {
         type: String,
         default: "",
     },
-    musics: {
+    trackList: {
         type: Array,
         default: [],
+    },
+    contributors: {
+        type: Array,
+        default: []
     },
     dateOfCreation: {
         type: Date,
