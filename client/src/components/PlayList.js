@@ -11,6 +11,7 @@ import { Context as AuthContext } from "../context/AuthContext";
 
 const PlayList = ({ navigation }) => {
   const [publicPlayList, setPublicPlayList] = useState([]);
+  const [myPlayList, setMyPlayList] = useState([]);
 
   const {
     state: { token },
@@ -18,13 +19,14 @@ const PlayList = ({ navigation }) => {
 
   const fetchPlaylistes = async () => {
     let allPlayList = await getAllPlayListService(token);
-    setPublicPlayList(allPlayList.publicList)
+
+    setMyPlayList(allPlayList.myPlaylist);
+    setPublicPlayList(allPlayList.publicList);
   }
 
   useEffect(() => {
     fetchPlaylistes();
   }, []);
-
 
   const keyExtractor = (item, index) => index.toString()
 
@@ -40,7 +42,6 @@ const PlayList = ({ navigation }) => {
         </Text> */}
     </Card>
   )
-
 
   return (
     <View style={styles.container}>
@@ -65,10 +66,21 @@ const PlayList = ({ navigation }) => {
         renderItem={renderItem}
         horizontal={true}
       />
+
+      <View>
+        <Text style={styles.myPlaylistTitle}>My playlist</Text>
+      </View>
+
+      <FlatList
+        keyExtractor={keyExtractor}
+        data={myPlayList}
+        renderItem={renderItem}
+        horizontal={true}
+      />
+
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   playlistTitle: {
@@ -76,6 +88,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginTop: 20,
+    marginLeft: 10,
+    marginBottom: 10,
+  },
+  myPlaylistTitle: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
     marginLeft: 10,
     marginBottom: 10,
   },
