@@ -42,11 +42,11 @@ const updatePlaylist = (playlist) => {
     })
 }
 
-const createPlaylist = (public, name, userId) => {
+const createPlaylist = (data, userId) => {
     return new Promise(async (resolve, reject) => {
-        let playList = new Playlist(await PlaylistClass.CreateNewPlaylist(public, name, userId));
+        let playList = new Playlist(await PlaylistClass.CreateNewPlaylist(data, userId));
         playList.save().then(res => {
-            resolve(playList);
+            resolve(res);
         }).catch(err => {
             console.log("createPlaylist ERR :", err);
             reject(err);
