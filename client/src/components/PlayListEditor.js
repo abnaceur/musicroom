@@ -32,6 +32,7 @@ import { TextInput } from "react-native-gesture-handler";
 
 // TODO Hide invite collaborators if isPrivate = false
 // TODO Add for validation to ensure that data is not empty
+// TODO FOR SYLVAIN
 
 const PlayListEditor = ({ navigation, route }) => {
   const [name, setName] = useState("");
