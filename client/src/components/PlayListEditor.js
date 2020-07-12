@@ -17,6 +17,9 @@ import Delete from 'react-native-vector-icons/AntDesign';
 
 import BackWard from 'react-native-vector-icons/Ionicons';
 
+// Import services 
+import { savePlayListService } from '../service/playListService';
+
 // Import context
 import { Context as playlistReducer } from "../context/PlayListContext";
 import { Context as AuthContext } from "../context/AuthContext";
@@ -25,8 +28,10 @@ import { Card, ListItem, Header, Icon } from 'react-native-elements';
 
 import Deezer from "../../Deezer";
 import { TextInput } from "react-native-gesture-handler";
-import userApi from "../api/user";
-import authHeader from "../api/authHeader";
+
+
+// TODO Hide invite collaborators if isPrivate = false
+// TODO Add for validation to ensure that data is not empty
 
 const PlayListEditor = ({ navigation, route }) => {
   const [name, setName] = useState("");
@@ -73,22 +78,7 @@ const PlayListEditor = ({ navigation, route }) => {
       isPrivate
     }
 
-    try {
-      let response = await userApi.post(
-        `/playlist/new`,
-        data,
-        {
-          headers: authHeader(token)
-        }
-      );
-      if (response.data.code === 200) {
-        Alert.alert("Confirmation", response.data.data.msg)
-      } else {
-        Alert.alert(response.data.data.msg)
-      }
-    } catch (error) {
-      console.log(error, " error");
-    }
+    savePlayListService(data, token);
   };
 
   const getMusics = async (name) => {
