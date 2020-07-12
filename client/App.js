@@ -106,7 +106,7 @@ const App = () => {
         }}>
         <Stack.Screen name="TabStack" options={{ headerShown: false }} component={TabStack} />
         <Stack.Screen name="AddMusic" component={AddMusic} />
-        <Stack.Screen name="PlayListEditor" component={PlayListEditor} />
+        <Stack.Screen name="PlayListEditor" options={{ headerShown: false }} component={PlayListEditor} />
         <Stack.Screen name="MusicList" component={MusicList} />
         <Stack.Screen name="Player" component={Player} />
       </Stack.Navigator> */}

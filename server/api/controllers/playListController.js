@@ -33,10 +33,16 @@ const deletePlaylist = (req, res, next) => {
     playListService.updatePlaylistService.deletePlaylist(req, res, data, user);
 }
 
+const getListPlaylist = (req, res, next) => {
+    let user = req.user
+    playListService.getListPlaylistService.getListPlaylist(res, user);
+}
+
 module.exports = {
     getPlaylistById,
     getMine,
     getAllPublicPlaylist,
+    getListPlaylist,
     createPlaylist,
     updatePlaylist,
     deletePlaylist
