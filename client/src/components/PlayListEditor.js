@@ -11,24 +11,23 @@ import {
   FlatList,
 } from "react-native";
 
-import CheckBox from '@react-native-community/checkbox';
-import Save from 'react-native-vector-icons/Entypo';
-import Delete from 'react-native-vector-icons/AntDesign';
+import CheckBox from "@react-native-community/checkbox";
+import Save from "react-native-vector-icons/Entypo";
+import Delete from "react-native-vector-icons/AntDesign";
 
-import BackWard from 'react-native-vector-icons/Ionicons';
+import BackWard from "react-native-vector-icons/Ionicons";
 
-// Import services 
-import { savePlayListService } from '../service/playListService';
+// Import services
+import { savePlayListService } from "../service/playListService";
 
 // Import context
 import { Context as playlistReducer } from "../context/PlayListContext";
 import { Context as AuthContext } from "../context/AuthContext";
 
-import { Card, ListItem, Header, Icon } from 'react-native-elements';
+import { Card, ListItem, Header, Icon } from "react-native-elements";
 
 import Deezer from "../../Deezer";
 import { TextInput } from "react-native-gesture-handler";
-
 
 // TODO Hide invite collaborators if isPrivate = false
 // TODO Add for validation to ensure that data is not empty
@@ -64,22 +63,27 @@ const PlayListEditor = ({ navigation, route }) => {
 
   // Handl private change
   const handlIsprivate = async (isPrivate) => {
-    if (isPrivate === true)
-      await setIsPrivate(false)
-    else
-      await setIsPrivate(true);
-  }
+    if (isPrivate === true) await setIsPrivate(false);
+    else await setIsPrivate(true);
+  };
 
   const savePlayList = async (trackList) => {
-    let data = {
-      titlePlayList,
-      description,
-      trackList,
-      contributors,
-      isPrivate
+    if (
+      titlePlayList.trim === "" ||
+      description.trim() === "" ||
+      trackList.length === 0
+    ) {
+      Alert.alert("All fields are not filled !");
+    } else {
+      let data = {
+        titlePlayList,
+        description,
+        trackList,
+        contributors,
+        isPrivate,
+      };
+      savePlayListService(data, token);
     }
-
-    savePlayListService(data, token);
   };
 
   const getMusics = async (name) => {
@@ -111,25 +115,26 @@ const PlayListEditor = ({ navigation, route }) => {
   }, [contributors]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <Header
-
         backgroundColor="#633689"
-        centerComponent={{ text: 'PlayList', style: { color: '#fff' } }}
+        centerComponent={{ text: "PlayList", style: { color: "#fff" } }}
         leftComponent={
           <BackWard
             onPress={() => navigation.goBack()}
             name="md-arrow-back"
             size={24}
-            color="white" />}
-
+            color="white"
+          />
+        }
         rightComponent={
           // <View style={styles.rightIcons}>
           <Save
             onPress={() => savePlayList(trackList)}
             name="save"
             size={24}
-            color="white" />
+            color="white"
+          />
 
           //   <Delete
           //     name="delete"
@@ -251,14 +256,60 @@ const PlayListEditor = ({ navigation, route }) => {
           style={styles.textInput}
         />
       </View>
-      <View style={{ marginTop: 15, flex: 0.1 }}>
-        <Button
-          title="Add music"
-          color="blue"
-          onPress={() => navigation.navigate("AddMusic")}
-        />
+      <View
+        style={{
+          flex: 0.2,
+          flexDirection: "row",
+          alignItems: "center",
+          // justifyContent: "center",
+        }}
+      >
+        <View
+          style={{
+            flex: 0.5,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <CheckBox
+            style={{ flex: 0.2 }}
+            // disabled={false}
+            value={isPrivate}
+            onChange={() => setIsPrivate(!isPrivate)}
+          />
+          <Text style={{ color: "white", flex: 0.6 }}>Set private !</Text>
+        </View>
+        {isPrivate ? (
+          <View style={{ marginTop: 15, flex: 0.5, alignSelf: "center" }}>
+            <TouchableOpacity
+              style={styles.buttonAdd}
+              onPress={() => setModalContributorVisible(true)}
+            >
+              <Text style={styles.buttonText}>
+                Invite user to contribute in my playlist
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
       </View>
-      <View style={{ flex: 0.8, backgroundColor: "red" }}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "white",
+          marginTop: 15,
+          borderTopRightRadius: 15,
+          borderTopLeftRadius: 15,
+        }}
+      >
+        <View style={{ marginTop: 10, alignItems: "center", marginBottom: 10 }}>
+          <TouchableOpacity
+            style={styles.buttonAdd}
+            onPress={() => navigation.navigate("AddMusic")}
+          >
+            <Text style={styles.buttonText}>Add music</Text>
+          </TouchableOpacity>
+        </View>
         <FlatList
           data={trackList}
           renderItem={({ item }) => {
@@ -271,7 +322,6 @@ const PlayListEditor = ({ navigation, route }) => {
             return (
               <View
                 style={{
-                  backgroundColor: "blue",
                   flex: 1,
                   flexDirection: "row",
                 }}
@@ -303,42 +353,15 @@ const PlayListEditor = ({ navigation, route }) => {
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
-      <View style={{ marginTop: 15, flex: 0.1 }}>
-        <Button
-          title="Invite user to contribute in my playlist"
-          onPress={() => setModalContributorVisible(true)}
-          color="blue"
-        />
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-
-        <CheckBox
-          style={{ flex: 0.1 }}
-          // disabled={false}
-          value={isPrivate}
-          onChange={() => handlIsprivate(isPrivate)}
-        />
-
-        {/* <CheckBox
-          disabled={false}
-          value={isPrivate}
-          onChange={() => isPrivate ? setIsPrivate(false) : setIsPrivate(true)} */}
-        {/* /> */}
-
-        <Text>Set private !</Text>
-      </View>
     </View>
   );
 };
 
-
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#282830",
+    flex: 1,
+  },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
@@ -383,24 +406,40 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 0.75,
     height: 40,
-    borderColor: "grey",
+    backgroundColor: "white",
     borderWidth: 1,
   },
   textInputContainer: {
     flexDirection: "row",
+    alignItems: "center",
     marginTop: 10,
   },
   text: {
     marginLeft: 10,
     flex: 0.2,
+    color: "white",
   },
   rightIcons: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    top: 13
-  }
+    flexDirection: "row",
+    justifyContent: "space-between",
+    top: 13,
+  },
+  buttonAdd: {
+    elevation: 8,
+    backgroundColor: "#841584",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    width: 150,
+  },
+  buttonText: {
+    fontSize: 14,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase",
+  },
 });
-
 
 export default PlayListEditor;
