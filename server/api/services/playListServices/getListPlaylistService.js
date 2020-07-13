@@ -2,7 +2,8 @@ const playListDao = require('../../daos/playListDao/playListDao');
 
 async function getListPlaylist(res, user) {
 
-    if (String(user.id).length !== 24)
+    let id = "5f0b1eeb309baa0356c7b210";
+    if (String(id).length !== 24)
         res.status(200).json({
             success: false,
             data: {
@@ -13,7 +14,7 @@ async function getListPlaylist(res, user) {
     else {
         // Get all public playlist
         let publicList = await playListDao.getAllPublic();
-        let myPlaylist = await playListDao.getMine(user.id);
+        let myPlaylist = await playListDao.getMine(id);
 
         res.status(200).json({
             success: true,

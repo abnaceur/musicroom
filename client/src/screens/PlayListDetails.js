@@ -12,9 +12,10 @@ import {
 
 // Import context
 import { Context as AuthContext } from '../context/AuthContext';
-import { Card, Tile, ListItem, Button, Header, Icon } from "react-native-elements";
+import { Card, Tile, ListItem, Button, Header } from "react-native-elements";
 import FavOff from "react-native-vector-icons/MaterialIcons";
 import BackWard from "react-native-vector-icons/Ionicons";
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const PlaylistDetailsScreens = (props) => {
     const { signout } = useContext(AuthContext);
@@ -29,12 +30,6 @@ const PlaylistDetailsScreens = (props) => {
             setDetails(JSON.parse(route.params.playListDetails))
         }
     }, [])
-    // React.useEffect(() => {
-    //     if (route.params?.post) {
-    //       // Post updated, do something with `route.params.post`
-    //       // For example, send the post to the server
-    //     }
-    //   }, [route.params?.post]);
 
     return (
         <ScrollView style={Styles.container}>
@@ -63,15 +58,36 @@ const PlaylistDetailsScreens = (props) => {
                     caption={listDetails.desctiption}
                 />
 
+                <Button
+                    icon={
+                        <Icon
+                            name="play"
+                            size={25}
+                            color="white"
+                        />
+                    }
+                    iconLeft
+                    title="  Start playlist"
+                />
+
+
                 {
                     listDetails.trackList ? listDetails.trackList.map((l, i) => (
                         <ListItem
                             key={i}
-                            leftAvatar={{ source: { uri: l.album.cover_big } }}
+                            leftAvatar={{ source: { uri: l.album ? l.album.cover_big : null } }}
                             title={l.title}
                             // subtitle={l.subtitle}
                             bottomDivider
+                            rightTitle="122"
+                            rightIcon={<Icon
+                                name="like1"
+                                size={25}
+                                color="blue"
+                            />
+                            }
                         />
+
                     )) : <Text>Empty list</Text>
                 }
 
