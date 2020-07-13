@@ -21,7 +21,7 @@ router.get('/getAllPublic', checkAuth, playListController.getAllPublicPlaylist)
 // @desc    getAllList
 // @route   GET /api/v1/playlist/getlist
 // @access  Private
-router.get('/getlist', checkAuth, playListController.getListPlaylist);
+router.get('/getlist', playListController.getListPlaylist);
 
 // @desc    createPlaylist
 // @route   POST /api/v1/playlist/new
