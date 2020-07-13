@@ -15,8 +15,11 @@ import java.util.ArrayList;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 // @react-native-community/checkbox
 import com.reactnativecommunity.checkbox.ReactCheckBoxPackage;
+<<<<<<< HEAD
 // @react-native-community/datetimepicker
 import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
+=======
+>>>>>>> def2069e6519b3963d0d9bd2f587f3990c79bce1
 // @react-native-community/masked-view
 import org.reactnative.maskedview.RNCMaskedViewPackage;
 // @react-native-community/slider
@@ -80,7 +83,10 @@ public class PackageList {
       new MainReactPackage(mConfig),
       new AsyncStoragePackage(),
       new ReactCheckBoxPackage(),
+<<<<<<< HEAD
       new RNDateTimePickerPackage(),
+=======
+>>>>>>> def2069e6519b3963d0d9bd2f587f3990c79bce1
       new RNCMaskedViewPackage(),
       new ReactSliderPackage(),
       new RNGestureHandlerPackage(),
