@@ -10,7 +10,7 @@ import Eye from 'react-native-vector-icons/AntDesign';
 import { getAllPlayListService } from '../service/playListService';
 import { Context as AuthContext } from "../context/AuthContext";
 
-const PlayList = ({ navigation }) => {
+const PlayList = ({ navigation, route }) => {
   const [publicPlayList, setPublicPlayList] = useState([]);
   const [myPlayList, setMyPlayList] = useState([]);
 

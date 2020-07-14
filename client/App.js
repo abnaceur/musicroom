@@ -96,8 +96,9 @@ function TabStack() {
 
 const App = () => {
   const { state } = useContext(AuthContext);
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IiQyYiQxMCRYOS9weVNDTnI3S3JhVVQyWC9lbjZPV05JdFdneFVLNjJIdDI1RmVxTEpoZUYyS0RqejNCNiIsImRhdGEiOiI1ZjBiMWVlYjMwOWJhYTAzNTZjN2IyMTAiLCJpYXQiOjE1OTQ2Mzg0NzksImV4cCI6MTU5NDY4MTY3OX0.Xa7tSkKKEQMe9SxX7BxFOmH_Bdvj3x7pfU6RTI7Ms7c";
-
+  // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IiQyYiQxMCRqZThiY3kxWEExbGQvN0RoVldac2guY2VxdnR6WWdXUUxFYmlFOXlvTnpOUFE4cjFrNEhmdSIsImRhdGEiOiI1ZjBkOGQ2Mzc3NjMwNjAwOGFmZGY4MGUiLCJpYXQiOjE1OTQ3MjU1MzYsImV4cCI6MTU5NDc2ODczNn0.OhFom7IIXNgpAHinzp-QpHJAR8WPNtW2nzn0nTBZLh8";
+  const token = state.token;
+  
   if (!token) {
     return (
       <NavigationContainer>

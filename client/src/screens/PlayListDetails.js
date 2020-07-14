@@ -10,6 +10,8 @@ import {
     StyleSheet
 } from 'react-native';
 
+import AsyncStorage from '@react-native-community/async-storage';
+
 // Import context
 import { Context as AuthContext } from '../context/AuthContext';
 import { Card, Tile, ListItem, Button, Header } from "react-native-elements";
@@ -19,19 +21,21 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Sound, { setCategory } from "react-native-sound";
 
+// Import servces
+import { updateTrackLikeService } from '../service/playListService';
 
 const PlaylistDetailsScreens = (props) => {
-    const { signout } = useContext(AuthContext);
+    const { state } = useContext(AuthContext);
     const [listDetails, setDetails] = useState({});
     const [trackList, setTrackList] = useState({});
     const [songsList, setSongsList] = useState({});
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentSong, setCurrentSong] = useState(0);
+    const [rerender, setRerender] = useState(0);
     const [sound, setSound] = useState(false);
     const { navigation, route } = props;
 
     const handlSongsList = (list) => {
-        // console.log("list :", list);
         let data = [];
         if (list && list.length > 0) {
             list.map(l => {
@@ -47,10 +51,17 @@ const PlaylistDetailsScreens = (props) => {
             let data = JSON.parse(route.params.playListDetails);
             // console.log("route.params :", data);
             setDetails(JSON.parse(route.params.playListDetails))
-            setTrackList(data.trackList);
+            setTrackList(data.trackList.sort(a => a.position));
             handlSongsList(data.trackList)
         }
     }, []);
+
+    useEffect(() => {
+        if (rerender !== 0) {
+            let data = trackList;
+            setTrackList(trackList);
+        }
+    },  [rerender])
 
     const startPlay = (i) => {
         if (isPlaying) {
@@ -81,12 +92,25 @@ const PlaylistDetailsScreens = (props) => {
                 });
     }
 
+
     const pause = (i) => {
         if (sound) {
             sound.pause();
         }
         setIsPlaying(false);
     };
+
+    const handleLikePress = async (id, track, ) => {
+        let user = JSON.parse(await AsyncStorage.getItem('userInfo'));
+        if (track.likes.indexOf(user.userId) === -1) {
+            trackList[id].likes.push(user.userId);
+        } else {
+            trackList[id].likes.splice(trackList[id].likes.indexOf(user.userId), 1);
+        }
+        await setTrackList(trackList);
+        setRerender(Math.floor(Math.random() * 999999999));
+        await updateTrackLikeService(id, track, state.token)
+    }
 
     return (
         <ScrollView style={Styles.container}>
@@ -96,7 +120,7 @@ const PlaylistDetailsScreens = (props) => {
                     centerComponent={{ text: listDetails.name, style: { color: "#fff" } }}
                     leftComponent={
                         <BackWard
-                            onPress={() => {pause(), navigation.goBack()}}
+                            onPress={() => { pause(), navigation.goBack() }}
                             name="md-arrow-back"
                             size={24}
                             color="white"
@@ -131,15 +155,16 @@ const PlaylistDetailsScreens = (props) => {
 
 
                 {
-                    listDetails.trackList ? listDetails.trackList.map((l, i) => (
+                    listDetails.trackList ? trackList.map((l, i) => (
                         <ListItem
                             key={i}
                             leftAvatar={{ source: { uri: l.album ? l.album.cover_big : null } }}
                             title={l.title}
                             // subtitle={l.subtitle}
                             bottomDivider
-                            rightTitle="122"
+                            rightTitle={console.log(l.likes.length), (l.likes.length).toString()}
                             rightIcon={<SimpleLineIcons
+                                onPress={() => handleLikePress(i, l)}
                                 name="like"
                                 size={25}
                                 color="blue"
