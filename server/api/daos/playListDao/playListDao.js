@@ -42,6 +42,24 @@ const updatePlaylist = (playlist) => {
     })
 }
 
+const updatePlaylistTracks = (id, track) => {
+    return new Promise(async (resolve, reject) => {
+        getPlayListById(id)
+            .then(result => {
+                result.trackList[track.position] = track;
+                Playlist.findByIdAndUpdate(
+                    result._id,
+                    result,
+                    { new: true },
+                    (err, newTrackLikes) => {
+                        if (err) resolve(false);
+                        resolve(newTrackLikes);
+                    }
+                )
+            })
+    })
+}
+
 const createPlaylist = (data, userId) => {
     return new Promise(async (resolve, reject) => {
         let playList = new Playlist(await PlaylistClass.CreateNewPlaylist(data, userId));
@@ -82,6 +100,7 @@ const deletePlaylist = (id) => {
 module.exports = {
     getMine,
     updatePlaylist,
+    updatePlaylistTracks,
     getPlayListById,
     createPlaylist,
     getAllPublic,

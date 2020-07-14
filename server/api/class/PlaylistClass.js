@@ -8,7 +8,6 @@ const prepareTrackList = async (list) => {
                 l.likes = []; 
                 l.position = i;
             });
-            console.log("List", list);
             resolve(list);
         } else resolve([])
     })

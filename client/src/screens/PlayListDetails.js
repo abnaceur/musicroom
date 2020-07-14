@@ -49,7 +49,6 @@ const PlaylistDetailsScreens = (props) => {
     useEffect(() => {
         if (route.params?.playListDetails) {
             let data = JSON.parse(route.params.playListDetails);
-            // console.log("route.params :", data);
             setDetails(JSON.parse(route.params.playListDetails))
             setTrackList(data.trackList.sort(a => a.position));
             handlSongsList(data.trackList)
@@ -109,7 +108,7 @@ const PlaylistDetailsScreens = (props) => {
         }
         await setTrackList(trackList);
         setRerender(Math.floor(Math.random() * 999999999));
-        await updateTrackLikeService(id, track, state.token)
+        await updateTrackLikeService(listDetails._id, track, state.token)
     }
 
     return (
@@ -162,7 +161,7 @@ const PlaylistDetailsScreens = (props) => {
                             title={l.title}
                             // subtitle={l.subtitle}
                             bottomDivider
-                            rightTitle={console.log(l.likes.length), (l.likes.length).toString()}
+                            rightTitle={(l.likes.length).toString()}
                             rightIcon={<SimpleLineIcons
                                 onPress={() => handleLikePress(i, l)}
                                 name="like"

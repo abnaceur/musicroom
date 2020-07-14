@@ -45,7 +45,7 @@ const updateTrackLikeService = async (id, track, token) => {
     return new Promise(async (resolve, reject) => {
         try {
             let response = await userApi.post(`/playlist/likes`, {
-                position: id,
+                id,
                 track
             },
                 { headers: authHeader(token) });
