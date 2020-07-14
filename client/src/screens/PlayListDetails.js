@@ -16,8 +16,8 @@ import { Card, Tile, ListItem, Button, Header } from "react-native-elements";
 import FavOff from "react-native-vector-icons/MaterialIcons";
 import BackWard from "react-native-vector-icons/Ionicons";
 import Icon from 'react-native-vector-icons/AntDesign';
-
-import Sound from "react-native-sound";
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Sound, { setCategory } from "react-native-sound";
 
 
 const PlaylistDetailsScreens = (props) => {
@@ -52,16 +52,14 @@ const PlaylistDetailsScreens = (props) => {
         }
     }, []);
 
-    useEffect(() => {
-        console.log("currentSong :", currentSong);
-        // if (currentSong !== 0)
-        startPlay();
-    }, [currentSong])
-
-    const startPlay = () => {
-        console.log("songsList[currentSong] ", songsList[currentSong], currentSong)
-        if (songsList[currentSong])
-            var sound1 = new Sound(songsList[currentSong], '',
+    const startPlay = (i) => {
+        if (isPlaying) {
+            pause();
+            setIsPlaying(false);
+        }
+        setCurrentSong(i);
+        if (songsList[i])
+            var sound1 = new Sound(songsList[i], '',
                 (error, sound) => {
                     if (error) {
                         alert('error' + error.message);
@@ -70,17 +68,20 @@ const PlaylistDetailsScreens = (props) => {
                     setIsPlaying(true);
                     setSound(sound1);
                     sound1.play(() => {
-                        console.log("Releaded", songsList.length, parseInt(currentSong))
                         sound1.release();
-                        if (parseInt(currentSong) + 1 < songsList.length)
-                            setCurrentSong(currentSong + 1);
-                        else
+                        if (parseInt(i) + 1 < songsList.length) {
+                            setCurrentSong(i + 1);
+                            startPlay(i + 1);
+                        }
+                        else {
                             setCurrentSong(0);
+                            startPlay(0);
+                        }
                     });
                 });
     }
 
-    const pause = () => {
+    const pause = (i) => {
         if (sound) {
             sound.pause();
         }
@@ -95,7 +96,7 @@ const PlaylistDetailsScreens = (props) => {
                     centerComponent={{ text: listDetails.name, style: { color: "#fff" } }}
                     leftComponent={
                         <BackWard
-                            onPress={() => navigation.goBack()}
+                            onPress={() => {pause(), navigation.goBack()}}
                             name="md-arrow-back"
                             size={24}
                             color="white"
@@ -115,7 +116,7 @@ const PlaylistDetailsScreens = (props) => {
                 />
 
                 <Button
-                    onPress={() => !isPlaying ? startPlay() : pause()}
+                    onPress={() => !isPlaying ? startPlay(currentSong) : pause(currentSong)}
                     icon={
 
                         <Icon
@@ -138,11 +139,25 @@ const PlaylistDetailsScreens = (props) => {
                             // subtitle={l.subtitle}
                             bottomDivider
                             rightTitle="122"
-                            rightIcon={<Icon
-                                name="like1"
+                            rightIcon={<SimpleLineIcons
+                                name="like"
                                 size={25}
                                 color="blue"
                             />
+                            }
+                            leftIcon={i === currentSong && isPlaying ?
+                                <SimpleLineIcons
+                                    name="control-pause"
+                                    size={25}
+                                    color="blue"
+                                    onPress={() => pause(i)}
+                                />
+                                : <SimpleLineIcons
+                                    name="control-play"
+                                    size={24} color="blue"
+                                    onPress={() => startPlay(i)
+                                    }
+                                />
                             }
                         />
 
