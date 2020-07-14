@@ -17,19 +17,75 @@ import FavOff from "react-native-vector-icons/MaterialIcons";
 import BackWard from "react-native-vector-icons/Ionicons";
 import Icon from 'react-native-vector-icons/AntDesign';
 
+import Sound from "react-native-sound";
+
+
 const PlaylistDetailsScreens = (props) => {
     const { signout } = useContext(AuthContext);
     const [listDetails, setDetails] = useState({});
+    const [trackList, setTrackList] = useState({});
+    const [songsList, setSongsList] = useState({});
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [currentSong, setCurrentSong] = useState(0);
+    const [sound, setSound] = useState(false);
     const { navigation, route } = props;
 
+    const handlSongsList = (list) => {
+        // console.log("list :", list);
+        let data = [];
+        if (list && list.length > 0) {
+            list.map(l => {
+                data.push(l.preview)
+            })
+        }
+
+        setSongsList(data);
+    }
 
     useEffect(() => {
         if (route.params?.playListDetails) {
-            let test = JSON.parse(route.params.playListDetails);
-            console.log("route.params :", test);
+            let data = JSON.parse(route.params.playListDetails);
+            // console.log("route.params :", data);
             setDetails(JSON.parse(route.params.playListDetails))
+            setTrackList(data.trackList);
+            handlSongsList(data.trackList)
         }
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        console.log("currentSong :", currentSong);
+        // if (currentSong !== 0)
+        startPlay();
+    }, [currentSong])
+
+    const startPlay = () => {
+        console.log("songsList[currentSong] ", songsList[currentSong], currentSong)
+        if (songsList[currentSong])
+            var sound1 = new Sound(songsList[currentSong], '',
+                (error, sound) => {
+                    if (error) {
+                        alert('error' + error.message);
+                        return;
+                    }
+                    setIsPlaying(true);
+                    setSound(sound1);
+                    sound1.play(() => {
+                        console.log("Releaded", songsList.length, parseInt(currentSong))
+                        sound1.release();
+                        if (parseInt(currentSong) + 1 < songsList.length)
+                            setCurrentSong(currentSong + 1);
+                        else
+                            setCurrentSong(0);
+                    });
+                });
+    }
+
+    const pause = () => {
+        if (sound) {
+            sound.pause();
+        }
+        setIsPlaying(false);
+    };
 
     return (
         <ScrollView style={Styles.container}>
@@ -59,9 +115,11 @@ const PlaylistDetailsScreens = (props) => {
                 />
 
                 <Button
+                    onPress={() => !isPlaying ? startPlay() : pause()}
                     icon={
+
                         <Icon
-                            name="play"
+                            name={!isPlaying ? "play" : "pause"}
                             size={25}
                             color="white"
                         />
