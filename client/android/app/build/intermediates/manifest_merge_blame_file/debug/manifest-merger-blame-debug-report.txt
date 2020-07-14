@@ -9,81 +9,81 @@
 9        android:targetSdkVersion="28" />
 10
 11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-11-->/home/sylvain/Bureau/musicroom42/client/android/app/src/debug/AndroidManifest.xml:5:5-77
-11-->/home/sylvain/Bureau/musicroom42/client/android/app/src/debug/AndroidManifest.xml:5:22-75
+11-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/debug/AndroidManifest.xml:5:5-77
+11-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/debug/AndroidManifest.xml:5:22-75
 12    <uses-permission android:name="android.permission.INTERNET" />
-12-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:4:5-67
-12-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:4:22-64
+12-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:4:5-67
+12-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:4:22-64
 13    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-13-->[com.facebook.flipper:flipper:0.33.1] /home/sylvain/.gradle/caches/transforms-2/files-2.1/ba85e5c610365242e2fd3b7d92141bb3/jetified-flipper-0.33.1/AndroidManifest.xml:16:5-76
-13-->[com.facebook.flipper:flipper:0.33.1] /home/sylvain/.gradle/caches/transforms-2/files-2.1/ba85e5c610365242e2fd3b7d92141bb3/jetified-flipper-0.33.1/AndroidManifest.xml:16:22-73
+13-->[com.facebook.flipper:flipper:0.33.1] /root/.gradle/caches/transforms-2/files-2.1/ba85e5c610365242e2fd3b7d92141bb3/jetified-flipper-0.33.1/AndroidManifest.xml:16:5-76
+13-->[com.facebook.flipper:flipper:0.33.1] /root/.gradle/caches/transforms-2/files-2.1/ba85e5c610365242e2fd3b7d92141bb3/jetified-flipper-0.33.1/AndroidManifest.xml:16:22-73
 14
 15    <application
-15-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:6:5-34:19
+15-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:6:5-34:19
 16        android:name="com.client.MainApplication"
-16-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:7:7-38
+16-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:7:7-38
 17        android:allowBackup="false"
-17-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:11:7-34
+17-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:11:7-34
 18        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-18-->[androidx.core:core:1.1.0] /home/sylvain/.gradle/caches/transforms-2/files-2.1/03736cf4bc3669a69d502627b70a527e/core-1.1.0/AndroidManifest.xml:24:18-86
+18-->[androidx.core:core:1.1.0] /root/.gradle/caches/transforms-2/files-2.1/03736cf4bc3669a69d502627b70a527e/core-1.1.0/AndroidManifest.xml:24:18-86
 19        android:debuggable="true"
 20        android:icon="@mipmap/ic_launcher"
-20-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:9:7-41
+20-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:9:7-41
 21        android:label="@string/app_name"
-21-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:8:7-39
+21-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:8:7-39
 22        android:roundIcon="@mipmap/ic_launcher_round"
-22-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:10:7-52
+22-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:10:7-52
 23        android:theme="@style/AppTheme"
-23-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:12:7-38
+23-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:12:7-38
 24        android:usesCleartextTraffic="true" >
-24-->/home/sylvain/Bureau/musicroom42/client/android/app/src/debug/AndroidManifest.xml:7:18-53
+24-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/debug/AndroidManifest.xml:7:18-53
 25        <activity
-25-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:13:7-30:18
+25-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:13:7-30:18
 26            android:name="com.client.MainActivity"
-26-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:14:9-37
+26-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:14:9-37
 27            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-27-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:16:9-86
+27-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:16:9-86
 28            android:label="@string/app_name"
-28-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:15:9-41
+28-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:15:9-41
 29            android:launchMode="singleTask"
-29-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:17:9-40
+29-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:17:9-40
 30            android:windowSoftInputMode="adjustResize" >
-30-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:18:9-51
+30-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:18:9-51
 31            <intent-filter>
-31-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:19:9-22:25
+31-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:19:9-22:25
 32                <action android:name="android.intent.action.MAIN" />
-32-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:20:13-65
-32-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:20:21-62
+32-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:20:13-65
+32-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:20:21-62
 33
 34                <category android:name="android.intent.category.LAUNCHER" />
-34-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:21:13-73
-34-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:21:23-70
+34-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:21:13-73
+34-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:21:23-70
 35            </intent-filter>
 36            <intent-filter android:label="musicroom" >
-36-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:24:13-29:29
-36-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:24:28-53
+36-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:24:13-29:29
+36-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:24:28-53
 37                <action android:name="android.intent.action.VIEW" />
-37-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:25:17-69
-37-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:25:25-66
+37-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:25:17-69
+37-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:25:25-66
 38
 39                <category android:name="android.intent.category.DEFAULT" />
-39-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:26:17-76
-39-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:26:27-73
+39-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:26:17-76
+39-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:26:27-73
 40                <category android:name="android.intent.category.BROWSABLE" />
-40-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:27:17-78
-40-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:27:27-75
+40-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:27:17-78
+40-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:27:27-75
 41
 42                <data
-42-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:28:17-80
+42-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:28:17-80
 43                    android:host="msrm42app.io"
-43-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:28:50-77
+43-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:28:50-77
 44                    android:scheme="msrm42app" />
-44-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:28:23-49
+44-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:28:23-49
 45            </intent-filter>
 46        </activity>
 47        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-47-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:33:7-84
-47-->/home/sylvain/Bureau/musicroom42/client/android/app/src/main/AndroidManifest.xml:33:17-81
+47-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:33:7-84
+47-->/home/abn/my-projects/42_Projects/musicroom42/client/android/app/src/main/AndroidManifest.xml:33:17-81
 48    </application>
 49
 50</manifest>
