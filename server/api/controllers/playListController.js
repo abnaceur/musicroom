@@ -38,7 +38,14 @@ const getListPlaylist = (req, res, next) => {
     playListService.getListPlaylistService.getListPlaylist(res, user);
 }
 
+likePlaylist = (req, res, next) => {
+    let user = req.user;
+    let data = req.body;
+    playListService.likePlaylistTrackService.likePlaylistTrack(res, user, data);
+}
+
 module.exports = {
+    likePlaylist,
     getPlaylistById,
     getMine,
     getAllPublicPlaylist,

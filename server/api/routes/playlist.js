@@ -43,4 +43,10 @@ router.post('/update', checkAuth, playListController.updatePlaylist)
 // @access  Private
 router.post('/delete', checkAuth, playListController.deletePlaylist)
 
+
+// @desc    likePlaylist
+// @route   POST /api/v1/playlist/likes
+// @access  Private
+router.post('/likes', checkAuth, playListController.likePlaylist)
+
 module.exports = router;

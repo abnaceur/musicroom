@@ -46,6 +46,7 @@ const createPlaylist = (data, userId) => {
     return new Promise(async (resolve, reject) => {
         let playList = new Playlist(await PlaylistClass.CreateNewPlaylist(data, userId));
         playList.save().then(res => {
+            console.log("res :", res)
             resolve(res);
         }).catch(err => {
             console.log("createPlaylist ERR :", err);
