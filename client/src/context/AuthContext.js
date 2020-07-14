@@ -70,10 +70,12 @@ const signup = (dispatch) => async ({ username, email, password }) => {
 const signin = (dispatch) => async ({ email, password }) => {
   try {
     if (!emailRegex.test(email)) {
+      console.log(email);
       dispatch({ type: "add_error", payload: "Invalid email" });
       return;
     }
     if (!passwordRegex.test(password)) {
+      console.log(password);
       dispatch({ type: "add_error", payload: "Invalid password" });
       return;
     }
@@ -110,7 +112,8 @@ const signout = (dispatch) => async () => {
 
 const resetPwd = (dispatch) => async (email) => {
   try {
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(email.email)) {
+      console.log(emailRegex.test(email.email));
       dispatch({ type: "add_error", payload: "Invalid email" });
       return;
     }
