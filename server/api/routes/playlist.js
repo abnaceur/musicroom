@@ -2,8 +2,6 @@ var express = require('express');
 const router = express.Router();
 const playListController = require('../controllers/playListController');
 
-// const passport = require('passport')
-// const checkAuth = passport.authenticate('jwt', { session: false });
 const checkAuth = require("../middleware/check-auth");
 
 //=> End of declared dependencies
