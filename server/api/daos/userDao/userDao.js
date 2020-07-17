@@ -82,6 +82,28 @@ getUserByEmail = (email) => {
     })
 }
 
+updateUser = (id, updateUser) => {
+    return new Promise((resolve, reject) => {
+        this.getUserById(id).then(user => {
+            if (!user)
+                resolve(false)
+            else {
+                user.status = updateUser.status
+                user.city = updateUser.city
+                user.age = updateUser.age
+                user.musicStyle = updateUser.musicStyle
+                user.firstname = updateUser.firstname
+                user.lastname = updateUser.lastname
+                User.findByIdAndUpdate(id,
+                    user, (err, userRes) => {
+                        if (err) resolve(false);
+                        resolve(userRes);
+                    })
+            }
+        }).catch(err => reject(err))
+    })
+}
+
 resetPassword = async (email) => {
     return new Promise(async (resolve, reject) => {
         //    Generate new pwd
@@ -155,6 +177,7 @@ module.exports = {
     resetPassword,
     ifExistUserAccountById,
     getUserById,
+    updateUser,
     deleteUserById,
     saveNewUserAccount
 }
