@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import {
   View,
   Text,
@@ -14,16 +14,21 @@ import {
 import DatetimePicker from "@react-native-community/datetimepicker";
 import { Header } from "react-native-elements";
 import CheckBox from "@react-native-community/checkbox";
+import axios from "axios";
 
 import Save from "react-native-vector-icons/Entypo";
 import BackWard from "react-native-vector-icons/Ionicons";
 
 import { Context as AuthContext } from "../context/AuthContext";
 import { getMyPlayList } from "../service/eventService";
+import { add } from "react-native-reanimated";
+
+const apiKeyGeocoder = "2fc143fb400c48a38e3479e0dfd66278";
 
 const EventEditor = ({ navigation }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [address, setAddress] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [mode, setMode] = useState("date");
@@ -35,6 +40,10 @@ const EventEditor = ({ navigation }) => {
   const [modalContributorVisible, setModalContributorVisible] = useState(false);
   const [contributor, setContributor] = useState("");
   const [contributors, setContributors] = useState([]);
+  const [allAddress, setAllAddress] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const lastUpdateTime = useRef(null);
+  const typingInterval = useRef(null);
 
   const {
     state: { token },
@@ -115,6 +124,51 @@ const EventEditor = ({ navigation }) => {
     setModalContributorVisible(false);
   };
 
+  const getAddress = async () => {
+    axios
+      .get(
+        `https://api.opencagedata.com/geocode/v1/json?q=${address}&key=${apiKeyGeocoder}&language=fr&pretty=1`
+      )
+      .then((response) => console.log(response.data.results))
+      // .then((responseJson) => console.log(responseJson.results))
+      .catch((error) => console.log(error));
+    try {
+      const response = await axios.get(
+        `https://api.opencagedata.com/geocode/v1/json?q=${address}&key=${apiKeyGeocoder}&language=fr&pretty=1`
+      );
+      address.length > 0 && setAllAddress(response.data.results);
+      address.length === 0 && setAllAddress([]);
+    } catch (error) {
+      console.log(error);
+      setAllAddress([]);
+    }
+  };
+
+  const startTyping = () => {
+    typingInterval.current = setInterval(() => {
+      if (Date.now() - lastUpdateTime.current > 300) {
+        getAddress();
+        stopCheckingTyping();
+        setIsTyping(false);
+      } else {
+      }
+    });
+  };
+
+  const stopCheckingTyping = () => {
+    if (typingInterval.current) {
+      clearInterval(typingInterval.current);
+    }
+  };
+
+  const typingIsProgress = () => {
+    lastUpdateTime.current = Date.now();
+    if (!isTyping) {
+      startTyping();
+      setIsTyping(true);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Header
@@ -188,6 +242,34 @@ const EventEditor = ({ navigation }) => {
           style={styles.textInput}
         />
       </View>
+      <View style={[styles.textInputContainer]}>
+        <Text style={styles.text}>Address</Text>
+        <View style={{ flex: 0.75, height: 40 }}>
+          <TextInput
+            onChangeText={(text) => setAddress(text)}
+            value={address}
+            style={[styles.textInput, { flex: 1 }]}
+            onKeyPress={() => typingIsProgress()}
+          />
+          {/* <Button title="Envoie" onPress={() => getAddress()} /> */}
+          {allAddress.length > 0 ? (
+            <View style={styles.addressContainer}>
+              {allAddress.map((address, index) => (
+                <View key={index}>
+                  <Text
+                    style={styles.textAddress}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {address.formatted}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          ) : null}
+        </View>
+      </View>
+      {/* <Button title="Close" onPress={() => getAddress()} /> */}
       <View>
         <View
           style={{
@@ -333,7 +415,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   buttonDate: {
-    elevation: 8,
+    // elevation: 8,
     backgroundColor: "#841584",
     borderRadius: 10,
     paddingVertical: 10,
@@ -382,6 +464,21 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     borderBottomColor: "grey",
     borderBottomWidth: 1,
+  },
+  addressContainer: {
+    position: "absolute",
+    top: 40,
+    left: 0,
+    flex: 1,
+    elevation: 10,
+    backgroundColor: "white",
+  },
+  textAddress: {
+    flex: 1,
+    marginTop: 10,
+    borderBottomColor: "grey",
+    borderBottomWidth: 1,
+    paddingBottom: 10,
   },
 });
 
