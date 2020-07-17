@@ -44,6 +44,18 @@ let userSchema = mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    status: {
+        type: String,
+    },
+    city: {
+        type: String,
+    },
+    age: {
+        type: Number,
+    },
+    musicStyle: {
+        type: String,
+    }
 });
 
 module.exports = mongoose.model('User', userSchema);

@@ -87,7 +87,7 @@ const getMine = (userId) => {
 
 const deletePlaylist = (id) => {
     return new Promise((resolve, reject) => {
-        Playlist.findOneAndDelete(id).exec()
+        Playlist.findByIdAndDelete(id).exec()
             .then(response => {
                 resolve(response);
             }).catch(err => {

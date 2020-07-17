@@ -34,6 +34,9 @@ resetPassword = (req, res, next) => {
 }
 
 updateUser = (req, res, next) => {
+    let updateUser = req.body.user;
+    let id = req.user.id
+    userService.updateUserService.updateUser(id, updateUser, res)
 }
 
 module.exports = {
