@@ -33,6 +33,8 @@ resetPassword = (req, res, next) => {
     userService.resetPwdService.resetPwd(req.body.email.email, res);
 }
 
+updateUser = (req, res, next) => {
+}
 
 module.exports = {
     createNewAccount,
@@ -40,5 +42,6 @@ module.exports = {
     deleteUserById,
     resetPassword,
     getUserById,
-    loginUser
+    loginUser,
+    updateUser
 }
