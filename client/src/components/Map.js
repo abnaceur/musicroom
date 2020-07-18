@@ -6,12 +6,13 @@ import {
   PermissionsAndroid,
   TextInput,
 } from "react-native";
-import axios from "axios";
 
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 import MapView, { Marker, Circle } from "react-native-maps";
 import Geolocation from "react-native-geolocation-service";
+
+const locationEvent = "48.862725,2.287592";
 
 const Map = () => {
   const [userLocation, setUserLocation] = useState({
@@ -26,8 +27,8 @@ const Map = () => {
   });
   const [circle, setCircle] = useState({
     center: {
-      latitude: 48.819307,
-      longitude: 2.2464147,
+      latitude: 48.862725,
+      longitude: 2.287592,
     },
     radius: 1000,
   });
@@ -37,14 +38,31 @@ const Map = () => {
     getPermissions();
   }, []);
 
+  useEffect(() => {
+    const { latitude, longitude } = userLocation;
+    const distance = circle.radius / 1000;
+    const userPosition = calculDistance(
+      latitude,
+      longitude,
+      circle.center.latitude,
+      circle.center.longitude
+    );
+    console.log(userPosition, distance, " distance");
+    if (userPosition < distance) {
+      console.log("setPermission");
+    } else {
+      console.log("notPermission");
+    }
+  }, [userLocation]);
+
   const getUserLocation = () => {
     Geolocation.getCurrentPosition(
       (position) => {
-        const currentLocation = position;
         const {
           coords: { longitude, latitude },
-        } = currentLocation;
+        } = position;
         setUserLocation({ longitude, latitude });
+        setPositionMap({ ...positionMap, longitude, latitude });
       },
       (error) => {
         // See error code charts below.
@@ -52,6 +70,28 @@ const Map = () => {
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );
+  };
+
+  const calculDistance = (lat1, lon1, lat2, lon2) => {
+    if (lat1 === lat2 && lon1 === lon2) {
+      return 0;
+    } else {
+      const radLat1 = (Math.PI * lat1) / 180;
+      const radLat2 = (Math.PI * lat2) / 180;
+      const theta = lon1 - lon2;
+      const radTheta = (Math.PI * theta) / 180;
+      let distance =
+        Math.sin(radLat1) * Math.sin(radLat2) +
+        Math.cos(radLat1) * Math.cos(radLat2) * Math.cos(radTheta);
+      if (distance > 1) {
+        distance = 1;
+      }
+      distance = Math.acos(distance);
+      distance = (distance * 180) / Math.PI;
+      distance = distance * 60 * 1.1515;
+      distance = distance * 1.609344;
+      return distance;
+    }
   };
 
   const getPermissions = async () => {
@@ -62,7 +102,9 @@ const Map = () => {
         message: "ReactNativeCode App needs access to your location ",
       }
     );
-    console.log(granted);
+    if (granted) {
+      getUserLocation();
+    }
   };
 
   const setZoom = (increase) => {
@@ -84,37 +126,33 @@ const Map = () => {
     const {
       coordinate: { latitude, longitude },
     } = e.nativeEvent;
+    const newPositionMap = { ...positionMap, longitude, latitude };
     setUserLocation({
       latitude,
       longitude,
     });
+    setPositionMap({ ...positionMap, longitude, latitude });
+    mapRef.current.animateToRegion(newPositionMap);
+  };
+
+  const centerMap = () => {
+    const { latitude, longitude } = userLocation;
+    const newPositionMap = { ...positionMap, longitude, latitude };
+    setPositionMap({ ...positionMap, longitude, latitude });
+    mapRef.current.animateToRegion(newPositionMap);
   };
 
   return (
     <View style={styles.container}>
       <View>
         <View style={styles.iconContainer}>
-          <Icon
-            onPress={() => getUserLocation()}
-            name="my-location"
-            size={24}
-          />
+          <Icon onPress={() => centerMap()} name="my-location" size={24} />
         </View>
         <View style={styles.iconContainer}>
-          <Icon
-            onPress={() => console.log("position")}
-            name="zoom-in"
-            size={24}
-            onPress={() => setZoom(true)}
-          />
+          <Icon name="zoom-in" size={24} onPress={() => setZoom(true)} />
         </View>
         <View style={styles.iconContainer}>
-          <Icon
-            onPress={() => console.log("position")}
-            name="zoom-out"
-            onPress={() => setZoom(false)}
-            size={24}
-          />
+          <Icon name="zoom-out" onPress={() => setZoom(false)} size={24} />
         </View>
       </View>
       <MapView
@@ -129,9 +167,14 @@ const Map = () => {
       >
         <Marker
           coordinate={userLocation}
-          title={"title"}
-          description={"description"}
+          title={"me"}
+          description={"location"}
           onPress={(e) => newCoordinate(e)}
+        />
+        <Marker
+          coordinate={circle.center}
+          title={"eventTitle"}
+          description={"descriptionEvent"}
         />
         <Circle
           center={circle.center}
