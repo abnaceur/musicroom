@@ -10,6 +10,7 @@ import {
   Alert,
   Modal,
   Button,
+  Keyboard,
 } from "react-native";
 import DatetimePicker from "@react-native-community/datetimepicker";
 import { Header } from "react-native-elements";
@@ -21,7 +22,6 @@ import BackWard from "react-native-vector-icons/Ionicons";
 
 import { Context as AuthContext } from "../context/AuthContext";
 import { getMyPlayList } from "../service/eventService";
-import { add } from "react-native-reanimated";
 
 const apiKeyGeocoder = "2fc143fb400c48a38e3479e0dfd66278";
 
@@ -52,6 +52,17 @@ const EventEditor = ({ navigation }) => {
   useEffect(() => {
     fetchPlayLists();
   }, []);
+
+  useEffect(() => {
+    Keyboard.addListener("keyboardDidHide", keyboardHide);
+    return () => {
+      Keyboard.removeListener("keyboardDidHide", keyboardHide);
+    };
+  }, []);
+
+  const keyboardHide = () => {
+    setAllAddress([]);
+  };
 
   const fetchPlayLists = async () => {
     try {
@@ -125,13 +136,6 @@ const EventEditor = ({ navigation }) => {
   };
 
   const getAddress = async () => {
-    axios
-      .get(
-        `https://api.opencagedata.com/geocode/v1/json?q=${address}&key=${apiKeyGeocoder}&language=fr&pretty=1`
-      )
-      .then((response) => console.log(response.data.results))
-      // .then((responseJson) => console.log(responseJson.results))
-      .catch((error) => console.log(error));
     try {
       const response = await axios.get(
         `https://api.opencagedata.com/geocode/v1/json?q=${address}&key=${apiKeyGeocoder}&language=fr&pretty=1`
@@ -167,6 +171,11 @@ const EventEditor = ({ navigation }) => {
       startTyping();
       setIsTyping(true);
     }
+  };
+
+  const setDataAddress = (address) => {
+    setAddress(address);
+    setAllAddress([]);
   };
 
   return (
@@ -250,6 +259,7 @@ const EventEditor = ({ navigation }) => {
             value={address}
             style={[styles.textInput, { flex: 1 }]}
             onKeyPress={() => typingIsProgress()}
+            onSubmitEditing={Keyboard.dismiss}
           />
           {/* <Button title="Envoie" onPress={() => getAddress()} /> */}
           {allAddress.length > 0 ? (
@@ -257,6 +267,7 @@ const EventEditor = ({ navigation }) => {
               {allAddress.map((address, index) => (
                 <View key={index}>
                   <Text
+                    onPress={() => setDataAddress(address.formatted)}
                     style={styles.textAddress}
                     numberOfLines={1}
                     ellipsizeMode="tail"
@@ -471,6 +482,7 @@ const styles = StyleSheet.create({
     left: 0,
     flex: 1,
     elevation: 10,
+    zIndex: 10,
     backgroundColor: "white",
   },
   textAddress: {
