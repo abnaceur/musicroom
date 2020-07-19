@@ -9,7 +9,7 @@ const checkAuth = require("../middleware/check-auth");
 // @desc    getPlaylistById
 // @route   POST /api/v1/playlist/id/:id
 // @access  Private
-router.get('/id/:id', checkAuth, playListController.getPlaylistById)
+router.get('/id/:id', playListController.getPlaylistById)
 
 // @desc    getAllPublicPlaylist
 // @route   POST /api/v1/playlist/getAllPublic
@@ -19,7 +19,7 @@ router.get('/getAllPublic', checkAuth, playListController.getAllPublicPlaylist)
 // @desc    getAllList
 // @route   GET /api/v1/playlist/getlist
 // @access  Private
-router.get('/getlist', checkAuth, playListController.getListPlaylist);
+router.get('/getlist', playListController.getListPlaylist);
 
 // @desc    createPlaylist
 // @route   POST /api/v1/playlist/new

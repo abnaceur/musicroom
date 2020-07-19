@@ -60,8 +60,27 @@ const updateTrackLikeService = async (id, track, token) => {
     })
 }
 
+const getPlaylistByidService = (id, token) => {
+    return new Promise( async (resolve, reject) => {
+        try {
+            let response = await userApi.get(`/playlist/id/` + id,
+                { headers: authHeader(token) });
+
+            console.log("response :", response.data);
+            if (response.data.code === 200) {
+                resolve(response.data.data);
+            } else {
+                Alert.alert(response.data.data.msg)
+            }
+        } catch (error) {
+            console.log(error, " error");
+        }
+    })
+}
+
 export {
     savePlayListService,
+    getPlaylistByidService,
     updateTrackLikeService,
     getAllPlayListService
 }

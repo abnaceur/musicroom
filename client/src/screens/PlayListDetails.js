@@ -22,13 +22,13 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Sound, { setCategory } from "react-native-sound";
 
 // Import servces
-import { updateTrackLikeService } from '../service/playListService';
+import { updateTrackLikeService, getPlaylistByidService } from '../service/playListService';
 
 const PlaylistDetailsScreens = (props) => {
     const { state } = useContext(AuthContext);
     const [listDetails, setDetails] = useState({});
-    const [trackList, setTrackList] = useState({});
-    const [songsList, setSongsList] = useState({});
+    const [trackList, setTrackList] = useState([]);
+    const [songsList, setSongsList] = useState([]);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentSong, setCurrentSong] = useState(0);
     const [rerender, setRerender] = useState(0);
@@ -48,19 +48,24 @@ const PlaylistDetailsScreens = (props) => {
 
     useEffect(() => {
         if (route.params?.playListDetails) {
-            let data = JSON.parse(route.params.playListDetails);
-            setDetails(JSON.parse(route.params.playListDetails))
-            setTrackList(data.trackList.sort(a => a.position));
-            handlSongsList(data.trackList)
+            let dataIn = JSON.parse(route.params.playListDetails);
+            getPlaylistByidService(dataIn._id, state.token)
+                .then(data => {
+                    if (data.playList) {
+                        setDetails(data.playList)
+                        setTrackList(data.playList.trackList.sort(a => a.position));
+                        handlSongsList(data.playList.trackList);
+                    }
+                })
         }
-    }, []);
+    }, [route.params.playListDetails]);
 
     useEffect(() => {
         if (rerender !== 0) {
             let data = trackList;
             setTrackList(trackList);
         }
-    },  [rerender])
+    }, [rerender])
 
     const startPlay = (i) => {
         if (isPlaying) {
@@ -154,7 +159,7 @@ const PlaylistDetailsScreens = (props) => {
 
 
                 {
-                    listDetails.trackList ? trackList.map((l, i) => (
+                    listDetails.trackList && trackList ? trackList.map((l, i) => (
                         <ListItem
                             key={i}
                             leftAvatar={{ source: { uri: l.album ? l.album.cover_big : null } }}
