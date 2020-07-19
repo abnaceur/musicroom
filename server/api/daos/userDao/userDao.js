@@ -172,10 +172,10 @@ updateUserData = (id, updateUser) => {
 }
 
 
-updateUserPassword = (id, updateUser) => {
+updateUserPassword = async (id, updateUser) => {
     return new Promise((resolve, reject) => {
         User.findById(id).exec()
-            .then(user => {
+            .then(async user => {
                 if (!user)
                     resolve(false)
                 else {
