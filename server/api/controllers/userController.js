@@ -14,11 +14,6 @@ validateAccount = (req, res, next) => {
     userService.userAccountValidationService.validateEmailAddress(res, token);
 }
 
-resetPassword = (req, res, next) => {
-    let email = req.body.email.email;
-    userService.resetPwdService.resetPwd(email, res);
-}
-
 getUserById = (req, res, next) => {
     let id = req.params.id
     userService.getUserService.getUserById(res, id);
@@ -34,9 +29,15 @@ resetPassword = (req, res, next) => {
 }
 
 updateUser = (req, res, next) => {
-    let updateUser = req.body.user;
+    let updateUser = req.body;
     let id = req.user.id
-    userService.updateUserService.updateUser(id, updateUser, res)
+    userService.updateUserService.updateUserData(id, updateUser, res)
+}
+
+updateUserPassword = (req, res, next) => {
+    let updateUser = req.body;
+    let id = req.user.id
+    userService.updateUserService.updateUserPassword(id, updateUser, res)
 }
 
 module.exports = {
@@ -44,6 +45,7 @@ module.exports = {
     validateAccount,
     deleteUserById,
     resetPassword,
+    updateUserPassword,
     getUserById,
     loginUser,
     updateUser

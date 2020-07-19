@@ -42,10 +42,16 @@ router.get('/id/:id', checkAuth, userController.getUserById)
 // @access  Private / Token
 router.post('/delete', checkAuth, userController.deleteUserById)
 
-// @desc    deleteUserById
+// @desc    update
 // @route   POST /api/v1/users/update/
 // @access  Private / Token
 router.post('/update', checkAuth, userController.updateUser)
+
+
+// @desc    updatePassword
+// @route   POST /api/v1/users/update/
+// @access  Private / Token
+router.post('/updatePassword', checkAuth, userController.updateUserPassword)
 
 
 module.exports = router;
