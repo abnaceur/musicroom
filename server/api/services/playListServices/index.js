@@ -5,8 +5,10 @@ const getListPlaylistService = require("./getListPlaylistService");
 const likePlaylistTrackService = require('./likePlaylistTrackService');
 const positionPlaylistTrackService = require('./positionPlaylistTrackService');
 const createNewEventService = require("./createNewEventService");
+const getEventsService = require("./getEventsService");
 
 module.exports = {
+    getEventsService,
     getPlaylistService,
     createNewEventService,
     positionPlaylistTrackService,

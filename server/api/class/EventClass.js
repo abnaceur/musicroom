@@ -31,6 +31,8 @@ async function CreateNewEvent(data, userId) {
         let startSec = parseInt(data.dateStartEvent.substring(17, 19));
 
         //19/07/2020 23:35:07
+        // console.log(startDay, startMonth, startYear, startHour, startMin, startSec);
+
         resolve({
             _id: new mongoose.Types.ObjectId,
             name: data.name,
@@ -42,8 +44,8 @@ async function CreateNewEvent(data, userId) {
             isEditable: data.isEditable,
             address: data.address,
             isVote: data.isVote,
-            dateEndEvent: new Date(endYear, endMonth, endDay, endHour, endMin, endSec),
-            dateStartEvent: new Date(startYear, startMonth, startDay, startHour, startMin, startSec),
+            dateEndEvent: new Date(endYear, endMonth - 1, endDay, endHour, endMin, endSec),
+            dateStartEvent: new Date(startYear, startMonth - 1, startDay, startHour, startMin, startSec),
         })
     })
 }
