@@ -2,8 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
-import { Card, ListItem, Button, Header, Icon } from "react-native-elements";
-import Add from "react-native-vector-icons/Entypo";
 import { Card, ListItem, Button, Header, Icon } from 'react-native-elements';
 import Add from 'react-native-vector-icons/Entypo';
 import Eye from 'react-native-vector-icons/AntDesign';
