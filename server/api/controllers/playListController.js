@@ -50,10 +50,16 @@ positionPlaylist = (req, res, next) => {
     playListService.positionPlaylistTrackService.positionPlaylistTrack(res, user, data);
 }
 
+newEvent = (req, res, next) => {
+    let user = req.user;
+    let data = req.body;
+    playListService.createNewEventService.createEvent(res, user, data);
+}
 
 module.exports = {
     likePlaylist,
     positionPlaylist,
+    newEvent,
     getPlaylistById,
     getMine,
     getAllPublicPlaylist,
