@@ -51,11 +51,16 @@ const PlayListEditor = ({ navigation, route }) => {
     state: { trackList },
     storeTrack,
     deleteTrack,
+    deleteAllTrack,
   } = useContext(playlistReducer);
 
   const {
     state: { token },
   } = useContext(AuthContext);
+
+  useEffect(() => {
+    return () => deleteAllTrack();
+  }, []);
 
   useEffect(() => {
     if (route.params?.music) {
@@ -90,6 +95,13 @@ const PlayListEditor = ({ navigation, route }) => {
       };
       savePlayListService(data, token);
     }
+  };
+
+  const addContributor = () => {
+    contributor.trim() !== "" &&
+      setContributors([...contributors, contributor]);
+    setContributor("");
+    setModalContributorVisible(false);
   };
 
   const getMusics = async (name) => {
@@ -181,10 +193,7 @@ const PlayListEditor = ({ navigation, route }) => {
                   Show artist
                 </Text>
                 <Text
-                  onPress={() => {
-                    setModalOptionsVisible(false);
-                    console.log(title);
-                  }}
+                  onPress={() => setModalOptionsVisible(false)}
                   style={styles.textOptions}
                 >
                   Show album
@@ -228,11 +237,7 @@ const PlayListEditor = ({ navigation, route }) => {
                 <View style={{ marginTop: 10 }}>
                   <Button
                     title="Add contributor"
-                    onPress={() => {
-                      setContributor("");
-                      setContributors([...contributors, contributor]);
-                      setModalContributorVisible(false);
-                    }}
+                    onPress={() => addContributor()}
                   />
                 </View>
                 <View style={{ marginTop: 10 }}>
