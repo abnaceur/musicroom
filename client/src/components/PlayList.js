@@ -13,7 +13,7 @@ import { Context as AuthContext } from "../context/AuthContext";
 const PlayList = ({ navigation, route }) => {
   const [publicPlayList, setPublicPlayList] = useState([]);
   const [myPlayList, setMyPlayList] = useState([]);
-
+ 
   const {
     state: { token },
   } = useContext(AuthContext);
@@ -27,7 +27,7 @@ const PlayList = ({ navigation, route }) => {
 
   useEffect(() => {
     fetchPlaylistes();
-  }, []);
+  }, [route.params?.music]);
 
   const keyExtractor = (item, index) => index.toString()
 
