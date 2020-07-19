@@ -1,7 +1,7 @@
 const bookmarkDao = require('../../daos/bookmarkDao/bookmarkDao')
 
-const createBookmark = (req, res, user, data) => {
-    if (!data || !data.playlist || !data.user) {
+const createBookmark = (req, res, user, playlistId) => {
+    if (!playlistId) {
         res.status(200).json({
             success: false,
             data: {
@@ -10,29 +10,17 @@ const createBookmark = (req, res, user, data) => {
             code: 406
         })
     } else
-        bookmarkDao.testBookmark(user.id, data.playlist.id)
-            .then(haveBookmark => {
-                if (haveBookmark) {
-                    bookmarkDao.newBookmark(data.user.id, playList.id).then(bookmark => {
-                        req.app.io.emit('newBookmark', bookmark)
-                        res.status(200).json({
-                            success: true,
-                            data: {
-                                bookmark: bookmark
-                            },
-                            code: 200
-                        })
-                    })
-                } else {
-                    res.status(200).json({
-                        success: false,
-                        data: {
-                            msg: 'Error you dont have bookmark'
-                        },
-                        code: 406
-                    })
-                }
+        bookmarkDao.newBookmark(user.id, playlistId).then(bookmark => {
+            req.app.io.emit('newBookmark', bookmark)
+            res.status(200).json({
+                success: true,
+                data: {
+                    bookmark: bookmark
+                },
+                code: 200
             })
+
+        })
 }
 
 module.exports = {
