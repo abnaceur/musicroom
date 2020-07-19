@@ -59,6 +59,26 @@ const PlaylistDetailsScreens = (props) => {
         setSongsList(data);
     }
 
+    const handlLikeList = (list) => {
+        let data = list.sort((a, b) => parseInt(a.likes.length) < parseInt(b.likes.length));
+        
+        let dataNew = []; 
+        if (data && data.length > 0) {
+            data.map((l, i) => {
+                dataNew.push({
+                    preview: l.preview,
+                    position: i,
+                    likes: l.likes,
+                    selected: false,
+                    label: (i + 1).toString(),
+                    value: i.toString(),
+                })
+            })
+        }
+        setTrackList(data);
+        setSongsList(dataNew);
+    }
+
     useEffect(() => {
         if (route.params?.playListDetails) {
             let dataIn = JSON.parse(route.params.playListDetails);
@@ -67,7 +87,11 @@ const PlaylistDetailsScreens = (props) => {
                     if (data.playList) {
                         setDetails(data.playList)
                         setTrackList(data.playList.trackList.sort(a => a.position));
-                        handlSongsList(data.playList.trackList);
+                        if (data.playList.isEditable)
+                            handlSongsList(data.playList.trackList);
+                        else {
+                            handlLikeList(data.playList.trackList)
+                        }
                     }
                 })
         }
@@ -123,7 +147,9 @@ const PlaylistDetailsScreens = (props) => {
         } else {
             trackList[id].likes.splice(trackList[id].likes.indexOf(user.userId), 1);
         }
-        await setTrackList(trackList);
+       
+        handlLikeList(trackList);
+        // await setTrackList(trackList);
         setRerender(Math.floor(Math.random() * 999999999));
         await updateTrackLikeService(listDetails._id, track, state.token)
     }
@@ -137,7 +163,7 @@ const PlaylistDetailsScreens = (props) => {
         // Get old position
         let oldPos = data.filter(l => l.selected)[0].position;
         if (parseInt(oldPos) !== parseInt(newPos)) {
-          
+
             let arrangedTrack = array_move(trackList, oldPos, newPos);
             setTrackList(arrangedTrack);
 
@@ -243,15 +269,12 @@ const PlaylistDetailsScreens = (props) => {
                             // subtitle={l.subtitle}
                             bottomDivider
                             rightTitle={listDetails.isVote ? (l.likes.length).toString() : null}
-                            rightIcon={listDetails.trackList.isVote ? <SimpleLineIcons
+                            rightIcon={listDetails.isVote ? <SimpleLineIcons
                                 onPress={() => handleLikePress(i, l)}
                                 name="like"
                                 size={25}
                                 color="blue"
-                            /> : null
-                            }
-
-                            rightIcon={listDetails.isEditable ? <SimpleLineIcons
+                            /> : listDetails.isEditable ? <SimpleLineIcons
                                 onPress={() => handleEditPosPress(i, l)}
                                 name="cursor-move"
                                 size={25}
