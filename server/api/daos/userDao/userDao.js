@@ -66,7 +66,10 @@ accountValidation = (token) => {
                     )
                 } else
                     resolve(response.length);
-            }).catch(err => console.log("accountValidation ERR :", err));
+            }).catch(err => {
+                resolve(0)
+                console.log("accountValidation ERR :", err)
+            });
     })
 }
 
