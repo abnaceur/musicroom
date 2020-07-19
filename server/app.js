@@ -61,6 +61,7 @@ var indexRouter = require('./api/routes/index');
 var userRouter = require('./api/routes/user');
 var playListRouter = require('./api/routes/playlist');
 var certificateRouter = require('./api/routes/certificate');
+var bookmarkRouter = require('./api/routes/bookmark');
 
 // Open connection to the database
 db.once('open', function () {
@@ -88,6 +89,7 @@ app.use('/', indexRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/playList', playListRouter);
 app.use('/api/v1/certificate', certificateRouter);
+app.use('/api/v1/bookmark', bookmarkRouter);
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //Use hamlet 
