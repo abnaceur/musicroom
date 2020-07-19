@@ -13,3 +13,5 @@ client/package-lock.json
 docker
 /uploads
 .env
+client/android/app/build/
+client/android/.gradle

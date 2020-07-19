@@ -1,5 +1,9 @@
 const bcrypt = require('bcrypt');
 
+userNameRegex = RegExp(/^[a-zA-Z0-9]*$/);
+mailRegex = RegExp(/^[a-zA-Z0-9_\-\.]*\@[a-zA-Z0-9_\-\.]*\.[a-zA-Z]+$/);
+passwordRegex = RegExp(/^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/);
+
 hashPassword = (password) => {
     return new Promise((resolve, reject) => {
         bcrypt.hash(password, 10, (err, hash) => {
@@ -25,6 +29,9 @@ defaultError = (res, err) => {
 }
 
 module.exports = {
+    userNameRegex,
+    mailRegex,
+    passwordRegex,
     defaultError,
     generateRandomPassword,
     hashPassword,

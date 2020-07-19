@@ -3,6 +3,7 @@ const UserClass = require("../../class/UserClass");
 const utils = require('../../utils/utils');
 const userEmailsTemplate = require('../../emails/userEmails/accountValidationEmail');
 const emailSender = require('../../utils/emailSender');
+const uniqId = require('uniqid')
 const AccessToken = require('../../class/accessTokenClass');
 
 ifExistUserAccount = (email) => {
@@ -113,9 +114,7 @@ resetPassword = async (email) => {
 
 getUserById = (id) => {
     return new Promise((resolve, reject) => {
-        User.findOne({
-            _id: id
-        }).exec()
+        User.findById(id).exec()
             .then(response => {
                 resolve(response);
             }).catch(err => {
@@ -125,12 +124,37 @@ getUserById = (id) => {
     })
 }
 
+deleteUserById = (id) => {
+    return new Promise((resolve, reject) => {
+        User.findByIdAndDelete(id).exec()
+            .then(response => {
+                resolve(response);
+            }).catch(err => {
+                console.log("getUserById ERR :", err)
+                reject(err)
+            });
+    })
+}
+
+verifUserToken = (data) => {
+    return new Promise(async (resolve, reject) => {
+        getUserById(data.id).then(user => {
+            /**
+             * test user token here
+             */
+            resolve(false)
+        }).catch(err => { resolve(false) })
+    })
+}
+
 module.exports = {
+    verifUserToken,
     getUserByEmail,
     ifExistUserAccount,
     accountValidation,
     resetPassword,
     ifExistUserAccountById,
     getUserById,
+    deleteUserById,
     saveNewUserAccount
 }
