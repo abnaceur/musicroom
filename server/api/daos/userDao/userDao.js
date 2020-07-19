@@ -66,7 +66,10 @@ accountValidation = (token) => {
                     )
                 } else
                     resolve(response.length);
-            }).catch(err => console.log("accountValidation ERR :", err));
+            }).catch(err => {
+                resolve(0)
+                console.log("accountValidation ERR :", err)
+            });
     })
 }
 
@@ -130,31 +133,77 @@ deleteUserById = (id) => {
             .then(response => {
                 resolve(response);
             }).catch(err => {
-                console.log("getUserById ERR :", err)
+                console.log("deleteUserById ERR :", err)
                 reject(err)
             });
     })
 }
 
-verifUserToken = (data) => {
-    return new Promise(async (resolve, reject) => {
-        getUserById(data.id).then(user => {
-            /**
-             * test user token here
-             */
-            resolve(false)
-        }).catch(err => { resolve(false) })
+updateUserData = (id, updateUser) => {
+    return new Promise((resolve, reject) => {
+        User.findById(id).exec()
+            .then(user => {
+                if (!user)
+                    resolve(false)
+                else {
+                    if (updateUser.status)
+                        user.status = updateUser.status
+                    if (updateUser.city)
+                        user.city = updateUser.city
+                    if (updateUser.age)
+                        user.age = updateUser.age
+                    if (updateUser.musicStyle)
+                        user.musicStyle = updateUser.musicStyle
+                    if (updateUser.firstname)
+                        user.firstname = updateUser.firstname
+                    if (updateUser.lastname)
+                        user.lastname = updateUser.lastname
+
+                    User.findByIdAndUpdate(id,
+                        user, { new: true }, (err, userRes) => {
+                            if (err) resolve(false);
+                            resolve(userRes);
+                        })
+                }
+            }).catch(err => {
+                reject(err)
+            });
+    })
+}
+
+
+updateUserPassword = async (id, updateUser) => {
+    return new Promise((resolve, reject) => {
+        User.findById(id).exec()
+            .then(async user => {
+                if (!user)
+                    resolve(false)
+                else {
+                    if (updateUser.password && utils.passwordRegex.test(updateUser.password)) {
+                        const hashedPwd = await utils.hashPassword(updateUser.password);
+                        user.password = hashedPwd
+                    }
+                    User.findByIdAndUpdate(id,
+                        user, { new: true }, (err, userRes) => {
+                            if (err) resolve(false);
+                            resolve(userRes);
+                        })
+                }
+            }).catch(err => {
+                reject(err)
+            });
     })
 }
 
 module.exports = {
-    verifUserToken,
     getUserByEmail,
     ifExistUserAccount,
     accountValidation,
     resetPassword,
     ifExistUserAccountById,
     getUserById,
+    updateUserData,
+    updateUserPassword,
     deleteUserById,
     saveNewUserAccount
 }

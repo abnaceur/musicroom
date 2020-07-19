@@ -2,8 +2,6 @@ var express = require('express');
 const router = express.Router();
 const playListController = require('../controllers/playListController');
 
-// const passport = require('passport')
-// const checkAuth = passport.authenticate('jwt', { session: false });
 const checkAuth = require("../middleware/check-auth");
 
 //=> End of declared dependencies
@@ -42,5 +40,11 @@ router.post('/update', checkAuth, playListController.updatePlaylist)
 // @route   POST /api/v1/playlist/delete
 // @access  Private
 router.post('/delete', checkAuth, playListController.deletePlaylist)
+
+
+// @desc    likePlaylist
+// @route   POST /api/v1/playlist/likes
+// @access  Private
+router.post('/likes', checkAuth, playListController.likePlaylist)
 
 module.exports = router;
