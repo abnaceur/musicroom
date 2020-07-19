@@ -1,87 +1,98 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 import {
-    View,
-    Text,
-    TouchableOpacity,
-    ScrollView,
-    Dimensions,
-    Image,
-    KeyboardAvoidingView,
-    StyleSheet
-} from 'react-native';
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Dimensions,
+  Image,
+  KeyboardAvoidingView,
+  StyleSheet,
+} from "react-native";
 
 // Import context
-import { Context as AuthContext } from '../context/AuthContext';
-import { Card, ListItem, Button, Icon } from 'react-native-elements';
+import { Context as AuthContext } from "../context/AuthContext";
+import { Card, ListItem, Button, Icon } from "react-native-elements";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import ProfileScreen from "./ProfileScreen";
 
 const HomeScreens = (props) => {
-    const { signout } = useContext(AuthContext);
+  const { signout } = useContext(AuthContext);
 
-    return (
-        <ScrollView style={Styles.container}>
-            <View>
+  return (
+    <ScrollView style={Styles.container}>
+      <View>
+        <Card style={Styles.cardStyle} image={require("../assets/music.jpg")}>
+          <Button
+            buttonStyle={{
+              borderRadius: 0,
+              marginLeft: 0,
+              marginRight: 0,
+              marginBottom: 0,
+            }}
+            title="ALBUM / ARTISTS"
+          />
+        </Card>
 
-                <Card
-                    style={Styles.cardStyle}
-                    image={require('../assets/music.jpg')}
-                >
-                    <Button
-                        buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                        title='ALBUM / ARTISTS' />
-                </Card>
+        <Card style={Styles.cardStyle} image={require("../assets/favorit.jpg")}>
+          <Button
+            buttonStyle={{
+              borderRadius: 0,
+              marginLeft: 0,
+              marginRight: 0,
+              marginBottom: 0,
+            }}
+            title="FAVORIS"
+          />
+        </Card>
 
-                <Card
-                    style={Styles.cardStyle}
-                    image={require('../assets/favorit.jpg')}
-                >
-                    <Button
-                        buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                        title='FAVORIS' />
-                </Card>
-
-
-                <Card
-                    style={Styles.cardStyle}
-                    image={require('../assets/settings.jpg')}
-                >
-                    <Button
-                        buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                        title='SETTINGS' />
-                </Card>
-
-            </View>
-        </ScrollView>
-    )
-}
+        <Card
+          style={Styles.cardStyle}
+          image={require("../assets/settings.jpg")}
+        >
+          <Button
+            onPress={() => props.navigation.navigate("ProfileScreen")} // CHANGE NAME
+            buttonStyle={{
+              borderRadius: 0,
+              marginLeft: 0,
+              marginRight: 0,
+              marginBottom: 0,
+            }}
+            title="SETTINGS"
+          />
+        </Card>
+      </View>
+    </ScrollView>
+  );
+};
 
 const Styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#282830',
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
-    },
-    logoContainer: {
-        color: 'white',
-        flexGrow: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    logo: {
-        width: 100,
-        height: 100
-    },
-    title: {
-        color: '#fff',
-        marginTop: 20,
-        fontWeight: "100",
-        fontSize: 23
-    },
-    myForm: {
-        flex: 3
-    },
-
-})
-
+  container: {
+    flex: 1,
+    backgroundColor: "#282830",
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+  },
+  logoContainer: {
+    color: "white",
+    flexGrow: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  logo: {
+    width: 100,
+    height: 100,
+  },
+  title: {
+    color: "#fff",
+    marginTop: 20,
+    fontWeight: "100",
+    fontSize: 23,
+  },
+  myForm: {
+    flex: 3,
+  },
+});
 
 export default HomeScreens;

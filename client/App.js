@@ -19,6 +19,7 @@ import PlayListMusic from "react-native-vector-icons/MaterialCommunityIcons";
 import SigninScreens from "./src/screens/SigninScreen";
 import SignupScreens from "./src/screens/SignupScreen";
 import HomeScreens from "./src/screens/HomeScreen";
+import ProfileScreen from "./src/screens/ProfileScreen";
 import ResetPwdScreens from "./src/screens/ResetPwdScreen";
 import PlayList from "./src/components/PlayList";
 import PlayListEditor from "./src/components/PlayListEditor";
@@ -28,7 +29,7 @@ import AddMusic from "./src/components/AddMusic";
 import EventScreen from "./src/screens/EventScreen";
 import EventEditor from "./src/components/EventEditor";
 import FavorisScreen from "./src/screens/FavorisScreen";
-import PlaylistDetailsScreens from './src/screens/PlayListDetails';
+import PlaylistDetailsScreens from "./src/screens/PlayListDetails";
 
 // Import helpers
 import checkAuth from "./src/helpers/PrivateRoute";
@@ -98,7 +99,7 @@ const App = () => {
   const { state } = useContext(AuthContext);
   // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IiQyYiQxMCRqZThiY3kxWEExbGQvN0RoVldac2guY2VxdnR6WWdXUUxFYmlFOXlvTnpOUFE4cjFrNEhmdSIsImRhdGEiOiI1ZjBkOGQ2Mzc3NjMwNjAwOGFmZGY4MGUiLCJpYXQiOjE1OTQ3MjU1MzYsImV4cCI6MTU5NDc2ODczNn0.OhFom7IIXNgpAHinzp-QpHJAR8WPNtW2nzn0nTBZLh8";
   const token = state.token;
-  
+
   if (!token) {
     return (
       <NavigationContainer>
@@ -175,6 +176,7 @@ const App = () => {
               />
               <Stack.Screen name="MusicList" component={MusicList} />
               <Stack.Screen name="Player" component={Player} />
+              <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
             </Stack.Navigator>
           </NavigationContainer>
         );
