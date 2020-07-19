@@ -39,6 +39,8 @@ const PlayListEditor = ({ navigation, route }) => {
   const [title, setTitle] = useState("");
   const [modalOptionsVisible, setModalOptionsVisible] = useState(false);
   const [isPrivate, setIsPrivate] = useState(false);
+  const [isVote, setIsVote] = useState(true);
+  const [isEditable, setIsEditable] = useState(false);
   const [titlePlayList, setTitlePlayList] = useState("");
   const [description, setDescription] = useState("");
   const [modalContributorVisible, setModalContributorVisible] = useState(false);
@@ -79,6 +81,8 @@ const PlayListEditor = ({ navigation, route }) => {
       trackList.length === 0
     ) {
       Alert.alert("All fields are not filled !");
+    } else if (!isVote && !isPrivate && !isEditable) {
+      Alert.alert("Please select a collabration mode vote/editable !");
     } else {
       let data = {
         titlePlayList,
@@ -86,6 +90,8 @@ const PlayListEditor = ({ navigation, route }) => {
         trackList,
         contributors,
         isPrivate,
+        isVote,
+        isEditable,
       };
       savePlayListService(data, token);
     }
@@ -278,7 +284,7 @@ const PlayListEditor = ({ navigation, route }) => {
           }}
         >
           <CheckBox
-            style={{ flex: 0.2 }}
+            style={styles.checkBoxStyle}
             // disabled={false}
             value={isPrivate}
             onChange={() => setIsPrivate(!isPrivate)}
@@ -295,6 +301,43 @@ const PlayListEditor = ({ navigation, route }) => {
                 Invite user to contribute in my playlist
               </Text>
             </TouchableOpacity>
+          </View>
+        ) : null}
+
+        {!isPrivate ? (
+          <View style={{ marginTop: 15, flex: 1, alignSelf: "center" }}>
+            <View
+              style={{
+                flex: 0.5,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <CheckBox
+                style={styles.checkBoxStyle}
+                // disabled={false}
+                onChange={() => { !isVote ? setIsEditable(false) : null, setIsVote(!isVote) }}
+                value={isVote}
+              />
+              <Text style={{ color: "white", flex: 0.6 }}>Set vote !</Text>
+            </View>
+            <View
+              style={{
+                flex: 0.5,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <CheckBox
+                style={styles.checkBoxStyle}
+                // disabled={false}
+                value={isEditable}
+                onChange={() => {!isEditable ? setIsVote(false): null, setIsEditable(!isEditable)}}
+              />
+              <Text style={{ color: "white", flex: 0.6 }}>Set editable !</Text>
+            </View>
           </View>
         ) : null}
       </View>
@@ -445,6 +488,9 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textTransform: "uppercase",
   },
+  checkBoxStyle: {
+    flex: 0.2
+  }
 });
 
 export default PlayListEditor;
