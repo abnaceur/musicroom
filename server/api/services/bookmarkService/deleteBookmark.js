@@ -1,7 +1,7 @@
 const bookmarkDao = require('../../daos/bookmarkDao/bookmarkDao')
 
-const deleteBookmark = (req, res, user, data) => {
-    if (!data || !data.playlist || !data.user) {
+const deleteBookmark = (req, res, user, playlistId) => {
+    if (!playlistId) {
         res.status(200).json({
             success: false,
             data: {
@@ -10,10 +10,10 @@ const deleteBookmark = (req, res, user, data) => {
             code: 406
         })
     } else
-        bookmarkDao.testBookmark(user.id, data.playlist.id)
+        bookmarkDao.testBookmark(user.id, playlistId)
             .then(haveBookmark => {
                 if (haveBookmark) {
-                    bookmarkDao.deleteBookmark(data.user.id, playList.id).then(bookmark => {
+                    bookmarkDao.deleteBookmark(user.id, playlistId).then(bookmark => {
                         req.app.io.emit('deleteBookmark', bookmark)
                         res.status(200).json({
                             success: true,

@@ -1,7 +1,7 @@
 const certificateDao = require('../../daos/certificateDao/certificateDao')
 
-const deleteCertificate = (req, res, user, data) => {
-    if (!data || !data.playlist || !data.user) {
+const deleteCertificate = (req, res, user, playlistId) => {
+    if (!dplaylistId) {
         res.status(200).json({
             success: false,
             data: {
@@ -10,10 +10,10 @@ const deleteCertificate = (req, res, user, data) => {
             code: 406
         })
     } else
-        certificateDao.testCertificate(user.id, data.playlist.id)
+        certificateDao.testCertificate(user.id, playlistId)
             .then(haveCertificate => {
                 if (haveCertificate) {
-                    certificateDao.deleteCertificate(data.user.id, playList.id).then(certificate => {
+                    certificateDao.deleteCertificate(data.user.id, playlistId).then(certificate => {
                         req.app.io.emit('deleteCertificate', certificate)
                         res.status(200).json({
                             success: true,
