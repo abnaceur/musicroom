@@ -20,4 +20,25 @@ const getMyPlayList = (token) => {
   });
 };
 
-export { getMyPlayList };
+const saveNewEventService = (eventData, token) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let response = await userApi.post("/playlist/event/new", eventData, {
+        headers: authHeader(token),
+      });
+      const { code, data } = response.data;
+      if (code === 200) {
+        Alert.alert(data.msg);
+      } else {
+        Alert.alert(data.msg);
+      }
+    } catch (error) {
+      console.log(error, " error");
+    }
+  });
+}
+
+export {
+  getMyPlayList,
+  saveNewEventService
+};
