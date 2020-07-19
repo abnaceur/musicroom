@@ -7,7 +7,6 @@ import authHeader from "../api/authHeader";
 const saveUserInfoService = async (datauser, token) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log(datauser);
       let response = await userApi.post(`/users/update`, datauser, {
         headers: authHeader(token),
       });

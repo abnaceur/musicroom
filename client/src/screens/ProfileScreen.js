@@ -21,11 +21,13 @@ const ProfileScreen = () => {
   const [city, setCity] = useState("");
   const [mood, setMood] = useState("");
   const [email, setEmail] = useState("");
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
   const [musicPreferences, setMusicPreferences] = useState("");
   const {
     state: { token },
   } = useContext(AuthContext);
-  // password field empty = no change
+
   const fetchUserInfo = async () => {
     try {
       const data = JSON.parse(await AsyncStorage.getItem("userInfo"));
@@ -38,13 +40,13 @@ const ProfileScreen = () => {
   const saveUserInfo = async () => {
     console.log("Je suis la");
     let data = {
-      'status': status,
-      'city': city,
-      'age': age,
-      'musicStyle': musicPreferences,
-      'firstname': fistname,
-      'lastname': lastname,
-      'email': email,
+      status: mood,
+      city,
+      age,
+      musicStyle: musicPreferences,
+      firstname,
+      lastname,
+      email,
     };
     console.log(data);
     saveUserInfoService(data, token);
@@ -64,6 +66,28 @@ const ProfileScreen = () => {
           value={age}
           onChangeText={(value) => {
             setAge(value);
+          }}
+        />
+      </View>
+      <View style={styles.rows}>
+        <Icona name="user" color="white" size={15} />
+        <TextInput
+          style={styles.inputStyle}
+          placeholder="First name"
+          value={firstname}
+          onChangeText={(value) => {
+            setFirstName(value);
+          }}
+        />
+      </View>
+      <View style={styles.rows}>
+        <Icona name="user" color="white" size={15} />
+        <TextInput
+          style={styles.inputStyle}
+          placeholder="Last Name"
+          value={lastname}
+          onChangeText={(value) => {
+            setLastName(value);
           }}
         />
       </View>
@@ -116,10 +140,11 @@ const ProfileScreen = () => {
         <TextInput style={styles.inputStyle} placeholder="Password" />
       </View> */}
 
-      <TouchableOpacity style={styles.buttonContainer}>
-        <Text style={styles.buttonText} onPress={() => saveUserInfo()}>
-          Update
-        </Text>
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={() => saveUserInfo()}
+      >
+        <Text style={styles.buttonText}>Update</Text>
       </TouchableOpacity>
     </View>
   );
