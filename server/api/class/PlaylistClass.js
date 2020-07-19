@@ -24,6 +24,8 @@ async function CreateNewPlaylist(data, userId) {
             desctiption: data.description,
             trackList: await prepareTrackList(data.trackList),
             contributors: data.contributors,
+            isEditable: data.isEditable,
+            isVote: data.isVote
         })
     })
 }

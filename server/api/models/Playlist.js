@@ -20,6 +20,14 @@ let playlistSchema = mongoose.Schema({
         type: String,
         default: "",
     },
+    isEditable: {
+        type: Boolean,
+        default: false,
+    },
+    isVote: {
+        type: Boolean,
+        default: true,
+    },
     trackList: {
         type: Array,
         default: [],
