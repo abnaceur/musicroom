@@ -15,37 +15,11 @@ const checkAuth = require("../middleware/check-auth");
 // @desc    Signup new user
 // @route   POST /api/v1/users/signup 
 // @access  Public
-/**
- * @swagger
- * /customers:
- *    put:
- *      description: Use to return all customers
- *    parameters:
- *      - name: customer
- *        in: query
- *        description: Name of our customer
- *        required: false
- *        schema:
- *          type: string
- *          format: string
- *    responses:
- *      '201':
- *        description: Successfully created user
- */
 router.post('/signup', userController.createNewAccount)
 
 // @desc    Signin  user
 // @route   POST /api/v1/users/signin
 // @access  Public
-/**
- * @swagger
- * /customers:
- *  get:
- *    description: Use to request all customers
- *    responses:
- *      '200':
- *        description: A successful response
- */
 router.post('/signin', userController.loginUser)
 
 // @desc    validateAccount
@@ -67,6 +41,17 @@ router.get('/id/:id', checkAuth, userController.getUserById)
 // @route   POST /api/v1/users/delete/
 // @access  Private / Token
 router.post('/delete', checkAuth, userController.deleteUserById)
+
+// @desc    update
+// @route   POST /api/v1/users/update/
+// @access  Private / Token
+router.post('/update', checkAuth, userController.updateUser)
+
+
+// @desc    updatePassword
+// @route   POST /api/v1/users/update/
+// @access  Private / Token
+router.post('/updatePassword', checkAuth, userController.updateUserPassword)
 
 
 module.exports = router;

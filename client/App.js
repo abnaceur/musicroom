@@ -27,7 +27,9 @@ import Player from "./src/components/Player";
 import AddMusic from "./src/components/AddMusic";
 import EventScreen from "./src/screens/EventScreen";
 import EventEditor from "./src/components/EventEditor";
+import FavorisList from "./src/components/FavorisList";
 import FavorisScreen from "./src/screens/FavorisScreen";
+import Map from "./src/components/Map";
 import PlaylistDetailsScreens from './src/screens/PlayListDetails';
 
 // Import helpers
@@ -166,6 +168,11 @@ const App = () => {
                 name="EventEditor"
                 options={{ headerShown: false }}
                 component={EventEditor}
+              />
+              <Stack.Screen
+                name="FavorisList"
+                options={{ headerShown: false }}
+                component={FavorisList}
               />
               <Stack.Screen name="AddMusic" component={AddMusic} />
               <Stack.Screen
