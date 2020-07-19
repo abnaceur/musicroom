@@ -85,28 +85,6 @@ getUserByEmail = (email) => {
     })
 }
 
-updateUser = (id, updateUser) => {
-    return new Promise((resolve, reject) => {
-        this.getUserById(id).then(user => {
-            if (!user)
-                resolve(false)
-            else {
-                user.status = updateUser.status
-                user.city = updateUser.city
-                user.age = updateUser.age
-                user.musicStyle = updateUser.musicStyle
-                user.firstname = updateUser.firstname
-                user.lastname = updateUser.lastname
-                User.findByIdAndUpdate(id,
-                    user, (err, userRes) => {
-                        if (err) resolve(false);
-                        resolve(userRes);
-                    })
-            }
-        }).catch(err => reject(err))
-    })
-}
-
 resetPassword = async (email) => {
     return new Promise(async (resolve, reject) => {
         //    Generate new pwd
@@ -155,32 +133,77 @@ deleteUserById = (id) => {
             .then(response => {
                 resolve(response);
             }).catch(err => {
-                console.log("getUserById ERR :", err)
+                console.log("deleteUserById ERR :", err)
                 reject(err)
             });
     })
 }
 
-verifUserToken = (data) => {
-    return new Promise(async (resolve, reject) => {
-        getUserById(data.id).then(user => {
-            /**
-             * test user token here
-             */
-            resolve(false)
-        }).catch(err => { resolve(false) })
+updateUserData = (id, updateUser) => {
+    return new Promise((resolve, reject) => {
+        User.findById(id).exec()
+            .then(user => {
+                if (!user)
+                    resolve(false)
+                else {
+                    if (updateUser.status)
+                        user.status = updateUser.status
+                    if (updateUser.city)
+                        user.city = updateUser.city
+                    if (updateUser.age)
+                        user.age = updateUser.age
+                    if (updateUser.musicStyle)
+                        user.musicStyle = updateUser.musicStyle
+                    if (updateUser.firstname)
+                        user.firstname = updateUser.firstname
+                    if (updateUser.lastname)
+                        user.lastname = updateUser.lastname
+
+                    User.findByIdAndUpdate(id,
+                        user, { new: true }, (err, userRes) => {
+                            if (err) resolve(false);
+                            resolve(userRes);
+                        })
+                }
+            }).catch(err => {
+                reject(err)
+            });
+    })
+}
+
+
+updateUserPassword = (id, updateUser) => {
+    return new Promise((resolve, reject) => {
+        User.findById(id).exec()
+            .then(user => {
+                if (!user)
+                    resolve(false)
+                else {
+                    if (updateUser.password && utils.passwordRegex.test(updateUser.password)) {
+                        const hashedPwd = await utils.hashPassword(updateUser.password);
+                        user.password = hashedPwd
+                    }
+                    User.findByIdAndUpdate(id,
+                        user, { new: true }, (err, userRes) => {
+                            if (err) resolve(false);
+                            resolve(userRes);
+                        })
+                }
+            }).catch(err => {
+                reject(err)
+            });
     })
 }
 
 module.exports = {
-    verifUserToken,
     getUserByEmail,
     ifExistUserAccount,
     accountValidation,
     resetPassword,
     ifExistUserAccountById,
     getUserById,
-    updateUser,
+    updateUserData,
+    updateUserPassword,
     deleteUserById,
     saveNewUserAccount
 }
