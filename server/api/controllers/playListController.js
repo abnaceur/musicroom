@@ -33,11 +33,6 @@ const deletePlaylist = (req, res, next) => {
     playListService.updatePlaylistService.deletePlaylist(req, res, data, user);
 }
 
-const getListPlaylist = (req, res, next) => {
-    let user = req.user
-    playListService.getListPlaylistService.getListPlaylist(res, user);
-}
-
 likePlaylist = (req, res, next) => {
     let user = req.user;
     let data = req.body;
@@ -56,7 +51,18 @@ newEvent = (req, res, next) => {
     playListService.createNewEventService.createEvent(res, user, data);
 }
 
+const getListPlaylist = (req, res, next) => {
+    let user = req.user
+    playListService.getListPlaylistService.getListPlaylist(res, user);
+}
+
+getAllEvents = (req, res, next) => {
+    let user = req.user
+    playListService.getEventsService.getEvents(res, user);
+}
+
 module.exports = {
+    getAllEvents,
     likePlaylist,
     positionPlaylist,
     newEvent,

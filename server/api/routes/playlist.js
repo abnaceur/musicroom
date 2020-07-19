@@ -58,4 +58,10 @@ router.post('/position', checkAuth, playListController.positionPlaylist)
 // @access  Private
 router.post('/event/new', checkAuth, playListController.newEvent)
 
+
+// @desc    getAllEvents
+// @route   GET /api/v1/playlist/getevents
+// @access  Private
+router.get('/getevents', checkAuth, playListController.getAllEvents);
+
 module.exports = router;

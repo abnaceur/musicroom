@@ -133,7 +133,6 @@ const EventEditor = ({ navigation }) => {
     };
     console.log(data);
     await saveNewEventService(data, token)
-
   };
 
   const addContributor = () => {

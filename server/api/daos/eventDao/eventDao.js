@@ -91,7 +91,7 @@ const createEventAsNew = (data, userId) => {
     })
 }
 
-const getMine = (userId) => {
+const getMyevents = (userId) => {
     return new Promise((resolve, reject) => {
         Event.find({ creator: userId }).exec()
             .then(response => {
@@ -116,7 +116,7 @@ const deleteEvent = (id) => {
 }
 
 module.exports = {
-    getMine,
+    getMyevents,
     updateEvent,
     updateEventTracks,
     updateEventTracksPos,

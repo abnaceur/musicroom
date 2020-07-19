@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -15,8 +15,18 @@ import { Context as AuthContext } from "../context/AuthContext";
 import { Card, ListItem, Button, Header, Icon } from "react-native-elements";
 import Add from "react-native-vector-icons/Entypo";
 
+// impor tservices
+import { getAllEventsService } from '../service/eventService';
+
 const EventScreen = ({ navigation }) => {
-  const { signout } = useContext(AuthContext);
+  const { state, signout } = useContext(AuthContext);
+
+
+  useEffect(() => {
+    getAllEventsService(state.token).then(response => {
+      console.log("Response :", response);
+    })
+  }, []);
 
   return (
     <View style={Styles.container}>
