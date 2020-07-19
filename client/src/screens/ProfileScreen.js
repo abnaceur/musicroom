@@ -38,10 +38,13 @@ const ProfileScreen = () => {
   const saveUserInfo = async () => {
     console.log("Je suis la");
     let data = {
-      mood,
-      city,
-      age,
-      musicPreferences,
+      'status': status,
+      'city': city,
+      'age': age,
+      'musicStyle': musicPreferences,
+      'firstname': fistname,
+      'lastname': lastname,
+      'email': email,
     };
     console.log(data);
     saveUserInfoService(data, token);

@@ -152,6 +152,8 @@ updateUserData = (id, updateUser) => {
                         user.city = updateUser.city
                     if (updateUser.age)
                         user.age = updateUser.age
+                    if (updateUser.email)
+                        user.email = updateUser.email
                     if (updateUser.musicStyle)
                         user.musicStyle = updateUser.musicStyle
                     if (updateUser.firstname)
