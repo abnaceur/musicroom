@@ -3,8 +3,7 @@ const router = express.Router();
 const multer = require('../middleware/FileUpload');
 const userController = require('../controllers/userController');
 
-const passport = require('passport')
-const checkIfUserIsLog = passport.authenticate('jwt', { session: false });
+const checkAuth = require("../middleware/check-auth");
 
 //=> End of declared dependencies
 
@@ -36,12 +35,23 @@ router.post('/resetpwd', userController.resetPassword)
 // @desc    getUserById
 // @route   GET /api/v1/users/id/:id
 // @access  Private
-router.get('/id/:id', checkIfUserIsLog, userController.getUserById)
+router.get('/id/:id', checkAuth, userController.getUserById)
 
 // @desc    deleteUserById
 // @route   POST /api/v1/users/delete/
 // @access  Private / Token
-router.post('/delete', checkIfUserIsLog, userController.deleteUserById)
+router.post('/delete', checkAuth, userController.deleteUserById)
+
+// @desc    update
+// @route   POST /api/v1/users/update/
+// @access  Private / Token
+router.post('/update', checkAuth, userController.updateUser)
+
+
+// @desc    updatePassword
+// @route   POST /api/v1/users/update/
+// @access  Private / Token
+router.post('/updatePassword', checkAuth, userController.updateUserPassword)
 
 
 module.exports = router;

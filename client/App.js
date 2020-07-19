@@ -30,6 +30,7 @@ import EventEditor from "./src/components/EventEditor";
 import FavorisList from "./src/components/FavorisList";
 import FavorisScreen from "./src/screens/FavorisScreen";
 import Map from "./src/components/Map";
+import PlaylistDetailsScreens from './src/screens/PlayListDetails';
 
 // Import helpers
 import checkAuth from "./src/helpers/PrivateRoute";
@@ -71,7 +72,6 @@ function TabStack() {
           ),
         }}
       />
-
       <Tab.Screen
         name="PlayList"
         component={PlayList}
@@ -98,8 +98,9 @@ function TabStack() {
 
 const App = () => {
   const { state } = useContext(AuthContext);
+  // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IiQyYiQxMCRqZThiY3kxWEExbGQvN0RoVldac2guY2VxdnR6WWdXUUxFYmlFOXlvTnpOUFE4cjFrNEhmdSIsImRhdGEiOiI1ZjBkOGQ2Mzc3NjMwNjAwOGFmZGY4MGUiLCJpYXQiOjE1OTQ3MjU1MzYsImV4cCI6MTU5NDc2ODczNn0.OhFom7IIXNgpAHinzp-QpHJAR8WPNtW2nzn0nTBZLh8";
   const token = state.token;
-
+  
   if (!token) {
     return (
       <NavigationContainer>
@@ -157,6 +158,11 @@ const App = () => {
                 name="TabStack"
                 options={{ headerShown: false }}
                 component={TabStack}
+              />
+              <Stack.Screen
+                name="PlaylistDetails"
+                options={{ headerShown: false }}
+                component={PlaylistDetailsScreens}
               />
               <Stack.Screen
                 name="EventEditor"
