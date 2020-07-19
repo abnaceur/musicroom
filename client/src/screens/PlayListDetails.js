@@ -27,7 +27,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Sound, { setCategory } from "react-native-sound";
 
 // Import servces
-import { updateTrackLikeService, getPlaylistByidService } from '../service/playListService';
+import { updateTrackListPositionService, updateTrackLikeService, getPlaylistByidService } from '../service/playListService';
 
 const PlaylistDetailsScreens = (props) => {
 
@@ -132,7 +132,7 @@ const PlaylistDetailsScreens = (props) => {
     let modalRef;
     const openModal = () => modalRef.show();
     const saveModalRef = ref => modalRef = ref;
-    const onSelectedOption = newPos => {
+    const onSelectedOption = async newPos => {
         let data = songsList;
         // Get old position
         let oldPos = data.filter(l => l.selected)[0].position;
@@ -145,6 +145,7 @@ const PlaylistDetailsScreens = (props) => {
             newListTr.trackList = arrangedTrack;
             setDetails(newListTr);
             handlSongsList(arrangedTrack);
+            await updateTrackListPositionService(newListTr._id, arrangedTrack, state.token);
             // Force renderer
             setRerender(Math.floor(Math.random() * 9999999999));
         }
