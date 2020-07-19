@@ -18,15 +18,19 @@ let userSchema = mongoose.Schema({
     email: String,
     password: {
         type: String,
-        require: true,
     },
     validationToken: {
         type: String,
-        require: true,
     },
     dateOfCreation: {
         type: Date,
         default: Date.now,
+    },
+    googlePhoto: {
+        type: String,
+    },
+    googleId: {
+        type: String,
     },
     active: {
         type: Boolean,

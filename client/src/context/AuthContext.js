@@ -84,9 +84,15 @@ const resetPwd = dispatch => async (email) => {
     }
 }
 
+const oauth2google = dispatch => async ({token, userId}) => {
+    await AsyncStorage.setItem('token_id', token);
+    await AsyncStorage.setItem('userInfo', JSON.stringify({userId: userId}));
+    dispatch({ type: 'addToken', payload: token })
+}
+
 export const { Context, Provider } = creatDataContext(
     authReducer,
-    { signup, signin, signout, resetPwd, hideMessages },
+    { signup, signin, signout, resetPwd, hideMessages, oauth2google },
     {
         token: null,
         error_msg: "",

@@ -15,6 +15,95 @@ const swaggerDocument = {
     "produces": ["application/json"],
     "consumes": "application/json",
     "paths": {
+        // Socket 
+        "LIST OF SOCKET": {
+            "get": {
+                "x-swagger-router-controller": "socket.emit",
+                "operationId": "socket.emit",
+                "summary": "socket.emit",
+                "description": 'socket.emit',
+                "tags": ["Socket"],
+                "responses": {
+                    '1': {
+                        "description": "event name : newCertificate",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "certificate": {
+                                    "type": "certificate",
+                                    "example": {}
+                                }
+                            }
+                        },
+                    },
+                    '2': {
+                        "description": "event name : deleteCertificate",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "certificate": {
+                                    "type": "certificate",
+                                    "example": {}
+                                }
+                            }
+                        },
+                    },
+                    '3': {
+                        "description": "event name : newPlaylist",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "playList": {
+                                    "type": "playList",
+                                    "example": {}
+                                }
+                            }
+                        },
+                    },
+                    '4': {
+                        "description": "event name : updatePlaylist",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "playList": {
+                                    "type": "playList",
+                                    "example": {}
+                                }
+                            }
+                        },
+                    },
+                    '5': {
+                        "description": "event name : deletePlaylist",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "playList": {
+                                    "type": "playList",
+                                    "example": {}
+                                }
+                            }
+                        },
+                    }
+                }
+            }
+        },
+
+        /// User 
         "/api/v1/users/signup": {
             "post": {
                 "x-swagger-router-controller": "users",
@@ -67,6 +156,117 @@ const swaggerDocument = {
                     }
                 ],
                 "responses": {
+                    '408': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 408
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "valid": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Regex error mail'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '409': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 409
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "valid": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Regex error username'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '410': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 410
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "valid": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Regex error password.'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
                     '406': {
                         "description": "This account already exists",
                         "name": "body",
@@ -180,12 +380,235 @@ const swaggerDocument = {
                 }
             }
         },
+        "/api/v1/users/delete": {
+            "post": {
+                "x-swagger-router-controller": "users",
+                "operationId": "users",
+                "summary": "Delete user / Need header Authorization : bearer -> token",
+                "description": 'Delete user / Need header Authorization : bearer -> token',
+                "tags": ["User"],
+                "description": `[Delete user link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/delete"})`,
+                "parameters": [
+                    // {
+                    //     "name": "username",
+                    //     "in": "formData",
+                    //     "type": "string",
+                    //     "required": true
+                    // },
+                    // {
+                    //     "name": "email",
+                    //     "in": "formData",
+                    //     "required": true,
+                    //     "type": "string"
+                    // },
+                    // {
+                    //     "name": "password",
+                    //     "in": "formData",
+                    //     "required": true,
+                    //     "type": "string"
+                    // },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {}
+
+                    }
+                ],
+                "responses": {
+                    '406': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 406
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "valid": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad id format'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '407': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 407
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "valid": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad token'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '202': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 202
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "valid": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'User not found'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '444': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "valid": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Error Unknow  + err"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 444
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '200': {
+                        "description": "User account has been deleted succesfully",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Account deleted with success.'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '500': {
+                        "description": "An error has occured",
+                    },
+                }
+            }
+        },
         "/api/v1/users/id/{id}": {
             "get": {
                 "x-swagger-router-controller": "users",
                 "operationId": "users",
-                "summary": "Get User by Id",
-                "description": 'Get data of user by sending userId',
+                "summary": "Get User by Id / Need header Authorization : bearer -> token",
+                "description": 'Get data of user by sending userId / Need header Authorization : bearer -> token',
                 "tags": ["User"],
                 "description": `[Get user by id link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/id/{id}"})`,
                 "parameters": [
@@ -328,1002 +751,1795 @@ const swaggerDocument = {
             }
         },
 
-        // "/api/v1/users/validate/code": {
-        //     "post": {
-        //         "x-swagger-router-controller": "users",
-        //         "operationId": "users",
-        //         "summary": "Check if email code is valid",
-        //         "description": 'Check account validation code',
-        //         "tags": ["User"],
-        //         "description": `[Code validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/validate/code"})`,
-        //         "parameters": [
-        //             {
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "data": {
-        //                             "type": "object",
-        //                             "properties": {
-        //                                 "id": {
-        //                                     "type": "string",
-        //                                     "example": "5e4c58b2a7032302a4cc07cebd"
-        //                                 },
-        //                                 "validationCode": {
-        //                                     "type": "string",
-        //                                     "example": '26021'
-        //                                 }
+        /// PlayList
+        "/api/v1/playlist/id/{id}": {
+            "get": {
+                "x-swagger-router-controller": "playlist",
+                "operationId": "playlist",
+                "summary": "Get playlist by Id / Need header Authorization : bearer -> token",
+                "description": 'Get data of playlist by sending playlist / Need header Authorization : bearer -> token',
+                "tags": ["playlist"],
+                "description": `[Get playlist by id link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/playlist/id/{id}"})`,
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                        },
+                        "required": true,
+                        "description": " ID of the playlist to get",
+                    }
+                ],
+                "responses": {
+                    '406': {
+                        "description": "Bad id format",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Bad id format"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 406
+                                        }
 
-        //                             }
-        //                         }
-        //                     }
-        //                 }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '202': {
+                        "description": "playlist not found",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "playlist not found"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 202
+                                        }
 
-        //             }
-        //         ],
-        //         "responses": {
-        //             '406': {
-        //                 "description": "Validation code is incorrect",
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "data": {
-        //                             "type": "object",
-        //                             "properties": {
-        //                                 "success": {
-        //                                     "type": "booleon",
-        //                                     "example": true
-        //                                 },
-        //                                 "code": {
-        //                                     "type": "number",
-        //                                     "example": 406
-        //                                 },
-        //                                 "data": {
-        //                                     "properties": {
-        //                                         "valid": {
-        //                                             "type": "boolean",
-        //                                             "example": false
-        //                                         },
-        //                                         "msg": {
-        //                                             "type": "string",
-        //                                             "example": 'Not acceptable'
-        //                                         }
-        //                                     }
-        //                                 }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '444': {
+                        "description": "Error Unknow + err",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Error Unknow + err"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 444
+                                        }
 
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             },
-        //             '200': {
-        //                 "description": "Validation code is correct",
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "data": {
-        //                             "type": "object",
-        //                             "properties": {
-        //                                 "success": {
-        //                                     "type": "booleon",
-        //                                     "example": true
-        //                                 },
-        //                                 "code": {
-        //                                     "type": "number",
-        //                                     "example": 200
-        //                                 },
-        //                                 "data": {
-        //                                     "properties": {
-        //                                         "valid": {
-        //                                             "type": "boolean",
-        //                                             "example": true
-        //                                         },
-        //                                         "msg": {
-        //                                             "type": "string",
-        //                                             "example": 'Accepted'
-        //                                         }
-        //                                     }
-        //                                 }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '200': {
+                        "description": "Return playlist data",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "playlist": {
+                                                    "type": "Playlist",
+                                                    "example": '{...........}'
+                                                }
+                                            }
+                                        }
 
-        //                             }
-        //                         }
-        //                     }
-        //                 },
-        //             },
-        //             '500': {
-        //                 "description": "An error has occured",
-        //             },
-        //         }
-        //     }
-        // },
-        // "/api/v1/users/signup": {
-        //     "post": {
-        //         "x-swagger-router-controller": "users",
-        //         "operationId": "users",
-        //         "summary": "Signup a new user",
-        //         "description": 'Create a new user account',
-        //         "tags": ["User"],
-        //         "description": `[User creation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
-        //         "parameters": [
-        //             {
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "id": {
-        //                             "type": "string",
-        //                             "example": "5e4c58b2a7032302a4cc07cebd"
-        //                         },
-        //                         "fullname": {
-        //                             "type": "string",
-        //                             "example": 'John Dao'
-        //                         },
-        //                         "validationCode": {
-        //                             "type": "string",
-        //                             "example": '26021'
-        //                         },
-        //                         "email": {
-        //                             "type": "string",
-        //                             "example": 'pagex@gmail.com'
-        //                         },
-        //                         "password": {
-        //                             "type": "string",
-        //                             "example": '9876543456789'
-        //                         },
-        //                         "file": {
-        //                             "type": "file",
-        //                             "example": '/photo/test.png'
-        //                         },
-        //                         "passion": {
-        //                             "type": "string",
-        //                             "example": 'painting'
-        //                         }
-        //                     }
-        //                 }
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '500': {
+                        "description": "An error has occured",
+                    },
+                }
+            }
+        },
+        "/api/v1/playlist/getAllPublic": {
+            "get": {
+                "x-swagger-router-controller": "playlist",
+                "operationId": "playlist",
+                "summary": "Get all public playlist / Need header Authorization : bearer -> token",
+                "description": 'Get data of all public playlist / Need header Authorization : bearer -> token',
+                "tags": ["playlist"],
+                "description": `[Get user public playlist link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/playlist/getAllPublic"})`,
+                "responses": {
+                    '406': {
+                        "description": "Bad id format",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Bad id format"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 406
+                                        }
 
-        //             }
-        //         ],
-        //         "responses": {
-        //             '406': {
-        //                 "description": "Account validation",
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "data": {
-        //                             "type": "object",
-        //                             "properties": {
-        //                                 "success": {
-        //                                     "type": "booleon",
-        //                                     "example": true
-        //                                 },
-        //                                 "code": {
-        //                                     "type": "number",
-        //                                     "example": 406
-        //                                 },
-        //                                 "data": {
-        //                                     "properties": {
-        //                                         "valid": {
-        //                                             "type": "boolean",
-        //                                             "example": false
-        //                                         },
-        //                                         "msg": {
-        //                                             "type": "string",
-        //                                             "example": 'This account is not active or exists'
-        //                                         }
-        //                                     }
-        //                                 }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '202': {
+                        "description": "error data",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "error data"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 202
+                                        }
 
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             },
-        //             '407': {
-        //                 "description": "Password validation",
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "data": {
-        //                             "type": "object",
-        //                             "properties": {
-        //                                 "success": {
-        //                                     "type": "booleon",
-        //                                     "example": true
-        //                                 },
-        //                                 "code": {
-        //                                     "type": "number",
-        //                                     "example": 407
-        //                                 },
-        //                                 "data": {
-        //                                     "properties": {
-        //                                         "valid": {
-        //                                             "type": "boolean",
-        //                                             "example": false
-        //                                         },
-        //                                         "msg": {
-        //                                             "type": "string",
-        //                                             "example": 'Password must include more than 08 characters'
-        //                                         }
-        //                                     }
-        //                                 }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '444': {
+                        "description": "Error Unknow + err",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Error Unknow + err"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 444
+                                        }
 
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             },
-        //             '200': {
-        //                 "description": "Account creation",
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "data": {
-        //                             "type": "object",
-        //                             "properties": {
-        //                                 "success": {
-        //                                     "type": "booleon",
-        //                                     "example": true
-        //                                 },
-        //                                 "code": {
-        //                                     "type": "number",
-        //                                     "example": 200
-        //                                 },
-        //                                 "data": {
-        //                                     "properties": {
-        //                                         "msg": {
-        //                                             "type": "string",
-        //                                             "example": 'Account created with success'
-        //                                         }
-        //                                     }
-        //                                 }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '200': {
+                        "description": "Return playlist []",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "playListArray": {
+                                                    "type": "Playlist Array",
+                                                    "example": '[{Playlist}, {Playlist}]'
+                                                }
+                                            }
+                                        }
 
-        //                             }
-        //                         }
-        //                     }
-        //                 },
-        //             },
-        //             '500': {
-        //                 "description": "An error has occured",
-        //             },
-        //         }
-        //     }
-        // },
-        // "/api/v1/users/login": {
-        //     "post": {
-        //         "x-swagger-router-controller": "users",
-        //         "operationId": "users",
-        //         "summary": "Login user",
-        //         "description": 'Account connection',
-        //         "tags": ["User"],
-        //         "description": `[User creation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/login"})`,
-        //         "parameters": [
-        //             {
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "data": {
-        //                             "type": "object",
-        //                             "properties": {
-        //                                 "email": {
-        //                                     "type": "string",
-        //                                     "example": 'pagex@gmail.com'
-        //                                 },
-        //                                 "password": {
-        //                                     "type": "string",
-        //                                     "example": '9876543456789'
-        //                                 },
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '500': {
+                        "description": "An error has occured",
+                    },
+                }
+            }
+        },
+        "/api/v1/playlist/new": {
+            "post": {
+                "x-swagger-router-controller": "playlist",
+                "operationId": "playlist / Need header Authorization : bearer -> token",
+                "summary": "Create playlist / Need header Authorization : bearer -> token",
+                "description": 'Create playlist',
+                "tags": ["playlist"],
+                "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "public": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": 'testPlaylist'
+                                },
+                            }
+                        }
 
-        //                             }
-        //                         }
-        //                     }
-        //                 }
+                    }
+                ],
+                "responses": {
+                    '406': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 406
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad id format'
+                                                }
+                                            }
+                                        }
 
-        //             }
-        //         ],
-        //         "responses": {
-        //             '406': {
-        //                 "description": "Account validation",
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "data": {
-        //                             "type": "object",
-        //                             "properties": {
-        //                                 "success": {
-        //                                     "type": "booleon",
-        //                                     "example": true
-        //                                 },
-        //                                 "code": {
-        //                                     "type": "number",
-        //                                     "example": 406
-        //                                 },
-        //                                 "data": {
-        //                                     "properties": {
-        //                                         "msg": {
-        //                                             "type": "string",
-        //                                             "example": 'Account does not exists'
-        //                                         }
-        //                                     }
-        //                                 }
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '407': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 407
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad token'
+                                                }
+                                            }
+                                        }
 
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             },
-        //             '407': {
-        //                 "description": "Password validation",
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "data": {
-        //                             "type": "object",
-        //                             "properties": {
-        //                                 "success": {
-        //                                     "type": "booleon",
-        //                                     "example": true
-        //                                 },
-        //                                 "code": {
-        //                                     "type": "number",
-        //                                     "example": 407
-        //                                 },
-        //                                 "data": {
-        //                                     "properties": {
-        //                                         "msg": {
-        //                                             "type": "string",
-        //                                             "example": 'Password and/or email is not correct'
-        //                                         }
-        //                                     }
-        //                                 }
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '202': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 202
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'not found'
+                                                }
+                                            }
+                                        }
 
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             },
-        //             '200': {
-        //                 "description": "Account login successfully",
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "data": {
-        //                             "type": "object",
-        //                             "properties": {
-        //                                 "success": {
-        //                                     "type": "booleon",
-        //                                     "example": true
-        //                                 },
-        //                                 "code": {
-        //                                     "type": "number",
-        //                                     "example": 200
-        //                                 },
-        //                                 "data": {
-        //                                     "properties": {
-        //                                         "token": {
-        //                                             "type": "string",
-        //                                             "example": 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IiQyYiQxMCRlMnRWeGc5dmszaHlFdjVOWGJ2U2t1YVVJOUJIakdHblAzTGZXZEFiRzBHOXBLVGJNUlA4aSIsImRhdGEiOiI1ZTUxMzU0ZWIyZjM0MDAwMmI0Y2I4N2EiLCJpYXQiOjE1ODIzODA3MDUsImV4cCI6MTU4MjQyMzkwNX0.aiesaYNjxKbZyZUhWmfZD48pVS0C_GhqITdKdTK2g80'
-        //                                         },
-        //                                         "userId": {
-        //                                             "type": "string",
-        //                                             "example": '5e51354eb2f340002b4cb87a'
-        //                                         },
-        //                                         "imageUrl": {
-        //                                             "type": "string",
-        //                                             "example": '/upload/exemple/profiletest.png'
-        //                                         },
-        //                                         "fullname": {
-        //                                             "type": "string",
-        //                                             "example": 'John Dao'
-        //                                         },
-        //                                         "passion": {
-        //                                             "type": "string",
-        //                                             "example": 'Painting'
-        //                                         },
-        //                                         "dateOfCreation": {
-        //                                             "type": "string",
-        //                                             "example": '2020-02-22T14:06:06.704Z'
-        //                                         }
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '444': {
+                        "description": "error",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Error Unknow  + err"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 444
+                                        }
 
-        //                                     }
-        //                                 }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '200': {
+                        "description": "playlist",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "playlist": {
+                                                    "type": "playlist",
+                                                    "example": '{}'
+                                                }
+                                            }
+                                        }
 
-        //                             }
-        //                         }
-        //                     }
-        //                 },
-        //             },
-        //             '500': {
-        //                 "description": "An error has occured",
-        //             },
-        //         }
-        //     }
-        // },
-        // "/api/v1/users/:userId": {
-        //     "get": {
-        //         "x-swagger-router-controller": "users",
-        //         "operationId": "users",
-        //         "summary": "Get user information",
-        //         "description": 'Account connection',
-        //         "tags": ["User"],
-        //         "description": `[Get user information link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/:userId"})`,
-        //         "parameters": [{}],
-        //         "responses": {
-        //             '200': {
-        //                 "description": "User information fetched successfully",
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "data": {
-        //                             "type": "object",
-        //                             "properties": {
-        //                                 "success": {
-        //                                     "type": "booleon",
-        //                                     "example": true
-        //                                 },
-        //                                 "code": {
-        //                                     "type": "number",
-        //                                     "example": 200
-        //                                 },
-        //                                 "data": {
-        //                                     "properties": {
-        //                                         "_id": {
-        //                                             "type": "string",
-        //                                             "example": '5e51354eb2f340002b4cb87a'
-        //                                         },
-        //                                         "fullname": {
-        //                                             "type": "string",
-        //                                             "example": 'John Dao'
-        //                                         },
-        //                                         "passion": {
-        //                                             "type": "string",
-        //                                             "example": '5e51354eb2f340002b4cb87a'
-        //                                         },
-        //                                         "email": {
-        //                                             "type": "string",
-        //                                             "example": 'j.dao@ppagex.com'
-        //                                         },
-        //                                         "profilePhoto": {
-        //                                             "type": "string",
-        //                                             "example": '/upload/exemple/profiletest.png'
-        //                                         },
-        //                                         "dateOfCreation": {
-        //                                             "type": "string",
-        //                                             "example": '2020-02-22T14:06:06.704Z'
-        //                                         }
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '500': {
+                        "description": "An error has occured",
+                    },
+                }
+            }
+        },
 
-        //                                     }
-        //                                 }
+        // edit down 
+        "/api/v1/playlist/mine": {
+            "get": {
+                "x-swagger-router-controller": "playlist",
+                "operationId": "playlist",
+                "summary": "Get playlist by Id / Need header Authorization : bearer -> token",
+                "description": 'Get data of playlist by sending playlist / Need header Authorization : bearer -> token',
+                "tags": ["playlist"],
+                "description": `[Get playlist by id link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/playlist/id/{id}"})`,
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                        },
+                        "required": true,
+                        "description": " ID of the playlist to get",
+                    }
+                ],
+                "responses": {
+                    '406': {
+                        "description": "Bad id format",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Bad id format"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 406
+                                        }
 
-        //                             }
-        //                         }
-        //                     }
-        //                 },
-        //             },
-        //             '500': {
-        //                 "description": "An error has occured",
-        //             },
-        //         }
-        //     }
-        // },
-        // "/api/v1/content/new": {
-        //     "post": {
-        //         "x-swagger-router-controller": "contents",
-        //         "operationId": "contents",
-        //         "summary": "Add content",
-        //         "description": 'Create new content',
-        //         "tags": ["Content"],
-        //         "description": `[Content creation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/content/new"})`,
-        //         "parameters": [
-        //             {
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "contentUserId": {
-        //                             "type": "string",
-        //                             "example": '5e51354eb2f340002b4cb87a'
-        //                         },
-        //                         "contentTitle": {
-        //                             "type": "string",
-        //                             "example": 'Awesome paintings'
-        //                         },
-        //                         "contentDescription": {
-        //                             "type": "string",
-        //                             "example": 'this is my cool art'
-        //                         },
-        //                         "file": {
-        //                             "type": "string",
-        //                             "example": 'I am an image'
-        //                         },
-        //                         "contentType": {
-        //                             "type": "string",
-        //                             "example": 'passion'
-        //                         },
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '202': {
+                        "description": "playlist not found",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "playlist not found"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 202
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '444': {
+                        "description": "Error Unknow + err",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Error Unknow + err"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 444
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '200': {
+                        "description": "Return playlist data",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "playlist": {
+                                                    "type": "Playlist",
+                                                    "example": '{...........}'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '500': {
+                        "description": "An error has occured",
+                    },
+                }
+            }
+        },
+        "/api/v1/playlist/new": {
+            "post": {
+                "x-swagger-router-controller": "playlist",
+                "operationId": "playlist / Need header Authorization : bearer -> token",
+                "summary": "Create playlist / Need header Authorization : bearer -> token",
+                "description": 'Create playlist',
+                "tags": ["playlist"],
+                "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "public": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": 'testPlaylist'
+                                },
+                            }
+                        }
+
+                    }
+                ],
+                "responses": {
+                    '406': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 406
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad id format'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '407': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 407
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad token'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '202': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 202
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'not found'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '444': {
+                        "description": "error",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Error Unknow  + err"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 444
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '200': {
+                        "description": "playlist",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "playlist": {
+                                                    "type": "playlist",
+                                                    "example": '{}'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '500': {
+                        "description": "An error has occured",
+                    },
+                }
+            }
+        },
+        "/api/v1/playlist/update": {
+            "post": {
+                "x-swagger-router-controller": "playlist",
+                "operationId": "playlist / Need header Authorization : bearer -> token",
+                "summary": "Create playlist / Need header Authorization : bearer -> token",
+                "description": 'Create playlist',
+                "tags": ["playlist"],
+                "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "public": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": 'testPlaylist'
+                                },
+                            }
+                        }
+
+                    }
+                ],
+                "responses": {
+                    '406': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 406
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad id format'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '407': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 407
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad token'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '202': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 202
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'not found'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '444': {
+                        "description": "error",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Error Unknow  + err"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 444
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '200': {
+                        "description": "playlist",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "playlist": {
+                                                    "type": "playlist",
+                                                    "example": '{}'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '500': {
+                        "description": "An error has occured",
+                    },
+                }
+            }
+        },
+        "/api/v1/playlist/delete": {
+            "post": {
+                "x-swagger-router-controller": "playlist",
+                "operationId": "playlist / Need header Authorization : bearer -> token",
+                "summary": "Create playlist / Need header Authorization : bearer -> token",
+                "description": 'Create playlist',
+                "tags": ["playlist"],
+                "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "public": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": 'testPlaylist'
+                                },
+                            }
+                        }
+
+                    }
+                ],
+                "responses": {
+                    '406': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 406
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad id format'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '407': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 407
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad token'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '202': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 202
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'not found'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '444': {
+                        "description": "error",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Error Unknow  + err"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 444
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '200': {
+                        "description": "playlist",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "playlist": {
+                                                    "type": "playlist",
+                                                    "example": '{}'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '500': {
+                        "description": "An error has occured",
+                    },
+                }
+            }
+        },
+
+        /// Certificate
+        "/api/v1/certificate/delete": {
+            "post": {
+                "x-swagger-router-controller": "playlist",
+                "operationId": "playlist / Need header Authorization : bearer -> token",
+                "summary": "Create playlist / Need header Authorization : bearer -> token",
+                "description": 'Create playlist',
+                "tags": ["Certificate"],
+                "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "public": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": 'testPlaylist'
+                                },
+                            }
+                        }
+
+                    }
+                ],
+                "responses": {
+                    '406': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 406
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad id format'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '407': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 407
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad token'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '202': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 202
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'not found'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '444': {
+                        "description": "error",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Error Unknow  + err"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 444
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '200': {
+                        "description": "playlist",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "playlist": {
+                                                    "type": "playlist",
+                                                    "example": '{}'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '500': {
+                        "description": "An error has occured",
+                    },
+                }
+            }
+        },
+        "/api/v1/certificate/new": {
+            "post": {
+                "x-swagger-router-controller": "playlist",
+                "operationId": "playlist / Need header Authorization : bearer -> token",
+                "summary": "Create playlist / Need header Authorization : bearer -> token",
+                "description": 'Create playlist',
+                "tags": ["Certificate"],
+                "description": `[Account validation link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/users/signup"})`,
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "public": {
+                                    "type": "boolean",
+                                    "example": false
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": 'testPlaylist'
+                                },
+                            }
+                        }
+
+                    }
+                ],
+                "responses": {
+                    '406': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 406
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad id format'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '407': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 407
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'Bad token'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '202': {
+                        "description": "Data validation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 202
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": 'not found'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '444': {
+                        "description": "error",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Error Unknow  + err"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 444
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '200': {
+                        "description": "playlist",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "playlist": {
+                                                    "type": "playlist",
+                                                    "example": '{}'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '500': {
+                        "description": "An error has occured",
+                    },
+                }
+            }
+        },
+        "/api/v1/certificate/myCertificate": {
+            "get": {
+                "x-swagger-router-controller": "playlist",
+                "operationId": "playlist",
+                "summary": "Get playlist by Id / Need header Authorization : bearer -> token",
+                "description": 'Get data of playlist by sending playlist / Need header Authorization : bearer -> token',
+                "tags": ["Certificate"],
+                "description": `[Get playlist by id link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/playlist/id/{id}"})`,
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                        },
+                        "required": true,
+                        "description": " ID of the playlist to get",
+                    }
+                ],
+                "responses": {
+                    '406': {
+                        "description": "Bad id format",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Bad id format"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 406
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '202': {
+                        "description": "playlist not found",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "playlist not found"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 202
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '444': {
+                        "description": "Error Unknow + err",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": false
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "msg": {
+                                                    "type": "string",
+                                                    "example": "Error Unknow + err"
+                                                },
+                                            }
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 444
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    '200': {
+                        "description": "Return playlist data",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "booleon",
+                                            "example": true
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "playlist": {
+                                                    "type": "Playlist",
+                                                    "example": '{...........}'
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        },
+                    },
+                    '500': {
+                        "description": "An error has occured",
+                    },
+                }
+            }
+        },
 
 
-        //                     }
-        //                 }
-
-        //             }
-        //         ],
-        //         "responses": {
-        //             '406': {
-        //                 "description": "Account validation",
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "data": {
-        //                             "type": "object",
-        //                             "properties": {
-        //                                 "success": {
-        //                                     "type": "booleon",
-        //                                     "example": true
-        //                                 },
-        //                                 "code": {
-        //                                     "type": "number",
-        //                                     "example": 406
-        //                                 },
-        //                                 "data": {
-        //                                     "properties": {
-        //                                         "msg": {
-        //                                             "type": "string",
-        //                                             "example": 'Account does not exists'
-        //                                         }
-        //                                     }
-        //                                 }
-
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             },
-        //             '200': {
-        //                 "description": "Content created successfully",
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "data": {
-        //                             "type": "object",
-        //                             "properties": {
-        //                                 "success": {
-        //                                     "type": "booleon",
-        //                                     "example": true
-        //                                 },
-        //                                 "code": {
-        //                                     "type": "number",
-        //                                     "example": 200
-        //                                 },
-        //                                 "data": {
-        //                                     "properties": {
-        //                                         "msg": {
-        //                                             "type": "string",
-        //                                             "example": 'Content created with success'
-        //                                         }
-
-        //                                     }
-        //                                 }
-
-        //                             }
-        //                         }
-        //                     }
-        //                 },
-        //             },
-        //             '500': {
-        //                 "description": "An error has occured",
-        //             },
-        //         }
-        //     }
-        // },
-        // "/api/v1/content/all/limit/:limit/page/:page/sortByDate/:sortByDate": {
-        //     "get": {
-        //         "x-swagger-router-controller": "contents",
-        //         "operationId": "contents",
-        //         "summary": "Get contents",
-        //         "description": 'Get all content by pagination',
-        //         "tags": ["Content"],
-        //         "description": `[Content fetch link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/content/all/limit/:limit/page/:page/sortByDate/:sortByDate"})`,
-        //         "parameters": [
-
-        //         ],
-        //         "responses": {
-        //             '200': {
-        //                 "description": "Content fetched successfully",
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "data": {
-        //                             "type": "object",
-        //                             "properties": {
-        //                                 "success": {
-        //                                     "type": "booleon",
-        //                                     "example": true
-        //                                 },
-        //                                 "code": {
-        //                                     "type": "number",
-        //                                     "example": 200
-        //                                 },
-        //                                 "data": {
-        //                                     "properties": {
-        //                                         "per_page": {
-        //                                             "type": "number",
-        //                                             "example": 10
-        //                                         },
-        //                                         "total": {
-        //                                             "type": "number",
-        //                                             "example": 42
-        //                                         },
-        //                                         "total_pages": {
-        //                                             "type": "number",
-        //                                             "example": 4
-        //                                         },
-        //                                         "data": {
-        //                                             "properties": {
-        //                                                 "contentDeleted": {
-        //                                                     "type": "booleon",
-        //                                                     "example": false
-        //                                                 },
-        //                                                 "_id": {
-        //                                                     "type": "string",
-        //                                                     "example": "5e51489c01a9f50461ae7bf4"
-        //                                                 },
-        //                                                 "contentUserId": {
-        //                                                     "type": "string",
-        //                                                     "example": '5e51354eb2f340002b4cb87a'
-        //                                                 },
-        //                                                 "contentTitle": {
-        //                                                     "type": "string",
-        //                                                     "example": 'Awesome paintings'
-        //                                                 },
-        //                                                 "contentDescription": {
-        //                                                     "type": "string",
-        //                                                     "example": 'this is my cool art'
-        //                                                 },
-        //                                                 "file": {
-        //                                                     "type": "string",
-        //                                                     "example": 'I am an image'
-        //                                                 },
-        //                                                 "contentType": {
-        //                                                     "type": "string",
-        //                                                     "example": 'passion'
-        //                                                 },
-        //                                             }
-        //                                         }
-
-        //                                     }
-        //                                 }
-
-        //                             }
-        //                         }
-        //                     }
-        //                 },
-        //             },
-        //             '500': {
-        //                 "description": "An error has occured",
-        //             },
-        //         }
-        //     }
-        // },
-        // "/api/v1/content/passion/:passionId/limit/:limit/page/:page/sortByDate/:sortByDate": {
-        //     "get": {
-        //         "x-swagger-router-controller": "contents",
-        //         "operationId": "contents",
-        //         "summary": "Get contents by passion",
-        //         "description": 'Get all content by passion with pagination',
-        //         "tags": ["Content"],
-        //         "description": `[Content fetch by pasion link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/content/passion/:passionId/limit/:limit/page/0/sortByDate/0"})`,
-        //         "parameters": [
-
-        //         ],
-        //         "responses": {
-        //             '200': {
-        //                 "description": "Content fetched successfully",
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "data": {
-        //                             "type": "object",
-        //                             "properties": {
-        //                                 "success": {
-        //                                     "type": "booleon",
-        //                                     "example": true
-        //                                 },
-        //                                 "code": {
-        //                                     "type": "number",
-        //                                     "example": 200
-        //                                 },
-        //                                 "data": {
-        //                                     "properties": {
-        //                                         "per_page": {
-        //                                             "type": "number",
-        //                                             "example": 10
-        //                                         },
-        //                                         "total": {
-        //                                             "type": "number",
-        //                                             "example": 42
-        //                                         },
-        //                                         "total_pages": {
-        //                                             "type": "number",
-        //                                             "example": 4
-        //                                         },
-        //                                         "data": {
-        //                                             "properties": {
-        //                                                 "contentDeleted": {
-        //                                                     "type": "booleon",
-        //                                                     "example": false
-        //                                                 },
-        //                                                 "_id": {
-        //                                                     "type": "string",
-        //                                                     "example": "5e51489c01a9f50461ae7bf4"
-        //                                                 },
-        //                                                 "contentUserId": {
-        //                                                     "type": "string",
-        //                                                     "example": '5e51354eb2f340002b4cb87a'
-        //                                                 },
-        //                                                 "contentTitle": {
-        //                                                     "type": "string",
-        //                                                     "example": 'Awesome paintings'
-        //                                                 },
-        //                                                 "contentDescription": {
-        //                                                     "type": "string",
-        //                                                     "example": 'this is my cool art'
-        //                                                 },
-        //                                                 "file": {
-        //                                                     "type": "string",
-        //                                                     "example": 'I am an image'
-        //                                                 },
-        //                                                 "contentType": {
-        //                                                     "type": "string",
-        //                                                     "example": 'passion'
-        //                                                 },
-        //                                             }
-        //                                         }
-
-        //                                     }
-        //                                 }
-
-        //                             }
-        //                         }
-        //                     }
-        //                 },
-        //             },
-        //             '500': {
-        //                 "description": "An error has occured",
-        //             },
-        //         }
-        //     }
-        // },
-        // "/api/v1/content/passion/:passionId/user/:userId/limit/:limit/page/:page/sortByDate/:sortByDate": {
-        //     "get": {
-        //         "x-swagger-router-controller": "contents",
-        //         "operationId": "contents",
-        //         "summary": "Get contents by user passion",
-        //         "description": 'Get all content by user passion with pagination',
-        //         "tags": ["Content"],
-        //         "description": `[Content fetch by user pasion link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/content/passion/:passionId/user/:userId/limit/:limit/page/0/sortByDate/0"})`,
-        //         "parameters": [
-
-        //         ],
-        //         "responses": {
-        //             '200': {
-        //                 "description": "Content fetched successfully",
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "data": {
-        //                             "type": "object",
-        //                             "properties": {
-        //                                 "success": {
-        //                                     "type": "booleon",
-        //                                     "example": true
-        //                                 },
-        //                                 "code": {
-        //                                     "type": "number",
-        //                                     "example": 200
-        //                                 },
-        //                                 "data": {
-        //                                     "properties": {
-        //                                         "per_page": {
-        //                                             "type": "number",
-        //                                             "example": 10
-        //                                         },
-        //                                         "total": {
-        //                                             "type": "number",
-        //                                             "example": 42
-        //                                         },
-        //                                         "total_pages": {
-        //                                             "type": "number",
-        //                                             "example": 4
-        //                                         },
-        //                                         "data": {
-        //                                             "properties": {
-        //                                                 "contentDeleted": {
-        //                                                     "type": "booleon",
-        //                                                     "example": false
-        //                                                 },
-        //                                                 "_id": {
-        //                                                     "type": "string",
-        //                                                     "example": "5e51489c01a9f50461ae7bf4"
-        //                                                 },
-        //                                                 "contentUserId": {
-        //                                                     "type": "string",
-        //                                                     "example": '5e51354eb2f340002b4cb87a'
-        //                                                 },
-        //                                                 "contentTitle": {
-        //                                                     "type": "string",
-        //                                                     "example": 'Awesome paintings'
-        //                                                 },
-        //                                                 "contentDescription": {
-        //                                                     "type": "string",
-        //                                                     "example": 'this is my cool art'
-        //                                                 },
-        //                                                 "file": {
-        //                                                     "type": "string",
-        //                                                     "example": 'I am an image'
-        //                                                 },
-        //                                                 "contentType": {
-        //                                                     "type": "string",
-        //                                                     "example": 'passion'
-        //                                                 },
-        //                                             }
-        //                                         }
-
-        //                                     }
-        //                                 }
-
-        //                             }
-        //                         }
-        //                     }
-        //                 },
-        //             },
-        //             '500': {
-        //                 "description": "An error has occured",
-        //             },
-        //         }
-        //     }
-        // },
-        // "/api/v1/passion/all/limit/:limit/page/:page": {
-        //     "get": {
-        //         "x-swagger-router-controller": "passons",
-        //         "operationId": "passions",
-        //         "summary": "Get passions",
-        //         "description": 'Get all passions by pagination',
-        //         "tags": ["Passion"],
-        //         "description": `[Passion fetch link](${process.env.URL_BACKEND + ':' + process.env.URL_BACKEND_PORT + "/api/v1/passion/all/limit/:limit/page/:page"})`,
-        //         "parameters": [
-
-        //         ],
-        //         "responses": {
-        //             '200': {
-        //                 "description": "Passion fetched successfully",
-        //                 "name": "body",
-        //                 "in": "body",
-        //                 "required": true,
-        //                 "schema": {
-        //                     "type": "object",
-        //                     "properties": {
-        //                         "data": {
-        //                             "type": "object",
-        //                             "properties": {
-        //                                 "success": {
-        //                                     "type": "booleon",
-        //                                     "example": true
-        //                                 },
-        //                                 "code": {
-        //                                     "type": "number",
-        //                                     "example": 200
-        //                                 },
-        //                                 "data": {
-        //                                     "properties": {
-        //                                         "per_page": {
-        //                                             "type": "number",
-        //                                             "example": 10
-        //                                         },
-        //                                         "total": {
-        //                                             "type": "number",
-        //                                             "example": 42
-        //                                         },
-        //                                         "total_pages": {
-        //                                             "type": "number",
-        //                                             "example": 4
-        //                                         },
-        //                                         "data": {
-        //                                             "properties": {
-        //                                                 "_id": {
-        //                                                     "type": "string",
-        //                                                     "example": "5e51489c01a9f50461ae7bf4"
-        //                                                 },
-        //                                                 "passionImage": {
-        //                                                     "type": "string",
-        //                                                     "example": '5e51354eb2f340002b4cb87a'
-        //                                                 },
-        //                                                 "passionTitle": {
-        //                                                     "type": "string",
-        //                                                     "example": 'Painting'
-        //                                                 },
-        //                                                 "passionDescription": {
-        //                                                     "type": "strnig",
-        //                                                     "example": "My passion, my life"
-        //                                                 },
-        //                                                 "passionDeleted": {
-        //                                                     "type": "booleon",
-        //                                                     "example": false
-        //                                                 },
-        //                                                 "dateOfCreation": {
-        //                                                     "type": "string",
-        //                                                     "example": '2020-02-22T21:34:15.843Z'
-        //                                                 },
-        //                                                 "dateOfLastUpdate": {
-        //                                                     "type": "string",
-        //                                                     "example": '2020-02-22T21:34:15.843Z'
-        //                                                 },
-        //                                             }
-        //                                         }
-
-        //                                     }
-        //                                 }
-
-        //                             }
-        //                         }
-        //                     }
-        //                 },
-        //             },
-        //             '500': {
-        //                 "description": "An error has occured",
-        //             },
-        //         }
-        //     }
-        // },
     }
 };
 
