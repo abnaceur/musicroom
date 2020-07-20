@@ -19,6 +19,7 @@ import BackWard from "react-native-vector-icons/Ionicons";
 
 // Import services
 import { savePlayListService } from "../service/playListService";
+import { isContributorExistService } from '../service/userService';
 
 // Import context
 import { Context as playlistReducer } from "../context/PlayListContext";
@@ -99,11 +100,20 @@ const PlayListEditor = ({ navigation, route }) => {
     }
   };
 
-  const addContributor = () => {
-    contributor.trim() !== "" &&
-      setContributors([...contributors, contributor]);
-    setContributor("");
-    setModalContributorVisible(false);
+  const addContributor = async () => {
+    let data = {
+      contributor,
+      canVote,
+      canEdit
+    };
+
+    if (await isContributorExistService(data, token) === 200) {
+      // Check if user exist
+      contributor.trim() !== "" &&
+        setContributors([...contributors, data]);
+      setContributor("");
+      setModalContributorVisible(false);
+    };
   };
 
   const getMusics = async (name) => {
@@ -229,7 +239,7 @@ const PlayListEditor = ({ navigation, route }) => {
             onRequestClose={() => Alert.alert("Modal has been closed !")}
           >
             <View style={styles.modalContainer}>
-              <View style={[styles.textContainer, { width: 300, height: 200 }]}>
+              <View style={[styles.textContainer, { width: 300, height: 300 }]}>
                 {/* set width and height with dimensions */}
                 <TextInput
                   onChangeText={(text) => setContributor(text)}
@@ -517,9 +527,11 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 0.75,
-    height: 40,
+    height: 80,
     backgroundColor: "white",
-    borderWidth: 1,
+    borderWidth: 10,
+    padding: 20,
+    color: 'black'
   },
   textInputContainer: {
     flexDirection: "row",

@@ -6,7 +6,7 @@ async function CreateNewUser(data, token) {
         let hashedPwd = await utils.hashPassword(data.password);
         resolve({
             _id: new mongoose.Types.ObjectId,
-            username: data.fullname,
+            username: data.username,
             email: data.email,
             validationToken: token,
             password: hashedPwd,
