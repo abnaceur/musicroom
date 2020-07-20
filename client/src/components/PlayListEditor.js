@@ -5,6 +5,7 @@ import {
   View,
   Text,
   Modal,
+  ScrollView,
   TouchableOpacity,
   Alert,
   Image,
@@ -108,8 +109,10 @@ const PlayListEditor = ({ navigation, route }) => {
       canEdit
     };
 
-    if (await isContributorExistService(data, token) === 200) {
+    let repsonse = await isContributorExistService(data, token);
+    if (repsonse.code === 200) {
       // Check if user exist
+      data.id = repsonse.data.contributorId;
       contributor.trim() !== "" &&
         setContributors([...contributors, data]);
       setContributor("");
@@ -152,19 +155,16 @@ const PlayListEditor = ({ navigation, route }) => {
 }, [rerender])
 
   const removeContributor = (item) => {
-    console.log("Index :", item);
     let data = contributors;
     let newData = contributors;
 
     if (data && data.length > 0) {
       data.map((contrb, i) => {
-        console.log("contrb.contributor === item.contributor) :", contrb.contributor, item.contributor)
         if (contrb.contributor === item.contributor)
           newData.splice(i, 1);
       })
     }
 
-    console.log("newData :", newData.length)
     setContributors(newData);
     setRerender(Math.floor(Math.random() * 999999));
   }

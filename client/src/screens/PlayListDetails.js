@@ -38,6 +38,7 @@ const PlaylistDetailsScreens = (props) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentSong, setCurrentSong] = useState(0);
     const [rerender, setRerender] = useState(0);
+    const [userPerms, setUserPerms] = useState({});
     const [sound, setSound] = useState(false);
     const { navigation, route } = props;
 
@@ -61,8 +62,8 @@ const PlaylistDetailsScreens = (props) => {
 
     const handlLikeList = (list) => {
         let data = list.sort((a, b) => parseInt(a.likes.length) < parseInt(b.likes.length));
-        
-        let dataNew = []; 
+
+        let dataNew = [];
         if (data && data.length > 0) {
             data.map((l, i) => {
                 dataNew.push({
@@ -87,6 +88,20 @@ const PlaylistDetailsScreens = (props) => {
                     if (data.playList) {
                         setDetails(data.playList)
                         setTrackList(data.playList.trackList.sort(a => a.position));
+                        if (data.playList.public === false) {
+                            AsyncStorage.getItem('userInfo').then(user => {
+                                let userInfo = JSON.parse(user);
+                                let perms = {};
+                                if (data.playList.contributors) {
+                                    let dt = data.playList.contributors;
+                                    dt.map(collab => {
+                                        if (collab.id === userInfo.userId)
+                                            perms = collab;
+                                    })
+                                }
+                                setUserPerms(perms)
+                            })
+                        }
                         if (data.playList.isEditable)
                             handlSongsList(data.playList.trackList);
                         else {
@@ -147,7 +162,7 @@ const PlaylistDetailsScreens = (props) => {
         } else {
             trackList[id].likes.splice(trackList[id].likes.indexOf(user.userId), 1);
         }
-       
+
         handlLikeList(trackList);
         // await setTrackList(trackList);
         setRerender(Math.floor(Math.random() * 999999999));
@@ -260,7 +275,7 @@ const PlaylistDetailsScreens = (props) => {
 
 
                 {
-                    listDetails.trackList && trackList ? trackList.map((l, i) => (
+                    listDetails.public == true && listDetails.trackList && trackList ? trackList.map((l, i) => (
                         <ListItem
 
                             key={i}
@@ -275,6 +290,44 @@ const PlaylistDetailsScreens = (props) => {
                                 size={25}
                                 color="blue"
                             /> : listDetails.isEditable ? <SimpleLineIcons
+                                onPress={() => handleEditPosPress(i, l)}
+                                name="cursor-move"
+                                size={25}
+                                color="blue"
+                            /> : null
+                            }
+
+                            leftIcon={i === currentSong && isPlaying ?
+                                <SimpleLineIcons
+                                    name="control-pause"
+                                    size={25}
+                                    color="blue"
+                                    onPress={() => pause(i)}
+                                />
+                                : <SimpleLineIcons
+                                    name="control-play"
+                                    size={24} color="blue"
+                                    onPress={() => startPlay(i)
+                                    }
+                                />
+                            }
+                        />
+
+                    )) : listDetails.public == false && listDetails.trackList && trackList ? trackList.map((l, i) => (
+                        <ListItem
+
+                            key={i}
+                            leftAvatar={{ source: { uri: l.album ? l.album.cover_big : null } }}
+                            title={l.title}
+                            // subtitle={l.subtitle}
+                            bottomDivider
+                            rightTitle={listDetails.isVote && userPerms.canVote ? (l.likes.length).toString() : null}
+                            rightIcon={listDetails.isVote && userPerms.canVote ? <SimpleLineIcons
+                                onPress={() => handleLikePress(i, l)}
+                                name="like"
+                                size={25}
+                                color="blue"
+                            /> : listDetails.isEditable && userPerms.canEdit ? <SimpleLineIcons
                                 onPress={() => handleEditPosPress(i, l)}
                                 name="cursor-move"
                                 size={25}

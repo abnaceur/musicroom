@@ -209,9 +209,8 @@ ifContributorExist = (id) => {
             }
         ).exec()
             .then(data => {
-                console.log("Data => < ", data);
                 if (data.length > 0)
-                    resolve(true);
+                    resolve(data);
                 else
                     resolve(false);
             }).catch(err => {
