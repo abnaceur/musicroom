@@ -354,7 +354,8 @@ const PlayListEditor = ({ navigation, route }) => {
           />
           <Text style={{ color: "white", flex: 0.6 }}>Set private !</Text>
         </View>
-        {isPrivate ? (
+
+        {/* {isPrivate ? (
           <View style={{ marginTop: 15, flex: 0.5, alignSelf: "center" }}>
             <TouchableOpacity
               style={styles.buttonAdd}
@@ -365,7 +366,7 @@ const PlayListEditor = ({ navigation, route }) => {
               </Text>
             </TouchableOpacity>
           </View>
-        ) : null}
+        ) : null} */}
 
         {/* {!isPrivate ? (
           <View style={{ marginTop: 15, flex: 1, alignSelf: "center" }}>
@@ -415,6 +416,69 @@ const PlayListEditor = ({ navigation, route }) => {
         </View>
       </View>
 
+      {/* Contributors list */}
+      {isPrivate ?
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "white",
+          marginTop: 15,
+          borderTopRightRadius: 15,
+          borderTopLeftRadius: 15,
+          height: 'auto'
+        }}
+      >
+        <View style={{ marginTop: 10, alignItems: "center", marginBottom: 10 }}>
+          <TouchableOpacity
+            style={styles.buttonAdd}
+            onPress={() => setModalContributorVisible(true)}
+          >
+            <Text style={styles.buttonText}>Add group</Text>
+          </TouchableOpacity>
+        </View>
+
+        <FlatList
+          data={contributors}
+          renderItem={({ item }) => {
+            const {
+              contributor,
+            } = item;
+            return (
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                }}
+              >
+                <View style={[styles.optionsContainer]}>
+                  <View style={{ flex: 0.8, alignItems: "center" }}>
+                    <Text
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                      style={{
+                        paddingLeft: 20,
+                      }}
+                    >{`Title: ${contributor}`}</Text>
+                  </View>
+                  <View style={{ flex: 0.2, alignItems: "center" }}>
+                    <TouchableOpacity
+                      onPress={() => showModal(title, preview, name)}
+                    >
+                      <Image
+                        style={{ width: 25, height: 25 }}
+                        source={require("../../resources/ui_options.jpg")}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            );
+          }}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View> : null}
+
+      
       <View
         style={{
           flex: 1,
