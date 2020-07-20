@@ -40,18 +40,31 @@ updateUserPassword = (req, res, next) => {
     userService.updateUserService.updateUserPassword(id, updateUser, res)
 }
 
+updateUserEmail = (req, res, next) => {
+    let updateUser = req.body;
+    let id = req.user.id
+    userService.updateUserService.updateUserEmail(id, updateUser, res)
+}
+
 getContributor = (req, res, next) => {
     let data = req.body;
     let id = req.user.id
     userService.getContributorInfoService.getContributorInfo(id, data, res)
 }
 
+validateNewEmail = (req, res, next) => {
+    let token = req.params.token;
+    userService.userAccountValidationService.validateNewEmailAddress(res, token);
+}
+
 
 module.exports = {
     createNewAccount,
     validateAccount,
+    validateNewEmail,
     deleteUserById,
     getContributor,
+    updateUserEmail,
     resetPassword,
     updateUserPassword,
     getUserById,

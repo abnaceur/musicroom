@@ -6,6 +6,7 @@ const emailSender = require('../../utils/emailSender');
 const uniqId = require('uniqid')
 const AccessToken = require('../../class/accessTokenClass');
 
+
 ifExistUserAccount = (email) => {
     return new Promise((resolve, reject) => {
         User.find({
@@ -45,6 +46,30 @@ saveNewUserAccount = (data) => {
     })
 }
 
+changeEmailForUser = (id, email) => {
+    return new Promise(async (resolve, reject) => {
+        User.findById(id).exec()
+            .then(async user => {
+
+                const accessTokenDao = new AccessToken();
+                const token = await accessTokenDao.generateToken(id, email);
+                user.emailSwap = email
+                user.save().then(res => {
+                    let msg = userEmailsTemplate.newEmailValidation(token);
+                    emailSender.sendEmail("MUSICROOM TEAM", email, "Account validation", msg);
+                    resolve(true);
+                }).catch(err => {
+                    console.log("saveNewUserAccount ERR :", err);
+                    resolve(false);
+                })
+
+            }).catch(err => {
+                console.log("getUserById ERR :", err)
+                resolve(false);
+            });
+    })
+}
+
 accountValidation = (token) => {
     return new Promise((resolve, reject) => {
         User.find({
@@ -66,6 +91,32 @@ accountValidation = (token) => {
                     )
                 } else
                     resolve(response.length);
+            }).catch(err => {
+                resolve(0)
+                console.log("accountValidation ERR :", err)
+            });
+    })
+}
+
+accountEmailValidation = (token) => {
+    return new Promise((resolve, reject) => {
+        User.findById(token.id).exec()
+            .then(async user => {
+                if (user && user.emailSwap === token.data) {
+                    user.emailSwap = ''
+                    user.email = token.data
+                    User.findByIdAndUpdate(
+                        token.id,
+                        user,
+                        { new: true },
+                        (err, updatedUser) => {
+                            if (err) resolve(0);
+                            console.log("updatedUser :", updatedUser);
+                            resolve(1);
+                        }
+                    )
+                } else
+                    resolve(0);
             }).catch(err => {
                 resolve(0)
                 console.log("accountValidation ERR :", err)
@@ -152,8 +203,6 @@ updateUserData = (id, updateUser) => {
                         user.city = updateUser.city
                     if (updateUser.age)
                         user.age = updateUser.age
-                    if (updateUser.email && utils.mailRegex.test(updateUser.email))
-                        user.email = updateUser.email
                     if (updateUser.musicStyle)
                         user.musicStyle = updateUser.musicStyle
                     if (updateUser.firstname)
@@ -224,6 +273,8 @@ module.exports = {
     ifExistUserAccount,
     ifContributorExist,
     accountValidation,
+    changeEmailForUser,
+    accountEmailValidation,
     resetPassword,
     ifExistUserAccountById,
     getUserById,
