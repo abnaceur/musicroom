@@ -16,14 +16,15 @@ async function getListPlaylist(res, user) {
     else {
         // Get all public playlist
         let publicList = await playListDao.getAllPublic();
-        // let myPlaylist = await playListDao.getMine(id);
         let myPlaylist = await playListDao.getMine(user.id);
+        let getInvitedPl = await playListDao.getInvitedPlaylist(user.id);
 
         res.status(200).json({
             success: true,
             data: {
                 publicList,
                 myPlaylist,
+                getInvitedPl,
             },
             code: 200
         })
