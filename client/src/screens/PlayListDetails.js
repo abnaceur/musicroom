@@ -28,6 +28,7 @@ import Sound, { setCategory } from "react-native-sound";
 
 // Import servces
 import { updateTrackListPositionService, updateTrackLikeService, getPlaylistByidService } from '../service/playListService';
+import { getMyBookmarck, addFavoritService, rmFavoritService } from '../service/bookmarkService';
 
 const PlaylistDetailsScreens = (props) => {
 
@@ -41,6 +42,7 @@ const PlaylistDetailsScreens = (props) => {
     const [userPerms, setUserPerms] = useState({});
     const [sound, setSound] = useState(false);
     const { navigation, route } = props;
+    const [isFavorit, setIsFavorit] = useState(false);
 
     const handlSongsList = (list) => {
         let data = [];
@@ -80,13 +82,23 @@ const PlaylistDetailsScreens = (props) => {
         setSongsList(dataNew);
     }
 
+    const checkIfFovorit = async (id) => {
+        let code = await getMyBookmarck(id, state.token)
+        if (code == 200)
+            setIsFavorit(true);
+        else
+            setIsFavorit(false);
+    }
+
     useEffect(() => {
+        // Check if pplaylist is favorit
         if (route.params?.playListDetails) {
             let dataIn = JSON.parse(route.params.playListDetails);
             getPlaylistByidService(dataIn._id, state.token)
                 .then(data => {
                     if (data.playList) {
                         setDetails(data.playList)
+                        checkIfFovorit(data.playList._id);
                         setTrackList(data.playList.trackList.sort(a => a.position));
                         if (data.playList.public === false) {
                             AsyncStorage.getItem('userInfo').then(user => {
@@ -99,7 +111,7 @@ const PlaylistDetailsScreens = (props) => {
                                             perms = collab;
                                     })
                                 }
-                                setUserPerms(perms)
+                                setUserPerms(perms);
                             })
                         }
                         if (data.playList.isEditable)
@@ -221,6 +233,18 @@ const PlaylistDetailsScreens = (props) => {
 
     }
 
+
+    const handlFavorit = async () => {
+        if (isFavorit) {
+            await rmFavoritService(listDetails._id, state.token);
+            setIsFavorit(false);
+        }
+        else {
+            await addFavoritService(listDetails._id, state.token);
+            setIsFavorit(true);
+        }
+    }
+
     return (
         <ScrollView style={Styles.container}>
 
@@ -248,7 +272,11 @@ const PlaylistDetailsScreens = (props) => {
                     }
                     rightComponent={
                         // name favoris for desactivate
-                        <FavOff name="favorite-border" size={24} color="white" />
+                        <FavOff
+                            onPress={() => handlFavorit()}
+                            name={!isFavorit ? "favorite-border" : "favorite"}
+                            size={24}
+                            color="white" />
                     }
                 />
 
