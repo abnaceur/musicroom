@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   View,
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   slider: {
     flex: 1,
     alignSelf: "center",
-    marginHorizontal: Platform.select({ios: 5}),
+    marginHorizontal: Platform.select({ ios: 5 }),
   },
   sliderText: {
     color: "white",
@@ -65,8 +65,8 @@ const imgPlay = require("../../resources/ui_play.png");
 const imgPlayJumpLeft = require("../../resources/ui_playjumpleft.png");
 const imgPlayJumpRight = require("../../resources/ui_playjumpright.png");
 
-const Player = ({route, navigation}) => {
-  const {pathUrl} = route.params;
+const Player = ({ route, navigation }) => {
+  const { pathUrl } = route.params;
   const [play, setPlay] = useState("playing");
   const [playSecond, setPlaySeconds] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -116,7 +116,7 @@ const Player = ({route, navigation}) => {
 
   const startPlay = async () => {
     if (sound.current) {
-      sound.current.play(playComplete);
+      sound.current.play(playComplete());
       setPlay("playing");
     } else {
       const filePath = pathUrl;
@@ -138,8 +138,6 @@ const Player = ({route, navigation}) => {
     if (sound.current) {
       if (success) {
         setPlay("paused");
-      } else {
-        Alert.alert("Notice", "audio file error. (Error code: 2)");
       }
       setPlaySeconds(0);
       sound.current.setCurrentTime(0);
@@ -187,27 +185,31 @@ const Player = ({route, navigation}) => {
       <View style={styles.prev}>
         <TouchableOpacity
           onPress={() => jumpSeconds(-15)}
-          style={{justifyContent: "center"}}>
+          style={{ justifyContent: "center" }}
+        >
           <Image source={imgPlayJumpLeft} style={styles.img} />
           <Text style={styles.text}>15</Text>
         </TouchableOpacity>
         {play === "playing" && (
           <TouchableOpacity
             onPress={() => pause()}
-            style={{marginHorizontal: 20}}>
+            style={{ marginHorizontal: 20 }}
+          >
             <Image source={imgPause} style={styles.img} />
           </TouchableOpacity>
         )}
         {play === "paused" && (
           <TouchableOpacity
             onPress={() => startPlay()}
-            style={{marginHorizontal: 20}}>
+            style={{ marginHorizontal: 20 }}
+          >
             <Image source={imgPlay} style={styles.img} />
           </TouchableOpacity>
         )}
         <TouchableOpacity
           onPress={() => jumpSeconds(15)}
-          style={{justifyContent: "center"}}>
+          style={{ justifyContent: "center" }}
+        >
           <Image source={imgPlayJumpRight} style={styles.img} />
           <Text style={styles.text}>15</Text>
         </TouchableOpacity>

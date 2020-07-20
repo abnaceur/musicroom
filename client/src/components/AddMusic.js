@@ -2,13 +2,13 @@ import React, { useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
   View,
-  Button,
   FlatList,
   Image,
   Text,
   TouchableOpacity,
   TextInput,
 } from "react-native";
+import { Button } from "react-native-elements";
 
 import Deezer from "../../Deezer";
 
@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
     height: 180,
+    backgroundColor: "white",
   },
   searchInput: {
     height: 40,
@@ -31,6 +32,13 @@ const styles = StyleSheet.create({
     flex: 0.07,
     alignItems: "center",
     paddingTop: 15,
+  },
+  button: {
+    marginTop: 10,
+    backgroundColor: "#F194FF",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
   },
 });
 
@@ -110,7 +118,13 @@ const PlayList = ({ navigation }) => {
               })
             }
           >
-            <View style={{ flex: 0.5 }}>
+            <View
+              style={{
+                flex: 0.5,
+                borderRightWidth: 1,
+                borderRightColor: "grey",
+              }}
+            >
               <Image
                 style={{ flex: 1 }}
                 resizeMethod="resize"
@@ -153,7 +167,13 @@ const PlayList = ({ navigation }) => {
               })
             }
           >
-            <View style={{ flex: 0.5 }}>
+            <View
+              style={{
+                flex: 0.5,
+                borderRightWidth: 1,
+                borderRightColor: "grey",
+              }}
+            >
               <Image
                 resizeMethod="resize"
                 style={{ flex: 1 }}
@@ -237,7 +257,9 @@ const PlayList = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, flexDirection: "column" }}>
+    <View
+      style={{ flex: 1, flexDirection: "column", backgroundColor: "#282830" }}
+    >
       <View style={styles.buttonsContainer}>
         <FlatList
           data={buttons}
