@@ -46,6 +46,8 @@ const PlayListEditor = ({ navigation, route }) => {
   const [modalContributorVisible, setModalContributorVisible] = useState(false);
   const [contributor, setContributor] = useState("");
   const [contributors, setContributors] = useState([]);
+  const [canVote, setCanVote] = useState(true);
+  const [canEdit, setCanEdit] = useState(false);
 
   const {
     state: { trackList },
@@ -234,12 +236,63 @@ const PlayListEditor = ({ navigation, route }) => {
                   value={contributor}
                   style={styles.textInput}
                 />
+
+                <View
+                  atyle={{
+                    flex: 1, flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center", color: 'white', height: 100
+                  }}
+                >
+
+                  {isVote ?
+                    <View
+                      style={{
+                        // flex: 0.5,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <CheckBox
+                        style={styles.checkBoxStyle}
+                        // disabled={false}
+                        onChange={() => { !canVote ? setCanEdit(false) : null, setCanVote(!canVote) }}
+                        value={canVote}
+                      />
+                      <Text style={{ color: "black", flex: 0.6 }}>Can vote !</Text>
+                    </View>
+                    : null}
+
+
+                  {isEditable ?
+                    <View
+                      style={{
+                        // flex: 0.5,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <CheckBox
+                        style={styles.checkBoxStyle}
+                        // disabled={false}
+                        value={canEdit}
+                        onChange={() => { !canEdit ? setCanVote(false) : null, setCanEdit(!canEdit) }}
+                      />
+                      <Text style={{ color: "black", flex: 0.6 }}>Can edit !</Text>
+                    </View>
+                    : null}
+
+                </View>
+
                 <View style={{ marginTop: 10 }}>
                   <Button
                     title="Add contributor"
                     onPress={() => addContributor()}
                   />
                 </View>
+
                 <View style={{ marginTop: 10 }}>
                   <Button
                     title="Close"
@@ -304,43 +357,54 @@ const PlayListEditor = ({ navigation, route }) => {
           </View>
         ) : null}
 
-        {!isPrivate ? (
+        {/* {!isPrivate ? (
           <View style={{ marginTop: 15, flex: 1, alignSelf: "center" }}>
-            <View
-              style={{
-                flex: 0.5,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <CheckBox
-                style={styles.checkBoxStyle}
-                // disabled={false}
-                onChange={() => { !isVote ? setIsEditable(false) : null, setIsVote(!isVote) }}
-                value={isVote}
-              />
-              <Text style={{ color: "white", flex: 0.6 }}>Set vote !</Text>
-            </View>
-            <View
-              style={{
-                flex: 0.5,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <CheckBox
-                style={styles.checkBoxStyle}
-                // disabled={false}
-                value={isEditable}
-                onChange={() => {!isEditable ? setIsVote(false): null, setIsEditable(!isEditable)}}
-              />
-              <Text style={{ color: "white", flex: 0.6 }}>Set editable !</Text>
-            </View>
+           
           </View>
-        ) : null}
+        ) : null} */}
       </View>
+
+      <View
+        atyle={{
+          flex: 1, flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center", color: 'white', height: 100
+        }}
+      >
+        <View
+          style={{
+            // flex: 0.5,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <CheckBox
+            style={styles.checkBoxStyle}
+            // disabled={false}
+            onChange={() => { !isVote ? setIsEditable(false) : null, setIsVote(!isVote) }}
+            value={isVote}
+          />
+          <Text style={{ color: "white", flex: 0.6 }}>Set vote !</Text>
+        </View>
+        <View
+          style={{
+            // flex: 0.5,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <CheckBox
+            style={styles.checkBoxStyle}
+            // disabled={false}
+            value={isEditable}
+            onChange={() => { !isEditable ? setIsVote(false) : null, setIsEditable(!isEditable) }}
+          />
+          <Text style={{ color: "white", flex: 0.6 }}>Set editable !</Text>
+        </View>
+      </View>
+
       <View
         style={{
           flex: 1,
