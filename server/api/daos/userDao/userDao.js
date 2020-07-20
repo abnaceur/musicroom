@@ -197,9 +197,32 @@ updateUserPassword = async (id, updateUser) => {
     })
 }
 
+ifContributorExist = (id) => {
+    return new Promise((resolve, reject) => {
+        User.find(
+            {
+                $or: [{
+                    email: id
+                }, {
+                    username: id
+                }]
+            }
+        ).exec()
+            .then(data => {
+                if (data.length > 0)
+                    resolve(data);
+                else
+                    resolve(false);
+            }).catch(err => {
+                reject(err)
+            });
+    })
+}
+
 module.exports = {
     getUserByEmail,
     ifExistUserAccount,
+    ifContributorExist,
     accountValidation,
     resetPassword,
     ifExistUserAccountById,

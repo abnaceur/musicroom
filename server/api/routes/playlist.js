@@ -47,4 +47,21 @@ router.post('/delete', checkAuth, playListController.deletePlaylist)
 // @access  Private
 router.post('/likes', checkAuth, playListController.likePlaylist)
 
+
+// @desc    positionPlaylist
+// @route   POST /api/v1/playlist/position
+// @access  Private
+router.post('/position', checkAuth, playListController.positionPlaylist)
+
+// @desc    newEvent
+// @route   POST /api/v1/playlist/event/new
+// @access  Private
+router.post('/event/new', checkAuth, playListController.newEvent)
+
+
+// @desc    getAllEvents
+// @route   GET /api/v1/playlist/getevents
+// @access  Private
+router.get('/getevents', checkAuth, playListController.getAllEvents);
+
 module.exports = router;

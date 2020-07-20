@@ -21,7 +21,7 @@ import Save from "react-native-vector-icons/Entypo";
 import BackWard from "react-native-vector-icons/Ionicons";
 
 import { Context as AuthContext } from "../context/AuthContext";
-import { getMyPlayList } from "../service/eventService";
+import { getMyPlayList, saveNewEventService } from "../service/eventService";
 
 const apiKeyGeocoder = "2fc143fb400c48a38e3479e0dfd66278";
 
@@ -44,6 +44,9 @@ const EventEditor = ({ navigation }) => {
   const [isTyping, setIsTyping] = useState(false);
   const lastUpdateTime = useRef(null);
   const typingInterval = useRef(null);
+  const [isVote, setIsVote] = useState(true);
+  const [isEditable, setIsEditable] = useState(false);
+
 
   const {
     state: { token },
@@ -113,10 +116,10 @@ const EventEditor = ({ navigation }) => {
     return dateStr;
   };
 
-  const saveEvent = () => {
+  const saveEvent = async () => {
     const { trackList, name, creator } = playLists[playListChecked];
     let data = {
-      title,
+      name: title,
       description,
       public: isPrivate,
       trackList, // Musique
@@ -124,8 +127,12 @@ const EventEditor = ({ navigation }) => {
       name, // Name of playlist
       dateStartEvent: `${formatDate(startDate)} ${formatHour(startDate)}`, // dd/mm/yyyy hh:mm:ss
       dateEndEvent: `${formatDate(endDate)} ${formatHour(endDate)}`, // dd/mm/yyyy hh:mm:ss
+      address,
+      isVote,
+      isEditable
     };
     console.log(data);
+    await saveNewEventService(data, token)
   };
 
   const addContributor = () => {
@@ -379,6 +386,44 @@ const EventEditor = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         ) : null}
+
+        {!isPrivate ? (
+          <View style={{ marginTop: 15, flex: 1, alignSelf: "center" }}>
+            <View
+              style={{
+                flex: 0.5,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <CheckBox
+                style={styles.checkBoxStyle}
+                // disabled={false}
+                onChange={() => { !isVote ? setIsEditable(false) : null, setIsVote(!isVote) }}
+                value={isVote}
+              />
+              <Text style={{ color: "white", flex: 0.6 }}>Set vote !</Text>
+            </View>
+            <View
+              style={{
+                flex: 0.5,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <CheckBox
+                style={styles.checkBoxStyle}
+                // disabled={false}
+                value={isEditable}
+                onChange={() => { !isEditable ? setIsVote(false) : null, setIsEditable(!isEditable) }}
+              />
+              <Text style={{ color: "white", flex: 0.6 }}>Set editable !</Text>
+            </View>
+          </View>
+        ) : null}
+
       </View>
       <View style={styles.playListsContainer}>
         <Text style={{ textAlign: "center", marginBottom: 10, marginTop: 10 }}>
@@ -467,6 +512,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  checkBoxStyle: {
+    flex: 0.2
   },
   itemContainer: {
     flex: 1,

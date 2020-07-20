@@ -1,5 +1,6 @@
 const Playlist = require('../../models/Playlist');
 const PlaylistClass = require("../../class/PlaylistClass");
+const userDao = require('../../daos/userDao/userDao');
 
 const getPlayListById = (id) => {
     return new Promise((resolve, reject) => {
@@ -60,6 +61,24 @@ const updatePlaylistTracks = (id, track) => {
     })
 }
 
+const updatePlaylistTracksPos = (id, tracks) => {
+    return new Promise(async (resolve, reject) => {
+        getPlayListById(id)
+            .then(result => {
+                result.trackList = tracks;
+                Playlist.findByIdAndUpdate(
+                    result._id,
+                    result,
+                    { new: true },
+                    (err, response) => {
+                        if (err) resolve(false);
+                        resolve(response);
+                    }
+                )
+            })
+    })
+}
+
 const createPlaylist = (data, userId) => {
     return new Promise(async (resolve, reject) => {
         let playList = new Playlist(await PlaylistClass.CreateNewPlaylist(data, userId));
@@ -97,10 +116,29 @@ const deletePlaylist = (id) => {
     })
 }
 
+const getInvitedPlaylist = (id) => {
+    return new Promise(async (resolve, reject) => {
+        let user = await userDao.getUserById(id);
+       
+        Playlist.find({ public: false, "contributors.contributor": {
+            "$in": [user.email]
+        } }).exec()
+            .then(response => {
+                console.log("response :", response);
+                resolve(response);
+            }).catch(err => {
+                console.log("getPlayListById ERR :", err)
+                reject(err)
+            });
+    })
+}
+
 module.exports = {
     getMine,
+    getInvitedPlaylist,
     updatePlaylist,
     updatePlaylistTracks,
+    updatePlaylistTracksPos,
     getPlayListById,
     createPlaylist,
     getAllPublic,

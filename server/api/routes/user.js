@@ -53,5 +53,9 @@ router.post('/update', checkAuth, userController.updateUser)
 // @access  Private / Token
 router.post('/updatePassword', checkAuth, userController.updateUserPassword)
 
+// @desc    get contributor
+// @route   POST /api/v1/users/contributor/
+// @access  Private / Token
+router.post('/contributor', checkAuth, userController.getContributor)
 
 module.exports = router;
