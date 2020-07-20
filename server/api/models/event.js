@@ -20,8 +20,8 @@ let eventSchema = mongoose.Schema({
         default: "",
     },
     address: {
-        type: String,
-        default: "",
+        type: Object,
+        default: {},
     },
     isEditable: {
         type: Boolean,
