@@ -1,8 +1,7 @@
-const Music = require('./music')
 let mongoose = require('mongoose');
 
-// Playlist schema
-let playlistSchema = mongoose.Schema({
+// event schema
+let eventSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     name: {
         type: String,
@@ -20,6 +19,10 @@ let playlistSchema = mongoose.Schema({
         type: String,
         default: "",
     },
+    address: {
+        type: String,
+        default: "",
+    },
     isEditable: {
         type: Boolean,
         default: false,
@@ -31,6 +34,14 @@ let playlistSchema = mongoose.Schema({
     trackList: {
         type: Array,
         default: [],
+    },
+    dateStartEvent: {
+        type: Date,
+        require: true
+    },
+    dateEndEvent: {
+        type: Date,
+        require: true
     },
     contributors: {
         type: Array,
@@ -46,4 +57,4 @@ let playlistSchema = mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model('Playlist', playlistSchema);
+module.exports = mongoose.model('Event', eventSchema);

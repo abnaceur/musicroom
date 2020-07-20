@@ -1,6 +1,6 @@
-const playListDao = require('../../daos/playListDao/playListDao');
+const eventDao = require('../../daos/eventDao/eventDao');
 
-async function getListPlaylist(res, user) {
+async function getEvents(res, user) {
     //  This is for my local tests  
     // let id ="5f141ffe90684300473be91c";
 
@@ -15,16 +15,15 @@ async function getListPlaylist(res, user) {
         })
     else {
         // Get all public playlist
-        let publicList = await playListDao.getAllPublic();
-        let myPlaylist = await playListDao.getMine(user.id);
-        let getInvitedPl = await playListDao.getInvitedPlaylist(user.id);
+        let publicEvent = await eventDao.getAllPublicEvent();
+        // let myPlaylist = await playListDao.getMine(id);
+        let myEvent = await eventDao.getMyevents(user.id);
 
         res.status(200).json({
             success: true,
             data: {
-                publicList,
-                myPlaylist,
-                getInvitedPl,
+                publicEvent,
+                myEvent,
             },
             code: 200
         })
@@ -34,5 +33,5 @@ async function getListPlaylist(res, user) {
 }
 
 module.exports = {
-    getListPlaylist,
+    getEvents,
 }
