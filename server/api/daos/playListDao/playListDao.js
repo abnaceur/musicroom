@@ -1,5 +1,6 @@
 const Playlist = require('../../models/Playlist');
 const PlaylistClass = require("../../class/PlaylistClass");
+const userDao = require('../../daos/userDao/userDao');
 
 const getPlayListById = (id) => {
     return new Promise((resolve, reject) => {
@@ -42,10 +43,47 @@ const updatePlaylist = (playlist) => {
     })
 }
 
+const updatePlaylistTracks = (id, track) => {
+    return new Promise(async (resolve, reject) => {
+        getPlayListById(id)
+            .then(result => {
+                result.trackList[track.position] = track;
+                Playlist.findByIdAndUpdate(
+                    result._id,
+                    result,
+                    { new: true },
+                    (err, newTrackLikes) => {
+                        if (err) resolve(false);
+                        resolve(newTrackLikes);
+                    }
+                )
+            })
+    })
+}
+
+const updatePlaylistTracksPos = (id, tracks) => {
+    return new Promise(async (resolve, reject) => {
+        getPlayListById(id)
+            .then(result => {
+                result.trackList = tracks;
+                Playlist.findByIdAndUpdate(
+                    result._id,
+                    result,
+                    { new: true },
+                    (err, response) => {
+                        if (err) resolve(false);
+                        resolve(response);
+                    }
+                )
+            })
+    })
+}
+
 const createPlaylist = (data, userId) => {
     return new Promise(async (resolve, reject) => {
         let playList = new Playlist(await PlaylistClass.CreateNewPlaylist(data, userId));
         playList.save().then(res => {
+            console.log("res :", res)
             resolve(res);
         }).catch(err => {
             console.log("createPlaylist ERR :", err);
@@ -68,8 +106,25 @@ const getMine = (userId) => {
 
 const deletePlaylist = (id) => {
     return new Promise((resolve, reject) => {
-        Playlist.findOneAndDelete(id).exec()
+        Playlist.findByIdAndDelete(id).exec()
             .then(response => {
+                resolve(response);
+            }).catch(err => {
+                console.log("getPlayListById ERR :", err)
+                reject(err)
+            });
+    })
+}
+
+const getInvitedPlaylist = (id) => {
+    return new Promise(async (resolve, reject) => {
+        let user = await userDao.getUserById(id);
+       
+        Playlist.find({ public: false, "contributors.contributor": {
+            "$in": [user.email]
+        } }).exec()
+            .then(response => {
+                console.log("response :", response);
                 resolve(response);
             }).catch(err => {
                 console.log("getPlayListById ERR :", err)
@@ -80,7 +135,10 @@ const deletePlaylist = (id) => {
 
 module.exports = {
     getMine,
+    getInvitedPlaylist,
     updatePlaylist,
+    updatePlaylistTracks,
+    updatePlaylistTracksPos,
     getPlayListById,
     createPlaylist,
     getAllPublic,

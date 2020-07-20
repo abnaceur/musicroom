@@ -27,7 +27,10 @@ import Player from "./src/components/Player";
 import AddMusic from "./src/components/AddMusic";
 import EventScreen from "./src/screens/EventScreen";
 import EventEditor from "./src/components/EventEditor";
+import FavorisList from "./src/components/FavorisList";
 import FavorisScreen from "./src/screens/FavorisScreen";
+import Map from "./src/components/Map";
+import PlaylistDetailsScreens from './src/screens/PlayListDetails';
 
 // Import helpers
 import checkAuth from "./src/helpers/PrivateRoute";
@@ -69,7 +72,6 @@ function TabStack() {
           ),
         }}
       />
-
       <Tab.Screen
         name="PlayList"
         component={PlayList}
@@ -96,8 +98,9 @@ function TabStack() {
 
 const App = () => {
   const { state } = useContext(AuthContext);
+  // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IiQyYiQxMCQySW84ckxhRGNMTC9XVE45Q3N6MzQubk4zNWNrZUxpc3hzaW9ZV0FUclAvN3JkemZGb3FMTyIsImRhdGEiOiI1ZjBkOGQ2Mzc3NjMwNjAwOGFmZGY4MGUiLCJpYXQiOjE1OTQ5OTMzMTMsImV4cCI6MTU5NTAzNjUxM30.FVGmZOBa9BAlt4hMAe3BTExWYiiG-7plHpZv1mRcX9k";
   const token = state.token;
-
+  
   if (!token) {
     return (
       <NavigationContainer>
@@ -157,9 +160,19 @@ const App = () => {
                 component={TabStack}
               />
               <Stack.Screen
+                name="PlaylistDetails"
+                options={{ headerShown: false }}
+                component={PlaylistDetailsScreens}
+              />
+              <Stack.Screen
                 name="EventEditor"
                 options={{ headerShown: false }}
                 component={EventEditor}
+              />
+              <Stack.Screen
+                name="FavorisList"
+                options={{ headerShown: false }}
+                component={FavorisList}
               />
               <Stack.Screen name="AddMusic" component={AddMusic} />
               <Stack.Screen

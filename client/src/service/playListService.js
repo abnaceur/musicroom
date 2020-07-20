@@ -41,7 +41,72 @@ const getAllPlayListService = async (token) => {
     })
 }
 
+const updateTrackLikeService = async (id, track, token) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await userApi.post(`/playlist/likes`, {
+                id,
+                track
+            },
+                { headers: authHeader(token) });
+            if (response.data.code === 200) {
+                resolve(response.data.data);
+            } else {
+                Alert.alert(response.data.data.msg)
+            }
+        } catch (error) {
+            console.log(error, " error");
+        }
+    })
+}
+
+const getPlaylistByidService = (id, token) => {
+    return new Promise( async (resolve, reject) => {
+        try {
+            let response = await userApi.get(`/playlist/id/` + id,
+                { headers: authHeader(token) });
+
+            console.log("response :", response.data);
+            if (response.data.code === 200) {
+                resolve(response.data.data);
+            } else {
+                Alert.alert(response.data.data.msg)
+            }
+        } catch (error) {
+            console.log(error, " error");
+        }
+    })
+}
+
+
+const updateTrackListPositionService = (playListId, trackList, token) => {
+    return new Promise( async (resolve, reject) => {
+        try {
+            let data = {
+                _id: playListId,
+                trackList
+            };
+            let response = await userApi.post(`/playlist/position`, data,
+                { headers: authHeader(token) });
+
+            console.log("response :", response.data);
+            if (response.data.code === 200) {
+                resolve(response.data.data);
+            } else {
+                Alert.alert(response.data.data.msg)
+            }
+        } catch (error) {
+            console.log(error, " error");
+        }
+    })
+}
+
+
+
 export {
+    updateTrackListPositionService,
     savePlayListService,
+    getPlaylistByidService,
+    updateTrackLikeService,
     getAllPlayListService
 }
