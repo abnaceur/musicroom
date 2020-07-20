@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { View, StyleSheet, TouchableOpacity,ScrollView, Text } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
 import { Card, ListItem, Button, Header, Icon } from 'react-native-elements';
@@ -10,10 +10,12 @@ import Eye from 'react-native-vector-icons/AntDesign';
 import { getAllPlayListService } from "../service/playListService";
 import { Context as AuthContext } from "../context/AuthContext";
 
-const PlayList = ({ navigation, route }) => {
+const PlayList = (props) => {
+  const { navigation, route } = props;
   const [publicPlayList, setPublicPlayList] = useState([]);
   const [myPlayList, setMyPlayList] = useState([]);
- 
+  const [getInvitedPl, setGetInvitedPl] = useState([]);
+
   const {
     state: { token },
   } = useContext(AuthContext);
@@ -23,11 +25,15 @@ const PlayList = ({ navigation, route }) => {
 
     setMyPlayList(allPlayList.myPlaylist);
     setPublicPlayList(allPlayList.publicList);
+    setGetInvitedPl(allPlayList.getInvitedPl);
   };
 
   useEffect(() => {
+
+    console.log("route.params :", props);
     fetchPlaylistes();
-  }, [route.params?.music]);
+  }, [props]);
+
 
   const keyExtractor = (item, index) => index.toString();
 
@@ -58,6 +64,7 @@ const PlayList = ({ navigation, route }) => {
   );
 
   return (
+    <ScrollView>
     <View style={styles.container}>
       <Header
         backgroundColor="#633689"
@@ -83,6 +90,17 @@ const PlayList = ({ navigation, route }) => {
         horizontal={true}
       />
 
+<View>
+        <Text style={styles.invPlaylistTitle}>Invited to playlist</Text>
+      </View>
+
+      <FlatList
+        keyExtractor={keyExtractor}
+        data={getInvitedPl}
+        renderItem={renderItem}
+        horizontal={true}
+      />
+
       <View>
         <Text style={styles.myPlaylistTitle}>My playlist</Text>
       </View>
@@ -94,6 +112,7 @@ const PlayList = ({ navigation, route }) => {
         horizontal={true}
       />
     </View>
+    </ScrollView>
   );
 };
 
@@ -109,7 +128,16 @@ const styles = StyleSheet.create({
   myPlaylistTitle: {
     color: "white",
     fontSize: 16,
+    marginTop: 20,
     fontWeight: "bold",
+    marginLeft: 10,
+    marginBottom: 10,
+  },
+  invPlaylistTitle: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+    marginTop: 20,
     marginLeft: 10,
     marginBottom: 10,
   },

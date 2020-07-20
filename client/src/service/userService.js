@@ -8,7 +8,7 @@ const isContributorExistService = async (dataContri, token) => {
           let response = await userApi.post(`/users/contributor`, dataContri,
               { headers: authHeader(token) });
           if (response.data.code === 200) {
-              resolve(response.data.code);
+              resolve(response.data);
           } else {
               Alert.alert(response.data.data.msg)
           }
