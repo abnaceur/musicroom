@@ -49,6 +49,7 @@ const PlayListEditor = ({ navigation, route }) => {
   const [contributors, setContributors] = useState([]);
   const [canVote, setCanVote] = useState(true);
   const [canEdit, setCanEdit] = useState(false);
+  const [rerender, setRerender] = useState(0);
 
   const {
     state: { trackList },
@@ -143,6 +144,30 @@ const PlayListEditor = ({ navigation, route }) => {
   useEffect(() => {
     console.log(contributors);
   }, [contributors]);
+
+  useEffect(() => {
+    if (rerender !== 0) {
+        setContributors(contributors);
+    }
+}, [rerender])
+
+  const removeContributor = (item) => {
+    console.log("Index :", item);
+    let data = contributors;
+    let newData = contributors;
+
+    if (data && data.length > 0) {
+      data.map((contrb, i) => {
+        console.log("contrb.contributor === item.contributor) :", contrb.contributor, item.contributor)
+        if (contrb.contributor === item.contributor)
+          newData.splice(i, 1);
+      })
+    }
+
+    console.log("newData :", newData.length)
+    setContributors(newData);
+    setRerender(Math.floor(Math.random() * 999999));
+  }
 
   return (
     <View style={styles.container}>
@@ -418,67 +443,64 @@ const PlayListEditor = ({ navigation, route }) => {
 
       {/* Contributors list */}
       {isPrivate ?
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: "white",
-          marginTop: 15,
-          borderTopRightRadius: 15,
-          borderTopLeftRadius: 15,
-          height: 'auto'
-        }}
-      >
-        <View style={{ marginTop: 10, alignItems: "center", marginBottom: 10 }}>
-          <TouchableOpacity
-            style={styles.buttonAdd}
-            onPress={() => setModalContributorVisible(true)}
-          >
-            <Text style={styles.buttonText}>Add group</Text>
-          </TouchableOpacity>
-        </View>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "white",
+            marginTop: 15,
+            borderTopRightRadius: 15,
+            borderTopLeftRadius: 15,
+          }}
+        >
+          <View style={{ marginTop: 10, alignItems: "center", marginBottom: 10 }}>
+            <TouchableOpacity
+              style={styles.buttonAdd}
+              onPress={() => setModalContributorVisible(true)}
+            >
+              <Text style={styles.buttonText}>Add group</Text>
+            </TouchableOpacity>
+          </View>
 
-        <FlatList
-          data={contributors}
-          renderItem={({ item }) => {
-            const {
-              contributor,
-            } = item;
-            return (
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "row",
-                }}
-              >
-                <View style={[styles.optionsContainer]}>
-                  <View style={{ flex: 0.8, alignItems: "center" }}>
-                    <Text
-                      numberOfLines={1}
-                      ellipsizeMode="tail"
-                      style={{
-                        paddingLeft: 20,
-                      }}
-                    >{`Title: ${contributor}`}</Text>
-                  </View>
-                  <View style={{ flex: 0.2, alignItems: "center" }}>
-                    <TouchableOpacity
-                      onPress={() => showModal(title, preview, name)}
-                    >
-                      <Image
-                        style={{ width: 25, height: 25 }}
-                        source={require("../../resources/ui_options.jpg")}
+          <FlatList
+            data={contributors}
+            renderItem={({ item }) => {
+              const {
+                contributor,
+              } = item;
+              return (
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: "row",
+                  }}
+                >
+                  <View style={[styles.optionsContainer]}>
+                    <View style={{ flex: 0.8, alignItems: "center" }}>
+                      <Text
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                        style={{
+                          paddingLeft: 20,
+                        }}
+                      >{`User: ${contributor}`}</Text>
+                    </View>
+                    <View style={{ flex: 0.2, alignItems: "center" }}>
+                      <Delete
+                        onPress={() => removeContributor(item)}
+                        name="delete"
+                        size={24}
+                        color="black"
                       />
-                    </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
-              </View>
-            );
-          }}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View> : null}
+              );
+            }}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </View> : null}
 
-      
+
       <View
         style={{
           flex: 1,
