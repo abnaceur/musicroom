@@ -3,8 +3,10 @@ const BookmarkClass = require("../../class/bookmarkClass");
 
 const newBookmark = (userId, playListId) => {
     return new Promise(async (resolve, reject) => {
+        // TODO CHECK IF BOOKMARK EXIST
         let bookmark = new Bookmark(await BookmarkClass.CreateNewBookmark(userId, playListId));
         bookmark.save().then(res => {
+            console.log("res :, ", res)
             resolve(bookmark);
         }).catch(err => {
             console.log("newBookmark ERR :", err);
@@ -55,10 +57,23 @@ const getMyBookmark = (id) => {
     })
 }
 
+const getMyBookmarkByPlayListId = (id) => {
+    return new Promise(async (resolve, reject) => {
+        Bookmark.find({ playlistId: id }).exec()
+            .then(res => {
+                resolve(res);
+            }).catch(err => {
+                console.log("getMyBookmark ERR :", err);
+                reject(err);
+            })
+    })
+}
+
 
 module.exports = {
     getMyBookmark,
     newBookmark,
+    getMyBookmarkByPlayListId,
     testBookmark,
     deleteBookmark
 }

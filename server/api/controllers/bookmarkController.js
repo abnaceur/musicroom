@@ -17,8 +17,14 @@ const mybookmark = (req, res, next) => {
     bookmarkService.getBookmark.getMyBookmark(user, res)
 }
 
+const mybookmarkbyplaylist = (req, res, next) => {
+    let data = req.body.playlistId
+    bookmarkService.getBookmarkByplIdService.getBookmarkByplId(data, res)
+}
+
 module.exports = {
     newbookmark,
+    mybookmarkbyplaylist,
     deletebookmark,
     mybookmark
 }
