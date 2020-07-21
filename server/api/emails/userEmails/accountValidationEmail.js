@@ -8,6 +8,14 @@ const accountValidation = (token) => {
     return msg
 }
 
+const newEmailValidation = (token) => {
+    let msg = `Hello ! \n  \
+    \n Here is your activation link for the new email : \
+    \n  ${process.env.URL_BACKEND + ":" + process.env.URL_BACKEND_PORT + "/api/v1/users/newemailvalidation/" + token} \
+    \n MUSICROOM TEAM`
+
+    return msg
+}
 
 const resetPassword = (pwd) => {
     let msg = `Hello ! \n  \
@@ -21,5 +29,6 @@ const resetPassword = (pwd) => {
 
 module.exports = {
     resetPassword,
+    newEmailValidation,
     accountValidation
 }

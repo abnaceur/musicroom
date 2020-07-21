@@ -11,7 +11,7 @@ const helmet = require('helmet');
 let mongoose = require('mongoose');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./docs/openApiDocumentation/BasicInformation');
-
+var cron = require('node-cron');
 const passport = require('passport');
 
 // Main app
@@ -41,6 +41,12 @@ app.use(bodyParser.json());
 //  limit: 1000, 
 //  reset: '1 hour'
 //}))
+
+
+cron.schedule('* * * * *', () => {
+  console.log('running a task every minute //// Remove event here');
+});
+
 
 // Fix CORS errors
 app.use((req, res, next) => {

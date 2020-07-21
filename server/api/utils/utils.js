@@ -14,7 +14,14 @@ hashPassword = (password) => {
 
 generateRandomPassword = () => {
     return new Promise((resolve, reject) => {
-        resolve(Math.random().toString(36).slice(-8) + 'A!b');
+        let chars = "?<>@#%$&0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ?<>@#%$&abcdefghijklmnopqrstuvwxyz?<>@#%$&";
+        let string_length = 20;
+        let randomstring = '';
+        for (let i = 0; i < string_length; i++) {
+            let rnum = Math.floor(Math.random() * chars.length);
+            randomstring += chars.substring(rnum, rnum + 1);
+        }
+        resolve(randomstring);
     })
 }
 
