@@ -34,7 +34,7 @@ router.get('/mine', checkAuth, playListController.getMine)
 // @desc    updatePlaylist
 // @route   POST /api/v1/playlist/update
 // @access  Private
-router.post('/update', checkAuth, playListController.updatePlaylist)
+router.post('/update', checkAuth, playListController.updatePlaylistInfo)
 
 // @desc    deletePlaylist
 // @route   POST /api/v1/playlist/delete

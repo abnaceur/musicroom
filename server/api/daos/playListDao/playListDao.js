@@ -26,20 +26,18 @@ const getAllPublic = () => {
     })
 }
 
-const updatePlaylist = (playlist) => {
+const updatePlaylistData = (playlist) => {
+    console.log("playlist :", playlist)
     return new Promise(async (resolve, reject) => {
-        getPlayListById(playlist.id)
-            .then(result => {
-                if (result) {
-                    result.set({ musics: playlist.musics })
-                    result.set({ creator: playlist.creator })
-                        .then(newPlaylist => {
-                            resolve(newPlaylist)
-                        })
-                } else {
-                    reject()
-                }
-            })
+        Playlist.findByIdAndUpdate(
+            playlist.id,
+            playlist,
+            { new: true },
+            (err, response) => {
+                if (err) resolve(false);
+                resolve(response);
+            }
+        )
     })
 }
 
@@ -136,7 +134,7 @@ const getInvitedPlaylist = (id) => {
 module.exports = {
     getMine,
     getInvitedPlaylist,
-    updatePlaylist,
+    updatePlaylistData,
     updatePlaylistTracks,
     updatePlaylistTracksPos,
     getPlayListById,
