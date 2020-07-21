@@ -21,7 +21,7 @@ const createPlaylist = (req, res, next) => {
     playListService.createPlaylistService.createPlaylist(req, res, data, user);
 }
 
-const updatePlaylist = (req, res, next) => {
+const updatePlaylistInfo = (req, res, next) => {
     let data = req.body
     let user = req.user
     playListService.updatePlaylistService.updatePlaylist(req, res, data, user);
@@ -71,6 +71,6 @@ module.exports = {
     getAllPublicPlaylist,
     getListPlaylist,
     createPlaylist,
-    updatePlaylist,
+    updatePlaylistInfo,
     deletePlaylist
 }
