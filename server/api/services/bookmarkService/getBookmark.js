@@ -9,7 +9,7 @@ const getMyBookmark = (user, res) => {
                 data: {
                     bookmarkArray: bookmark
                 },
-                code: 406
+                code: 200
             })
 
         })
