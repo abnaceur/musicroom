@@ -28,6 +28,7 @@ import AddMusic from "./src/components/AddMusic";
 import EventScreen from "./src/screens/EventScreen";
 import EventEditor from "./src/components/EventEditor";
 import FavorisList from "./src/components/FavorisList";
+import FavorisComponent from "./src/components/FavorisList.abn";
 import FavorisScreen from "./src/screens/FavorisScreen";
 import Map from "./src/components/Map";
 import PlaylistDetailsScreens from './src/screens/PlayListDetails';
@@ -172,7 +173,7 @@ const App = () => {
               <Stack.Screen
                 name="FavorisList"
                 options={{ headerShown: false }}
-                component={FavorisList}
+                component={FavorisComponent}
               />
               <Stack.Screen name="AddMusic" component={AddMusic} />
               <Stack.Screen

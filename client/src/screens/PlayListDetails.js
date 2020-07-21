@@ -94,7 +94,13 @@ const PlaylistDetailsScreens = (props) => {
         // Check if pplaylist is favorit
         if (route.params?.playListDetails) {
             let dataIn = JSON.parse(route.params.playListDetails);
-            getPlaylistByidService(dataIn._id, state.token)
+            let id;
+            if (dataIn.playlistId === undefined)
+                id = dataIn._id;
+            else
+                id = dataIn.playlistId;
+
+            getPlaylistByidService(id, state.token)
                 .then(data => {
                     if (data.playList) {
                         setDetails(data.playList)
@@ -235,12 +241,16 @@ const PlaylistDetailsScreens = (props) => {
 
 
     const handlFavorit = async () => {
+        let data = {
+            playlistId: listDetails._id,
+            playlistName: listDetails.name
+        }
         if (isFavorit) {
-            await rmFavoritService(listDetails._id, state.token);
+            await rmFavoritService(data, state.token);
             setIsFavorit(false);
         }
         else {
-            await addFavoritService(listDetails._id, state.token);
+            await addFavoritService(data, state.token);
             setIsFavorit(true);
         }
     }

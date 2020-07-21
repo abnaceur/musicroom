@@ -2,7 +2,7 @@ const bookmarkService = require('../services/bookmarkService/index');
 
 const newbookmark = (req, res, next) => {
     let user = req.user
-    let data = req.body.playlistId
+    let data = req.body
     bookmarkService.createBookmark.createBookmark(req, res, user, data)
 }
 

@@ -16,10 +16,29 @@ const getMyBookmarck = (playlistId, token) => {
     });
 };
 
-const addFavoritService = (playlistId, token) => {
+const getMyFavoritList = (token) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let response = await userApi.post("/bookmark/new", { playlistId }, {
+            let response = await userApi.get("/bookmark/mybookmark", {
+                headers: authHeader(token),
+            });
+            const { code, data } = response.data;
+            console.log("data :", data);
+            if (code === 200)
+                resolve(data.bookmarkArray);
+            else {
+                Alert.alert("Error", "Sorry, an error occured")
+            }
+        } catch (error) {
+            console.log(error, " error");
+        }
+    });
+};
+
+const addFavoritService = (favData, token) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await userApi.post("/bookmark/new", favData, {
                 headers: authHeader(token),
             });
             const { code, data } = response.data;
@@ -31,10 +50,10 @@ const addFavoritService = (playlistId, token) => {
 }
 
 
-const rmFavoritService = (playlistId, token) => {
+const rmFavoritService = (favData, token) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let response = await userApi.post("/bookmark/delete", { playlistId }, {
+            let response = await userApi.post("/bookmark/delete", favData, {
                 headers: authHeader(token),
             });
             const { code, data } = response.data;
@@ -48,5 +67,6 @@ const rmFavoritService = (playlistId, token) => {
 export {
     getMyBookmarck,
     rmFavoritService,
+    getMyFavoritList,
     addFavoritService
 };
