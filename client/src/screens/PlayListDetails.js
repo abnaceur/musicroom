@@ -22,6 +22,8 @@ import { Context as AuthContext } from '../context/AuthContext';
 import { Card, Tile, ListItem, Button, Header } from "react-native-elements";
 import FavOff from "react-native-vector-icons/MaterialIcons";
 import BackWard from "react-native-vector-icons/Ionicons";
+import Edit from "react-native-vector-icons/AntDesign";;
+
 import Icon from 'react-native-vector-icons/AntDesign';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Sound, { setCategory } from "react-native-sound";
@@ -255,6 +257,12 @@ const PlaylistDetailsScreens = (props) => {
         }
     }
 
+    const handlRditPlayList = async () => {
+        navigation.navigate('PlayListEditor', {
+            playListDetails: JSON.stringify(listDetails),
+          });
+    }
+
     return (
         <ScrollView style={Styles.container}>
 
@@ -287,7 +295,17 @@ const PlaylistDetailsScreens = (props) => {
                             name={!isFavorit ? "favorite-border" : "favorite"}
                             size={24}
                             color="white" />
+
                     }
+                />
+
+                <Edit
+                    onPress={() => handlFavorit()}
+                    name="edit"
+                    size={24}
+                    style={{ position: 'absolute', zIndex: 1, right: 45, top: 40 }}
+                    color="white"
+                    onPress={() => handlRditPlayList()}
                 />
 
                 <Tile

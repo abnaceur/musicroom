@@ -13,6 +13,8 @@ const playlistReducer = (state, action) => {
       };
     case "deleteAllTrack":
       return { ...state, trackList: [] };
+    case "storePlayList":
+      return { ...state, storePlayList: action.payload };
     default:
       return state;
   }
@@ -30,10 +32,14 @@ const deleteAllTrack = (dispatch) => async () => {
   dispatch({ type: "deleteAllTrack" });
 };
 
+const storePlayListDetails = (dispatch) => async (data) => {
+  dispatch({ type: "storePlayList", payload: data });
+}
+
 export const { Context, Provider } = creatDataContext(
   playlistReducer,
-  { storeTrack, deleteTrack, deleteAllTrack },
+  { storeTrack, deleteTrack, deleteAllTrack, storePlayListDetails },
   {
-    trackList: [],
+    trackList: [], storePlayList: {}
   }
 );
