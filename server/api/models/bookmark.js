@@ -11,6 +11,10 @@ let bookmarkSchema = mongoose.Schema({
         type: String,
         require: true,
     },
+    playlistName: {
+        type: String,
+        require: true,
+    },
 });
 
 module.exports = mongoose.model('Bookmark', bookmarkSchema);
