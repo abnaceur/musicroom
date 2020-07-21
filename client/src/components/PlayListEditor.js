@@ -19,7 +19,7 @@ import Delete from "react-native-vector-icons/AntDesign";
 import BackWard from "react-native-vector-icons/Ionicons";
 
 // Import services
-import { savePlayListService } from "../service/playListService";
+import { savePlayListService, updatePlayListService } from "../service/playListService";
 import { isContributorExistService } from '../service/userService';
 
 // Import context
@@ -51,6 +51,7 @@ const PlayListEditor = ({ navigation, route }) => {
   const [canVote, setCanVote] = useState(true);
   const [canEdit, setCanEdit] = useState(false);
   const [rerender, setRerender] = useState(0);
+  const [playListId, setPlayListId] = useState("");
 
   const {
     state: { trackList },
@@ -73,11 +74,25 @@ const PlayListEditor = ({ navigation, route }) => {
     }
   }, [route.params?.music]);
 
-  // Handl private change
-  const handlIsprivate = async (isPrivate) => {
-    if (isPrivate === true) await setIsPrivate(false);
-    else await setIsPrivate(true);
-  };
+  useEffect(() => {
+    if (route.params?.playListDetails) {
+      let data = JSON.parse(route.params.playListDetails);
+      setPlayListId(data._id);
+      setTitlePlayList(data.name);
+      setDescription(data.desctiption);
+      setIsPrivate(!data.public);
+      setIsEditable(data.isEditable);
+      setIsVote(data.isVote);
+      setContributors(data.contributors);
+      if (data.trackList.length > 0) {
+        data.trackList.map(list => {
+          storeTrack(list);
+        })
+      }
+    }
+
+  }, [route.params?.playListDetails])
+
 
   const savePlayList = async (trackList) => {
     if (
@@ -90,6 +105,7 @@ const PlayListEditor = ({ navigation, route }) => {
       Alert.alert("Please select a collabration mode vote/editable !");
     } else {
       let data = {
+        id: playListId,
         titlePlayList,
         description,
         trackList,
@@ -98,7 +114,11 @@ const PlayListEditor = ({ navigation, route }) => {
         isVote,
         isEditable,
       };
-      savePlayListService(data, token);
+
+      if (playListId !== "") {
+        updatePlayListService(data, token)
+      } else
+        savePlayListService(data, token);
     }
   };
 
@@ -150,9 +170,9 @@ const PlayListEditor = ({ navigation, route }) => {
 
   useEffect(() => {
     if (rerender !== 0) {
-        setContributors(contributors);
+      setContributors(contributors);
     }
-}, [rerender])
+  }, [rerender])
 
   const removeContributor = (item) => {
     let data = contributors;

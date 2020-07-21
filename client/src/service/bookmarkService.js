@@ -23,7 +23,6 @@ const getMyFavoritList = (token) => {
                 headers: authHeader(token),
             });
             const { code, data } = response.data;
-            console.log("data :", data);
             if (code === 200)
                 resolve(data.bookmarkArray);
             else {
