@@ -20,7 +20,7 @@ import BackWard from "react-native-vector-icons/Ionicons";
 
 // Import services
 import { savePlayListService } from "../service/playListService";
-import { isContributorExistService } from '../service/userService';
+import { isContributorExistService } from "../service/userService";
 
 // Import context
 import { Context as playlistReducer } from "../context/PlayListContext";
@@ -36,6 +36,7 @@ import { TextInput } from "react-native-gesture-handler";
 // TODO FOR SYLVAIN
 
 const PlayListEditor = ({ navigation, route }) => {
+  const { editor } = route.params;
   const [name, setName] = useState("");
   const [preview, setPreview] = useState("");
   const [title, setTitle] = useState("");
@@ -106,18 +107,17 @@ const PlayListEditor = ({ navigation, route }) => {
     let data = {
       contributor,
       canVote,
-      canEdit
+      canEdit,
     };
 
     let repsonse = await isContributorExistService(data, token);
     if (repsonse.code === 200) {
       // Check if user exist
       data.id = repsonse.data.contributorId;
-      contributor.trim() !== "" &&
-        setContributors([...contributors, data]);
+      contributor.trim() !== "" && setContributors([...contributors, data]);
       setContributor("");
       setModalContributorVisible(false);
-    };
+    }
   };
 
   const getMusics = async (name) => {
@@ -130,6 +130,7 @@ const PlayListEditor = ({ navigation, route }) => {
           id: data[0].artist.id,
           image: data[0].artist.picture_medium,
           name: data[0].artist.name,
+          editor,
         });
       }
     } catch (error) {
@@ -150,9 +151,9 @@ const PlayListEditor = ({ navigation, route }) => {
 
   useEffect(() => {
     if (rerender !== 0) {
-        setContributors(contributors);
+      setContributors(contributors);
     }
-}, [rerender])
+  }, [rerender]);
 
   const removeContributor = (item) => {
     let data = contributors;
@@ -160,14 +161,13 @@ const PlayListEditor = ({ navigation, route }) => {
 
     if (data && data.length > 0) {
       data.map((contrb, i) => {
-        if (contrb.contributor === item.contributor)
-          newData.splice(i, 1);
-      })
+        if (contrb.contributor === item.contributor) newData.splice(i, 1);
+      });
     }
 
     setContributors(newData);
     setRerender(Math.floor(Math.random() * 999999));
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -274,13 +274,15 @@ const PlayListEditor = ({ navigation, route }) => {
 
                 <View
                   atyle={{
-                    flex: 1, flexDirection: "row",
+                    flex: 1,
+                    flexDirection: "row",
                     alignItems: "center",
-                    justifyContent: "center", color: 'white', height: 100
+                    justifyContent: "center",
+                    color: "white",
+                    height: 100,
                   }}
                 >
-
-                  {isVote ?
+                  {isVote ? (
                     <View
                       style={{
                         // flex: 0.5,
@@ -292,15 +294,19 @@ const PlayListEditor = ({ navigation, route }) => {
                       <CheckBox
                         style={styles.checkBoxStyle}
                         // disabled={false}
-                        onChange={() => { !canVote ? setCanEdit(false) : null, setCanVote(!canVote) }}
+                        onChange={() => {
+                          !canVote ? setCanEdit(false) : null,
+                            setCanVote(!canVote);
+                        }}
                         value={canVote}
                       />
-                      <Text style={{ color: "black", flex: 0.6 }}>Can vote !</Text>
+                      <Text style={{ color: "black", flex: 0.6 }}>
+                        Can vote !
+                      </Text>
                     </View>
-                    : null}
+                  ) : null}
 
-
-                  {isEditable ?
+                  {isEditable ? (
                     <View
                       style={{
                         // flex: 0.5,
@@ -313,12 +319,16 @@ const PlayListEditor = ({ navigation, route }) => {
                         style={styles.checkBoxStyle}
                         // disabled={false}
                         value={canEdit}
-                        onChange={() => { !canEdit ? setCanVote(false) : null, setCanEdit(!canEdit) }}
+                        onChange={() => {
+                          !canEdit ? setCanVote(false) : null,
+                            setCanEdit(!canEdit);
+                        }}
                       />
-                      <Text style={{ color: "black", flex: 0.6 }}>Can edit !</Text>
+                      <Text style={{ color: "black", flex: 0.6 }}>
+                        Can edit !
+                      </Text>
                     </View>
-                    : null}
-
+                  ) : null}
                 </View>
 
                 <View style={{ marginTop: 10 }}>
@@ -402,9 +412,12 @@ const PlayListEditor = ({ navigation, route }) => {
 
       <View
         atyle={{
-          flex: 1, flexDirection: "row",
+          flex: 1,
+          flexDirection: "row",
           alignItems: "center",
-          justifyContent: "center", color: 'white', height: 100
+          justifyContent: "center",
+          color: "white",
+          height: 100,
         }}
       >
         <View
@@ -418,7 +431,9 @@ const PlayListEditor = ({ navigation, route }) => {
           <CheckBox
             style={styles.checkBoxStyle}
             // disabled={false}
-            onChange={() => { !isVote ? setIsEditable(false) : null, setIsVote(!isVote) }}
+            onChange={() => {
+              !isVote ? setIsEditable(false) : null, setIsVote(!isVote);
+            }}
             value={isVote}
           />
           <Text style={{ color: "white", flex: 0.6 }}>Set vote !</Text>
@@ -435,14 +450,16 @@ const PlayListEditor = ({ navigation, route }) => {
             style={styles.checkBoxStyle}
             // disabled={false}
             value={isEditable}
-            onChange={() => { !isEditable ? setIsVote(false) : null, setIsEditable(!isEditable) }}
+            onChange={() => {
+              !isEditable ? setIsVote(false) : null, setIsEditable(!isEditable);
+            }}
           />
           <Text style={{ color: "white", flex: 0.6 }}>Set editable !</Text>
         </View>
       </View>
 
       {/* Contributors list */}
-      {isPrivate ?
+      {isPrivate ? (
         <View
           style={{
             flex: 1,
@@ -452,7 +469,9 @@ const PlayListEditor = ({ navigation, route }) => {
             borderTopLeftRadius: 15,
           }}
         >
-          <View style={{ marginTop: 10, alignItems: "center", marginBottom: 10 }}>
+          <View
+            style={{ marginTop: 10, alignItems: "center", marginBottom: 10 }}
+          >
             <TouchableOpacity
               style={styles.buttonAdd}
               onPress={() => setModalContributorVisible(true)}
@@ -464,9 +483,7 @@ const PlayListEditor = ({ navigation, route }) => {
           <FlatList
             data={contributors}
             renderItem={({ item }) => {
-              const {
-                contributor,
-              } = item;
+              const { contributor } = item;
               return (
                 <View
                   style={{
@@ -498,8 +515,8 @@ const PlayListEditor = ({ navigation, route }) => {
             }}
             keyExtractor={(item, index) => index.toString()}
           />
-        </View> : null}
-
+        </View>
+      ) : null}
 
       <View
         style={{
@@ -513,7 +530,7 @@ const PlayListEditor = ({ navigation, route }) => {
         <View style={{ marginTop: 10, alignItems: "center", marginBottom: 10 }}>
           <TouchableOpacity
             style={styles.buttonAdd}
-            onPress={() => navigation.navigate("AddMusic")}
+            onPress={() => navigation.navigate("AddMusic", { editor })}
           >
             <Text style={styles.buttonText}>Add music</Text>
           </TouchableOpacity>
@@ -617,7 +634,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderWidth: 10,
     padding: 20,
-    color: 'black'
+    color: "black",
   },
   textInputContainer: {
     flexDirection: "row",
@@ -651,8 +668,8 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   checkBoxStyle: {
-    flex: 0.2
-  }
+    flex: 0.2,
+  },
 });
 
 export default PlayListEditor;

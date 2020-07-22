@@ -30,7 +30,8 @@ import EventEditor from "./src/components/EventEditor";
 import FavorisList from "./src/components/FavorisList";
 import FavorisScreen from "./src/screens/FavorisScreen";
 import Map from "./src/components/Map";
-import PlaylistDetailsScreens from './src/screens/PlayListDetails';
+import EventDetails from "./src/components/EventDetails";
+import PlaylistDetailsScreens from "./src/screens/PlayListDetails";
 
 // Import helpers
 import checkAuth from "./src/helpers/PrivateRoute";
@@ -100,7 +101,7 @@ const App = () => {
   const { state } = useContext(AuthContext);
   // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IiQyYiQxMCQySW84ckxhRGNMTC9XVE45Q3N6MzQubk4zNWNrZUxpc3hzaW9ZV0FUclAvN3JkemZGb3FMTyIsImRhdGEiOiI1ZjBkOGQ2Mzc3NjMwNjAwOGFmZGY4MGUiLCJpYXQiOjE1OTQ5OTMzMTMsImV4cCI6MTU5NTAzNjUxM30.FVGmZOBa9BAlt4hMAe3BTExWYiiG-7plHpZv1mRcX9k";
   const token = state.token;
-  
+
   if (!token) {
     return (
       <NavigationContainer>
@@ -174,11 +175,21 @@ const App = () => {
                 options={{ headerShown: false }}
                 component={FavorisList}
               />
+              <Stack.Screen
+                name="EventDetails"
+                options={{ headerShown: false }}
+                component={EventDetails}
+              />
               <Stack.Screen name="AddMusic" component={AddMusic} />
               <Stack.Screen
                 name="PlayListEditor"
                 options={{ headerShown: false }}
                 component={PlayListEditor}
+              />
+              <Stack.Screen
+                name="Map"
+                options={{ headerShown: false }}
+                component={Map}
               />
               <Stack.Screen name="MusicList" component={MusicList} />
               <Stack.Screen name="Player" component={Player} />
