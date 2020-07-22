@@ -22,12 +22,14 @@ import HomeScreens from "./src/screens/HomeScreen";
 import ResetPwdScreens from "./src/screens/ResetPwdScreen";
 import PlayList from "./src/components/PlayList";
 import PlayListEditor from "./src/components/PlayListEditor";
+
 import MusicList from "./src/components/MusicList";
 import Player from "./src/components/Player";
 import AddMusic from "./src/components/AddMusic";
 import EventScreen from "./src/screens/EventScreen";
 import EventEditor from "./src/components/EventEditor";
 import FavorisList from "./src/components/FavorisList";
+import FavorisComponent from "./src/components/FavorisList.abn";
 import FavorisScreen from "./src/screens/FavorisScreen";
 import Map from "./src/components/Map";
 import EventDetails from "./src/components/EventDetails";
@@ -173,7 +175,7 @@ const App = () => {
               <Stack.Screen
                 name="FavorisList"
                 options={{ headerShown: false }}
-                component={FavorisList}
+                component={FavorisComponent}
               />
               <Stack.Screen
                 name="EventDetails"
@@ -191,6 +193,7 @@ const App = () => {
                 options={{ headerShown: false }}
                 component={Map}
               />
+
               <Stack.Screen name="MusicList" component={MusicList} />
               <Stack.Screen name="Player" component={Player} />
             </Stack.Navigator>
