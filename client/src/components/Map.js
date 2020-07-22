@@ -1,111 +1,26 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  Dimensions,
-  StyleSheet,
-  View,
-  PermissionsAndroid,
-  TextInput,
-} from "react-native";
+import React, { useState, useRef } from "react";
+import { StyleSheet, View } from "react-native";
+
+import { Header } from "react-native-elements";
 
 import Icon from "react-native-vector-icons/MaterialIcons";
+import BackWard from "react-native-vector-icons/Ionicons";
 
 import MapView, { Marker, Circle } from "react-native-maps";
-import Geolocation from "react-native-geolocation-service";
 
-const locationEvent = "48.862725,2.287592";
-
-const Map = () => {
-  const [userLocation, setUserLocation] = useState({
-    latitude: 48.819307,
-    longitude: 2.2464147,
-  });
+const Map = ({ route, navigation }) => {
+  const { coordsEvent, coordsUser } = route.params;
+  const [userLocation, setUserLocation] = useState(coordsUser);
   const [positionMap, setPositionMap] = useState({
-    latitude: 48.819307,
-    longitude: 2.2464147,
+    ...coordsEvent,
     latitudeDelta: 0.1,
     longitudeDelta: 0.1,
   });
-  const [circle, setCircle] = useState({
-    center: {
-      latitude: 48.862725,
-      longitude: 2.287592,
-    },
+  const circle = {
+    center: coordsEvent,
     radius: 1000,
-  });
+  };
   const mapRef = useRef(null);
-
-  useEffect(() => {
-    getPermissions();
-  }, []);
-
-  useEffect(() => {
-    const { latitude, longitude } = userLocation;
-    const distance = circle.radius / 1000;
-    const userPosition = calculDistance(
-      latitude,
-      longitude,
-      circle.center.latitude,
-      circle.center.longitude
-    );
-    console.log(userPosition, distance, " distance");
-    if (userPosition < distance) {
-      console.log("setPermission");
-    } else {
-      console.log("notPermission");
-    }
-  }, [userLocation]);
-
-  const getUserLocation = () => {
-    Geolocation.getCurrentPosition(
-      (position) => {
-        const {
-          coords: { longitude, latitude },
-        } = position;
-        setUserLocation({ longitude, latitude });
-        setPositionMap({ ...positionMap, longitude, latitude });
-      },
-      (error) => {
-        // See error code charts below.
-        console.log(error.code, error.message);
-      },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-    );
-  };
-
-  const calculDistance = (lat1, lon1, lat2, lon2) => {
-    if (lat1 === lat2 && lon1 === lon2) {
-      return 0;
-    } else {
-      const radLat1 = (Math.PI * lat1) / 180;
-      const radLat2 = (Math.PI * lat2) / 180;
-      const theta = lon1 - lon2;
-      const radTheta = (Math.PI * theta) / 180;
-      let distance =
-        Math.sin(radLat1) * Math.sin(radLat2) +
-        Math.cos(radLat1) * Math.cos(radLat2) * Math.cos(radTheta);
-      if (distance > 1) {
-        distance = 1;
-      }
-      distance = Math.acos(distance);
-      distance = (distance * 180) / Math.PI;
-      distance = distance * 60 * 1.1515;
-      distance = distance * 1.609344;
-      return distance;
-    }
-  };
-
-  const getPermissions = async () => {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      {
-        title: "ReactNativeCode Location Permission",
-        message: "ReactNativeCode App needs access to your location ",
-      }
-    );
-    if (granted) {
-      getUserLocation();
-    }
-  };
 
   const setZoom = (increase) => {
     let { latitudeDelta, longitudeDelta } = positionMap;
@@ -143,48 +58,70 @@ const Map = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View>
-        <View style={styles.iconContainer}>
-          <Icon onPress={() => centerMap()} name="my-location" size={24} />
-        </View>
-        <View style={styles.iconContainer}>
-          <Icon name="zoom-in" size={24} onPress={() => setZoom(true)} />
-        </View>
-        <View style={styles.iconContainer}>
-          <Icon name="zoom-out" onPress={() => setZoom(false)} size={24} />
-        </View>
+    <View style={{ flex: 1 }}>
+      <View style={{ zIndex: 100000 }}>
+        <Header
+          backgroundColor="#633689"
+          centerComponent={{ text: "Map", style: { color: "#fff" } }}
+          leftComponent={
+            <View style={{ zIndex: 10 }}>
+              <BackWard
+                onPress={() =>
+                  navigation.navigate("EventDetails", {
+                    newCoordsUser: userLocation,
+                  })
+                }
+                name="md-arrow-back"
+                size={24}
+                color="white"
+              />
+            </View>
+          }
+        />
       </View>
-      <MapView
-        style={styles.map}
-        initialRegion={positionMap}
-        onRegionChange={(region) => onRegionChange(region)}
-        onPress={(e) => newCoordinate(e)}
-        zoomEnabled={false}
-        minZoomLevel={5}
-        maxZoomLevel={19}
-        ref={mapRef}
-      >
-        <Marker
-          coordinate={userLocation}
-          title={"me"}
-          description={"location"}
+      <View style={styles.container}>
+        <View style={{ zIndex: 100000 }}>
+          <View style={styles.iconContainer}>
+            <Icon onPress={() => centerMap()} name="my-location" size={24} />
+          </View>
+          <View style={styles.iconContainer}>
+            <Icon name="zoom-in" size={24} onPress={() => setZoom(true)} />
+          </View>
+          <View style={styles.iconContainer}>
+            <Icon name="zoom-out" onPress={() => setZoom(false)} size={24} />
+          </View>
+        </View>
+        <MapView
+          style={styles.map}
+          initialRegion={positionMap}
+          onRegionChange={(region) => onRegionChange(region)}
           onPress={(e) => newCoordinate(e)}
-        />
-        <Marker
-          coordinate={circle.center}
-          title={"eventTitle"}
-          description={"descriptionEvent"}
-        />
-        <Circle
-          center={circle.center}
-          radius={circle.radius}
-          fillColor="rgba(107, 185, 240, 0.5)"
-          strokeColor="rgba(0,0,0,0.5)"
-          zIndex={2}
-          strokeWidth={2}
-        />
-      </MapView>
+          zoomEnabled={false}
+          minZoomLevel={5}
+          maxZoomLevel={19}
+          ref={mapRef}
+        >
+          <Marker
+            coordinate={userLocation}
+            title={"me"}
+            description={"location"}
+            onPress={(e) => newCoordinate(e)}
+          />
+          <Marker
+            coordinate={circle.center}
+            title={"eventTitle"}
+            description={"descriptionEvent"}
+          />
+          <Circle
+            center={circle.center}
+            radius={circle.radius}
+            fillColor="rgba(107, 185, 240, 0.5)"
+            strokeColor="rgba(0,0,0,0.5)"
+            zIndex={2}
+            strokeWidth={2}
+          />
+        </MapView>
+      </View>
     </View>
   );
 };
