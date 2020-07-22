@@ -3,7 +3,6 @@ const utils = require('../../utils/utils');
 
 async function getContributorInfo(id, data, res) {
     let response = await userDao.ifContributorExist(data.contributor);
-    console.log("data :", response);
  
     if (response.length > 0) {
         res.status(200).json({

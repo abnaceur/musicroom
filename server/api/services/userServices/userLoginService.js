@@ -24,7 +24,6 @@ async function userLogin(userInfo, res) {
                 const token = await accessTokenDao.generateToken(userData[0]._id, userData[0].email);
                 const accessTokenValue = await accessTokenDao.saveTokenAndGetAccessToken(token, userData[0]._id);
                 const basedAccesstoken = await accessTokenDao.generateToken(accessTokenValue, userData[0]._id);
-                console.log("userData :", userData);
                 res.status(200).json({
                     success: true,
                     code: 200,

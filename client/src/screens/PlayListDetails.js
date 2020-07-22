@@ -10,27 +10,28 @@ import {
   KeyboardAvoidingView,
   StyleSheet,
 } from "react-native";
-
 import AsyncStorage from "@react-native-community/async-storage";
-
 import { ModalSelectList } from "react-native-modal-select-list";
-
 // Import context
 import { Context as AuthContext } from "../context/AuthContext";
 import { Card, Tile, ListItem, Button, Header } from "react-native-elements";
 import FavOff from "react-native-vector-icons/MaterialIcons";
 import BackWard from "react-native-vector-icons/Ionicons";
+import Edit from "react-native-vector-icons/AntDesign";
 import Icon from "react-native-vector-icons/AntDesign";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import Sound, { setCategory } from "react-native-sound";
-
 // Import servces
 import {
   updateTrackListPositionService,
   updateTrackLikeService,
   getPlaylistByidService,
 } from "../service/playListService";
-
+import {
+  getMyBookmarck,
+  addFavoritService,
+  rmFavoritService,
+} from "../service/bookmarkService";
 const PlaylistDetailsScreens = (props) => {
   const { state } = useContext(AuthContext);
   const [listDetails, setDetails] = useState({});
@@ -42,7 +43,8 @@ const PlaylistDetailsScreens = (props) => {
   const [userPerms, setUserPerms] = useState({});
   const [sound, setSound] = useState(false);
   const { navigation, route } = props;
-
+  const [isFavorit, setIsFavorit] = useState(false);
+  const [willEdit, setWillEdit] = useState(false);
   const handlSongsList = (list) => {
     let data = [];
     if (list && list.length > 0) {
@@ -57,7 +59,6 @@ const PlaylistDetailsScreens = (props) => {
         });
       });
     }
-
     setSongsList(data);
   };
 
@@ -65,7 +66,6 @@ const PlaylistDetailsScreens = (props) => {
     let data = list.sort(
       (a, b) => parseInt(a.likes.length) < parseInt(b.likes.length)
     );
-
     let dataNew = [];
     if (data && data.length > 0) {
       data.map((l, i) => {
@@ -82,18 +82,27 @@ const PlaylistDetailsScreens = (props) => {
     setTrackList(data);
     setSongsList(dataNew);
   };
-
+  const checkIfFovorit = async (id) => {
+    let code = await getMyBookmarck(id, state.token);
+    if (code == 200) setIsFavorit(true);
+    else setIsFavorit(false);
+  };
   useEffect(() => {
-    console.log(route.params?.playListDetails);
+    // Check if pplaylist is favorit
     if (route.params?.playListDetails) {
       let dataIn = JSON.parse(route.params.playListDetails);
-      getPlaylistByidService(dataIn._id, state.token).then((data) => {
+      let id;
+      if (dataIn.playlistId === undefined) id = dataIn._id;
+      else id = dataIn.playlistId;
+      getPlaylistByidService(id, state.token).then((data) => {
         if (data.playList) {
           setDetails(data.playList);
+          checkIfFovorit(data.playList._id);
           setTrackList(data.playList.trackList.sort((a) => a.position));
           if (data.playList.public === false) {
             AsyncStorage.getItem("userInfo").then((user) => {
               let userInfo = JSON.parse(user);
+              if (userInfo.userId === data.playList.creator) setWillEdit(true);
               let perms = {};
               if (data.playList.contributors) {
                 let dt = data.playList.contributors;
@@ -112,13 +121,11 @@ const PlaylistDetailsScreens = (props) => {
       });
     }
   }, [route.params.playListDetails]);
-
   useEffect(() => {
     if (rerender !== 0) {
       setTrackList(trackList);
     }
   }, [rerender]);
-
   const startPlay = (i) => {
     if (isPlaying) {
       pause();
@@ -145,14 +152,12 @@ const PlaylistDetailsScreens = (props) => {
         });
       });
   };
-
   const pause = (i) => {
     if (sound) {
       sound.pause();
     }
     setIsPlaying(false);
   };
-
   const handleLikePress = async (id, track) => {
     let user = JSON.parse(await AsyncStorage.getItem("userInfo"));
     if (track.likes.indexOf(user.userId) === -1) {
@@ -160,13 +165,11 @@ const PlaylistDetailsScreens = (props) => {
     } else {
       trackList[id].likes.splice(trackList[id].likes.indexOf(user.userId), 1);
     }
-
     handlLikeList(trackList);
     // await setTrackList(trackList);
     setRerender(Math.floor(Math.random() * 999999999));
     await updateTrackLikeService(listDetails._id, track, state.token);
   };
-
   let modalRef;
   const openModal = () => modalRef.show();
   const saveModalRef = (ref) => (modalRef = ref);
@@ -177,7 +180,6 @@ const PlaylistDetailsScreens = (props) => {
     if (parseInt(oldPos) !== parseInt(newPos)) {
       let arrangedTrack = array_move(trackList, oldPos, newPos);
       setTrackList(arrangedTrack);
-
       let newListTr = listDetails;
       newListTr.trackList = arrangedTrack;
       setDetails(newListTr);
@@ -191,7 +193,6 @@ const PlaylistDetailsScreens = (props) => {
       setRerender(Math.floor(Math.random() * 9999999999));
     }
   };
-
   const array_move = (arr, old_index, new_index) => {
     if (new_index >= arr.length) {
       var k = new_index - arr.length + 1;
@@ -202,10 +203,8 @@ const PlaylistDetailsScreens = (props) => {
     arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
     return arr;
   };
-
   const handleEditPosPress = (pos, track) => {
     let data = songsList;
-
     for (let i = 0; i < data.length; i++) {
       if (i === parseInt(pos)) {
         data[i].label = (data[i].position + 1).toString() + " current position";
@@ -218,7 +217,24 @@ const PlaylistDetailsScreens = (props) => {
     setSongsList(data.sort((a) => a.position));
     openModal();
   };
-
+  const handlFavorit = async () => {
+    let data = {
+      playlistId: listDetails._id,
+      playlistName: listDetails.name,
+    };
+    if (isFavorit) {
+      await rmFavoritService(data, state.token);
+      setIsFavorit(false);
+    } else {
+      await addFavoritService(data, state.token);
+      setIsFavorit(true);
+    }
+  };
+  const handlRditPlayList = async () => {
+    navigation.navigate("PlayListEditor", {
+      playListDetails: JSON.stringify(listDetails),
+    });
+  };
   return (
     <ScrollView style={Styles.container}>
       <ModalSelectList
@@ -229,7 +245,6 @@ const PlaylistDetailsScreens = (props) => {
         onSelectedOption={onSelectedOption}
         disableTextSearch={false}
       />
-
       <View>
         <Header
           backgroundColor="#633689"
@@ -246,17 +261,30 @@ const PlaylistDetailsScreens = (props) => {
           }
           rightComponent={
             // name favoris for desactivate
-            <FavOff name="favorite-border" size={24} color="white" />
+            <FavOff
+              onPress={() => handlFavorit()}
+              name={!isFavorit ? "favorite-border" : "favorite"}
+              size={24}
+              color="white"
+            />
           }
         />
-
+        {willEdit ? (
+          <Edit
+            onPress={() => handlFavorit()}
+            name="edit"
+            size={24}
+            style={{ position: "absolute", zIndex: 1, right: 45, top: 40 }}
+            color="white"
+            onPress={() => handlRditPlayList()}
+          />
+        ) : null}
         <Tile
           imageSrc={require("../assets/music.jpg")}
           title={listDetails.name}
           featured
           caption={listDetails.desctiption}
         />
-
         <Button
           onPress={() =>
             !isPlaying ? startPlay(currentSong) : pause(currentSong)
@@ -271,7 +299,6 @@ const PlaylistDetailsScreens = (props) => {
           iconLeft
           title="  Start playlist"
         />
-
         {listDetails.public == true && listDetails.trackList && trackList ? (
           trackList.map((l, i) => (
             <ListItem
@@ -379,7 +406,6 @@ const PlaylistDetailsScreens = (props) => {
     </ScrollView>
   );
 };
-
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -437,5 +463,4 @@ const Styles = StyleSheet.create({
     // elevation: 2,
   },
 });
-
 export default PlaylistDetailsScreens;
