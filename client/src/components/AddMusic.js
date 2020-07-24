@@ -45,7 +45,8 @@ const styles = StyleSheet.create({
 const limitMusics = 15;
 const startIdAlbum = 50000;
 
-const PlayList = ({ navigation }) => {
+const PlayList = ({ navigation, route }) => {
+  const { editor } = route.params;
   const [artistList, setArtistList] = useState([]);
   const [albums, setAlbums] = useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -115,6 +116,7 @@ const PlayList = ({ navigation }) => {
                 id,
                 image: picture_medium,
                 name,
+                editor,
               })
             }
           >
@@ -164,6 +166,7 @@ const PlayList = ({ navigation }) => {
                 id,
                 image: cover_medium,
                 name: title,
+                editor,
               })
             }
           >
@@ -205,6 +208,7 @@ const PlayList = ({ navigation }) => {
         navigation.navigate("MusicList", {
           list: "artist",
           id: data[0].artist.id,
+          editor,
         });
       }
     } catch (error) {

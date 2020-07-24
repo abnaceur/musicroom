@@ -28,7 +28,7 @@ const apiKeyGeocoder = "2fc143fb400c48a38e3479e0dfd66278";
 const EventEditor = ({ navigation }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState({ name: "", coords: {} });
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [mode, setMode] = useState("date");
@@ -46,7 +46,6 @@ const EventEditor = ({ navigation }) => {
   const typingInterval = useRef(null);
   const [isVote, setIsVote] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
-
 
   const {
     state: { token },
@@ -117,7 +116,7 @@ const EventEditor = ({ navigation }) => {
   };
 
   const saveEvent = async () => {
-    const { trackList, name, creator } = playLists[playListChecked];
+    const { trackList, name, creator, _id } = playLists[playListChecked];
     let data = {
       name: title,
       description,
@@ -125,14 +124,15 @@ const EventEditor = ({ navigation }) => {
       trackList, // Musique
       creator, // id of user
       name, // Name of playlist
+      _id, // id of playList
       dateStartEvent: `${formatDate(startDate)} ${formatHour(startDate)}`, // dd/mm/yyyy hh:mm:ss
       dateEndEvent: `${formatDate(endDate)} ${formatHour(endDate)}`, // dd/mm/yyyy hh:mm:ss
       address,
       isVote,
-      isEditable
+      isEditable,
     };
     console.log(data);
-    await saveNewEventService(data, token)
+    await saveNewEventService(data, token);
   };
 
   const addContributor = () => {
@@ -145,10 +145,12 @@ const EventEditor = ({ navigation }) => {
   const getAddress = async () => {
     try {
       const response = await axios.get(
-        `https://api.opencagedata.com/geocode/v1/json?q=${address}&key=${apiKeyGeocoder}&language=fr&pretty=1`
+        `https://api.opencagedata.com/geocode/v1/json?q=${
+          address.name
+        }&key=${apiKeyGeocoder}&language=fr&pretty=1`
       );
-      address.length > 0 && setAllAddress(response.data.results);
-      address.length === 0 && setAllAddress([]);
+      address.name.length > 0 && setAllAddress(response.data.results);
+      address.name.length === 0 && setAllAddress([]);
     } catch (error) {
       console.log(error);
       setAllAddress([]);
@@ -262,19 +264,26 @@ const EventEditor = ({ navigation }) => {
         <Text style={styles.text}>Address</Text>
         <View style={{ flex: 0.75, height: 40 }}>
           <TextInput
-            onChangeText={(text) => setAddress(text)}
-            value={address}
+            onChangeText={(text) => setAddress({ ...address, name: text })}
+            value={address.name}
             style={[styles.textInput, { flex: 1 }]}
             onKeyPress={() => typingIsProgress()}
             onSubmitEditing={Keyboard.dismiss}
           />
-          {/* <Button title="Envoie" onPress={() => getAddress()} /> */}
           {allAddress.length > 0 ? (
             <View style={styles.addressContainer}>
               {allAddress.map((address, index) => (
                 <View key={index}>
                   <Text
-                    onPress={() => setDataAddress(address.formatted)}
+                    onPress={() =>
+                      setDataAddress({
+                        name: address.formatted,
+                        coords: {
+                          latitude: address.geometry.lat,
+                          longitude: address.geometry.lng,
+                        },
+                      })
+                    }
                     style={styles.textAddress}
                     numberOfLines={1}
                     ellipsizeMode="tail"
@@ -287,7 +296,6 @@ const EventEditor = ({ navigation }) => {
           ) : null}
         </View>
       </View>
-      {/* <Button title="Close" onPress={() => getAddress()} /> */}
       <View>
         <View
           style={{
@@ -400,7 +408,9 @@ const EventEditor = ({ navigation }) => {
               <CheckBox
                 style={styles.checkBoxStyle}
                 // disabled={false}
-                onChange={() => { !isVote ? setIsEditable(false) : null, setIsVote(!isVote) }}
+                onChange={() => {
+                  !isVote ? setIsEditable(false) : null, setIsVote(!isVote);
+                }}
                 value={isVote}
               />
               <Text style={{ color: "white", flex: 0.6 }}>Set vote !</Text>
@@ -417,13 +427,15 @@ const EventEditor = ({ navigation }) => {
                 style={styles.checkBoxStyle}
                 // disabled={false}
                 value={isEditable}
-                onChange={() => { !isEditable ? setIsVote(false) : null, setIsEditable(!isEditable) }}
+                onChange={() => {
+                  !isEditable ? setIsVote(false) : null,
+                    setIsEditable(!isEditable);
+                }}
               />
               <Text style={{ color: "white", flex: 0.6 }}>Set editable !</Text>
             </View>
           </View>
         ) : null}
-
       </View>
       <View style={styles.playListsContainer}>
         <Text style={{ textAlign: "center", marginBottom: 10, marginTop: 10 }}>
@@ -514,7 +526,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   checkBoxStyle: {
-    flex: 0.2
+    flex: 0.2,
   },
   itemContainer: {
     flex: 1,

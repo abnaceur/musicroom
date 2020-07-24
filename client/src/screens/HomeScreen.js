@@ -29,6 +29,7 @@ const HomeScreens = ({ navigation }) => {
               marginBottom: 0,
             }}
             title="ALBUM / ARTISTS"
+            onPress={() => navigation.navigate("AddMusic", { editor: false })}
           />
         </Card>
 

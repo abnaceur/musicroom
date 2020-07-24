@@ -41,7 +41,7 @@ const limitMusic = 15;
 const MusicList = ({ route, navigation }) => {
   const [musicList, setMusicList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { list, id, image, name } = route.params;
+  const { list, id, image, name, editor } = route.params;
 
   useEffect(() => {
     getMusicList();
@@ -114,14 +114,16 @@ const MusicList = ({ route, navigation }) => {
                   >
                     <Text style={styles.text}>Play music</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate("PlayListEditor", { music: item })
-                    }
-                    style={styles.buttonAddMusic}
-                  >
-                    <Text style={styles.text}>Add music</Text>
-                  </TouchableOpacity>
+                  {editor && (
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate("PlayListEditor", { music: item })
+                      }
+                      style={styles.buttonAddMusic}
+                    >
+                      <Text style={styles.text}>Add music</Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
             );
