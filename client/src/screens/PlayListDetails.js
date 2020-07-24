@@ -45,6 +45,7 @@ const PlaylistDetailsScreens = (props) => {
     const [sound, setSound] = useState(false);
     const { navigation, route } = props;
     const [isFavorit, setIsFavorit] = useState(false);
+    const [willEdit, setWillEdit] = useState(false)
 
     const handlSongsList = (list) => {
         let data = [];
@@ -111,6 +112,8 @@ const PlaylistDetailsScreens = (props) => {
                         if (data.playList.public === false) {
                             AsyncStorage.getItem('userInfo').then(user => {
                                 let userInfo = JSON.parse(user);
+                                if (userInfo.userId === data.playList.creator)
+                                    setWillEdit(true);
                                 let perms = {};
                                 if (data.playList.contributors) {
                                     let dt = data.playList.contributors;
@@ -260,7 +263,7 @@ const PlaylistDetailsScreens = (props) => {
     const handlRditPlayList = async () => {
         navigation.navigate('PlayListEditor', {
             playListDetails: JSON.stringify(listDetails),
-          });
+        });
     }
 
     return (
@@ -299,14 +302,17 @@ const PlaylistDetailsScreens = (props) => {
                     }
                 />
 
-                <Edit
-                    onPress={() => handlFavorit()}
-                    name="edit"
-                    size={24}
-                    style={{ position: 'absolute', zIndex: 1, right: 45, top: 40 }}
-                    color="white"
-                    onPress={() => handlRditPlayList()}
-                />
+                {willEdit ?
+                    <Edit
+                        onPress={() => handlFavorit()}
+                        name="edit"
+                        size={24}
+                        style={{ position: 'absolute', zIndex: 1, right: 45, top: 40 }}
+                        color="white"
+                        onPress={() => handlRditPlayList()}
+                    />
+
+                    : null}
 
                 <Tile
                     imageSrc={require('../assets/music.jpg')}
