@@ -50,16 +50,21 @@ app.io.on('connection', socket => {
   socket.on('contributorLeft', (data) => {
     if (usersList[data.room]) {
       let dataList = usersList[data.room].filter((a, b) => a._id != data.id)
-      console.log("dataList :", dataList);
       usersList[data.room] = dataList;
       app.io.to(data.room).emit('newContributorJoined', usersList[data.room]);
     }
   })
 
+  socket.on('addLikes', async (data) => {
+    console.log("New likes");
+    app.io.to(data.room).emit('newAddLikes', data.trackList);
+  });
+
   socket.on('disconnect', async (reason) => {
     console.log(`${socket.id} disconnected because: ${reason}`);
     socket.disconnect(true);
   });
+
 });
 
 

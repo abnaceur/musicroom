@@ -164,7 +164,12 @@ const PlaylistDetailsScreens = (props) => {
 
   useEffect(() => {
     socket.on("newContributorJoined", (newUsers) => {
-        setListUsers(newUsers);
+      setListUsers(newUsers);
+    })
+
+    socket.on("newAddLikes", (trackListIn) => {
+      console.log("New like in")
+      handlLikeList(trackListIn);
     })
   }, [])
 
@@ -218,7 +223,14 @@ const PlaylistDetailsScreens = (props) => {
     handlLikeList(trackList);
     // await setTrackList(trackList);
     setRerender(Math.floor(Math.random() * 999999999));
+    let dataLike = {
+      room: listDetails._id,
+      trackList,
+    };
+
+    socket.emit("addLikes", dataLike);
     await updateTrackLikeService(listDetails._id, track, state.token);
+
   };
 
   let modalRef;
@@ -308,7 +320,6 @@ const PlaylistDetailsScreens = (props) => {
 
   const contributorLeft = async () => {
     let user = JSON.parse(await AsyncStorage.getItem("userInfo"));
-    console.log("ddddd");
     let data = {
       room: listDetails._id,
       id: user.userId,
