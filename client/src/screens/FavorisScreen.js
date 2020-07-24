@@ -13,9 +13,16 @@ import {
 // Import context
 import { Context as AuthContext } from '../context/AuthContext';
 import { Card, ListItem, Button, Icon } from 'react-native-elements';
+import { useIsFocused } from "@react-navigation/native";
 
 const FavorisScreen = (props) => {
     const { signout } = useContext(AuthContext);
+
+    const isFocused = useIsFocused();
+    useEffect(() => {
+      if (isFocused)
+      fetchPlaylistes();
+    }, [isFocused]);
 
     return (
         <ScrollView style={Styles.container}>

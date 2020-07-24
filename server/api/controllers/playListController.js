@@ -62,6 +62,7 @@ positionEvent = (req, res, next) => {
 newEvent = (req, res, next) => {
     let user = req.user;
     let data = req.body;
+
     playListService.createNewEventService.createEvent(res, user, data);
 }
 
