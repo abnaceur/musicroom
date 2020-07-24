@@ -16,6 +16,8 @@ import Eye from "react-native-vector-icons/AntDesign";
 import { getAllPlayListService } from "../service/playListService";
 import { Context as AuthContext } from "../context/AuthContext";
 
+import { useIsFocused } from "@react-navigation/native";
+
 const PlayList = (props) => {
   const { navigation, route } = props;
   const [publicPlayList, setPublicPlayList] = useState([]);
@@ -25,6 +27,12 @@ const PlayList = (props) => {
   const {
     state: { token },
   } = useContext(AuthContext);
+
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    if (isFocused)
+    fetchPlaylistes();
+  }, [isFocused]);
 
   const fetchPlaylistes = async () => {
     let allPlayList = await getAllPlayListService(token);

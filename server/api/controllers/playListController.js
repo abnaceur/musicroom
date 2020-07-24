@@ -39,6 +39,13 @@ likePlaylist = (req, res, next) => {
     playListService.likePlaylistTrackService.likePlaylistTrack(res, user, data);
 }
 
+likeEvent = (req, res, next) => {
+    let user = req.user;
+    let data = req.body;
+    playListService.likePlaylistTrackService.likeEventTrack(res, user, data);
+}
+
+
 positionPlaylist = (req, res, next) => {
     let user = req.user;
     let data = req.body;
@@ -61,10 +68,17 @@ getAllEvents = (req, res, next) => {
     playListService.getEventsService.getEvents(res, user);
 }
 
+getEventById = (req, res, next) => {
+    let id = req.params.id
+    playListService.getPlaylistService.getEventInfoById(res, id);
+}
+
 module.exports = {
     getAllEvents,
     likePlaylist,
+    getEventById,
     positionPlaylist,
+    likeEvent,
     newEvent,
     getPlaylistById,
     getMine,

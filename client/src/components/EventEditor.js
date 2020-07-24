@@ -44,7 +44,7 @@ const EventEditor = ({ navigation }) => {
   const [contributors, setContributors] = useState([]);
   const [allAddress, setAllAddress] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
-  const lastUpdateTime = useRef(null); 
+  const lastUpdateTime = useRef(null);
   const typingInterval = useRef(null);
   const [isVote, setIsVote] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
@@ -59,8 +59,15 @@ const EventEditor = ({ navigation }) => {
   } = useContext(AuthContext);
 
   useEffect(() => {
+    console.log("dddd");
     fetchPlayLists();
   }, []);
+
+  useEffect(() => {
+    if (rerender !== 0) {
+      setContributors(contributors);
+    }
+  }, [rerender]);
 
   useEffect(() => {
     Keyboard.addListener("keyboardDidHide", keyboardHide);
@@ -110,6 +117,21 @@ const EventEditor = ({ navigation }) => {
       seconds.getFullYear();
     return dateStr;
   };
+
+  const removeContributor = (item) => {
+    let data = contributors;
+    let newData = contributors;
+
+    if (data && data.length > 0) {
+      data.map((contrb, i) => {
+        if (contrb.contributor === item.contributor) newData.splice(i, 1);
+      });
+    }
+
+    setContributors(newData);
+    setRerender(Math.floor(Math.random() * 999999));
+  };
+
 
   const formatHour = (date) => {
     const seconds = new Date(date);
@@ -163,7 +185,7 @@ const EventEditor = ({ navigation }) => {
     try {
       const response = await axios.get(
         `https://api.opencagedata.com/geocode/v1/json?q=${
-          address.name
+        address.name
         }&key=${apiKeyGeocoder}&language=fr&pretty=1`
       );
       address.name.length > 0 && setAllAddress(response.data.results);
@@ -227,7 +249,7 @@ const EventEditor = ({ navigation }) => {
         }
       />
 
-{modalContributorVisible ? (
+      {modalContributorVisible ? (
         <View>
           <Modal
             animationType="slide"

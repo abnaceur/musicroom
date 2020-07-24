@@ -53,7 +53,7 @@ const PlayListEditor = ({ navigation, route }) => {
   const [contributor, setContributor] = useState("");
   const [contributors, setContributors] = useState([]);
   const [canVote, setCanVote] = useState(true);
-  const [canEdit,  setCanEdit] = useState(false);
+  const [canEdit, setCanEdit] = useState(false);
   const [rerender, setRerender] = useState(0);
   const [playListId, setPlayListId] = useState("");
 
@@ -410,7 +410,24 @@ const PlayListEditor = ({ navigation, route }) => {
           <Text style={{ color: "white", flex: 0.6 }}>Set private !</Text>
         </View>
 
-        
+        {/* {isPrivate ? (
+          <View style={{ marginTop: 15, flex: 0.5, alignSelf: "center" }}>
+            <TouchableOpacity
+              style={styles.buttonAdd}
+              onPress={() => setModalContributorVisible(true)}
+            >
+              <Text style={styles.buttonText}>
+                Invite user to contribute in my playlist
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : null} */}
+
+        {/* {!isPrivate ? (
+          <View style={{ marginTop: 15, flex: 1, alignSelf: "center" }}>
+           
+          </View>
+        ) : null} */}
       </View>
 
       <View

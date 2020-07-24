@@ -27,10 +27,10 @@ import Sound, { setCategory } from "react-native-sound";
 
 // Import servces
 import {
-  updateTrackListPositionService,
-  updateTrackLikeService,
-  getPlaylistByidService,
-} from "../service/playListService";
+  updateTrackListEventPositionService,
+  updateTrackLikeEventService,
+  getEventByIdService,
+} from "../service/eventService";
 
 import BackWard from "react-native-vector-icons/Ionicons";
 import Marker from "react-native-vector-icons/MaterialCommunityIcons";
@@ -116,10 +116,10 @@ const EventDetails = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    if (route.params?.playListDetails) {
-      let dataIn = JSON.parse(route.params.playListDetails);
-      console.log(dataIn.creator, " id creator");
-      getPlaylistByidService("5f15a777c99c9b002086847d", state.token).then(
+    if (route.params?.eventDetails) {
+      let dataIn = JSON.parse(route.params.eventDetails);
+
+      getEventByIdService(dataIn._id, state.token).then(
         (data) => {
           if (data.playList) {
             setDetails(data.playList);
@@ -146,7 +146,7 @@ const EventDetails = ({ navigation, route }) => {
         }
       );
     }
-  }, [route.params.playListDetails]);
+  }, [route.params.eventDetails]);
 
   useEffect(() => {
     if (rerender !== 0) {
@@ -199,7 +199,7 @@ const EventDetails = ({ navigation, route }) => {
     handlLikeList(trackList);
     // await setTrackList(trackList);
     setRerender(Math.floor(Math.random() * 999999999));
-    await updateTrackLikeService(listDetails._id, track, state.token);
+    await updateTrackLikeEventService(listDetails._id, track, state.token);
   };
 
   let modalRef;
@@ -371,7 +371,7 @@ const EventDetails = ({ navigation, route }) => {
                 listDetails.isVote ? (
                   <SimpleLineIcons
                     onPress={() =>
-                      rightToVote
+                      !rightToVote
                         ? handleLikePress(i, l)
                         : Alert.alert("You are not in the right place !")
                     }

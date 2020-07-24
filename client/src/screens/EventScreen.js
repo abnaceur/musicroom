@@ -16,6 +16,7 @@ import { Context as AuthContext } from "../context/AuthContext";
 import { Card, ListItem, Button, Header, Icon } from "react-native-elements";
 import Add from "react-native-vector-icons/Entypo";
 import Eye from "react-native-vector-icons/AntDesign";
+import { useIsFocused } from "@react-navigation/native";
 
 // impor tservices
 import { getAllEventsService } from "../service/eventService";
@@ -27,6 +28,12 @@ const EventScreen = ({ navigation }) => {
     state: { token },
     signout,
   } = useContext(AuthContext);
+
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    if (isFocused)
+      getAllEvent();
+  }, [isFocused]);
 
   // Get date
   useEffect(() => {
@@ -68,7 +75,7 @@ const EventScreen = ({ navigation }) => {
         onPress={() =>
           navigation.navigate("EventDetails", {
             address: item.address,
-            playListDetails: JSON.stringify(item),
+            eventDetails: JSON.stringify(item),
           })
         }
       >
