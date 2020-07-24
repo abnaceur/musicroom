@@ -11,6 +11,11 @@ const checkAuth = require("../middleware/check-auth");
 // @access  Private
 router.get('/id/:id', checkAuth, playListController.getPlaylistById)
 
+// @desc    getPlaylistById
+// @route   POST /api/v1/playlist/id/:id
+// @access  Private
+router.get('/event/id/:id', checkAuth, playListController.getEventById)
+
 // @desc    getAllPublicPlaylist
 // @route   POST /api/v1/playlist/getAllPublic
 // @access  Private
@@ -47,6 +52,10 @@ router.post('/delete', checkAuth, playListController.deletePlaylist)
 // @access  Private
 router.post('/likes', checkAuth, playListController.likePlaylist)
 
+// @desc    likePlaylist
+// @route   POST /api/v1/playlist/likes
+// @access  Private
+router.post('/event/likes', checkAuth, playListController.likeEvent)
 
 // @desc    positionPlaylist
 // @route   POST /api/v1/playlist/position
