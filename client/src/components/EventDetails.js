@@ -217,7 +217,7 @@ const EventDetails = ({ navigation, route }) => {
       newListTr.trackList = arrangedTrack;
       setDetails(newListTr);
       handlSongsList(arrangedTrack);
-      await updateTrackListPositionService(
+      await updateTrackListEventPositionService(
         newListTr._id,
         arrangedTrack,
         state.token
