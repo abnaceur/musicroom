@@ -27,16 +27,41 @@ var server = http.createServer(app);
  */
 
 app.io = socket(server, {
-  pingTimeout: 500000,
+  pingTimeout: 30000,
   cookie: false
 });
 
+let usersList = {};
 app.io.on('connection', socket => {
   console.log(`new connection: ${socket.id}`);
+
+  socket.on('join', (room) => {
+    socket.join(room);
+    console.log("new socket joined room :", room);
+    if (usersList[room] === undefined)
+      usersList[room] = new Array();
+  });
+
+  socket.on('newContributor', (data) => {
+    usersList[data.room].push(data.user);
+    app.io.to(data.room).emit('newContributorJoined', usersList[data.room]);
+  });
+
+  socket.on('contributorLeft', (data) => {
+    if (usersList[data.room]) {
+      let dataList = usersList[data.room].filter((a, b) => a._id != data.id)
+      console.log("dataList :", dataList);
+      usersList[data.room] = dataList;
+      app.io.to(data.room).emit('newContributorJoined', usersList[data.room]);
+    }
+  })
+
   socket.on('disconnect', async (reason) => {
     console.log(`${socket.id} disconnected because: ${reason}`);
+    socket.disconnect(true);
   });
 });
+
 
 /**
  * Listen on provided port, on all network interfaces.

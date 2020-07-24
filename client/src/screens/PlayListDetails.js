@@ -6,6 +6,7 @@ import {
   ScrollView,
   Dimensions,
   Modal,
+  FlatList,
   Image,
   KeyboardAvoidingView,
   StyleSheet,
@@ -26,12 +27,17 @@ import {
   updateTrackListPositionService,
   updateTrackLikeService,
   getPlaylistByidService,
+  getUserById,
 } from "../service/playListService";
 import {
   getMyBookmarck,
   addFavoritService,
   rmFavoritService,
 } from "../service/bookmarkService";
+
+import io from 'socket.io-client';
+import { useIsFocused } from "@react-navigation/native";
+
 const PlaylistDetailsScreens = (props) => {
   const { state } = useContext(AuthContext);
   const [listDetails, setDetails] = useState({});
@@ -45,6 +51,24 @@ const PlaylistDetailsScreens = (props) => {
   const { navigation, route } = props;
   const [isFavorit, setIsFavorit] = useState(false);
   const [willEdit, setWillEdit] = useState(false);
+  const [listUsers, setListUsers] = useState([]);
+  const [socket, setSocket] = useState(io("http://192.168.42.120:3000"));
+
+  // this.state.socket.connect(true);
+  //   this.state.socket.emit('join', room);
+  //   this.state.socket.on('userNotifications', (data) => {
+  //     this.setState({
+  //       notifCount: data.length
+  //     })
+  //   })
+
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    if (isFocused) {
+      socket.connect(true);
+    }
+  }, [isFocused]);
+
   const handlSongsList = (list) => {
     let data = [];
     if (list && list.length > 0) {
@@ -82,11 +106,13 @@ const PlaylistDetailsScreens = (props) => {
     setTrackList(data);
     setSongsList(dataNew);
   };
+
   const checkIfFovorit = async (id) => {
     let code = await getMyBookmarck(id, state.token);
     if (code == 200) setIsFavorit(true);
     else setIsFavorit(false);
   };
+
   useEffect(() => {
     // Check if pplaylist is favorit
     if (route.params?.playListDetails) {
@@ -99,6 +125,9 @@ const PlaylistDetailsScreens = (props) => {
           setDetails(data.playList);
           checkIfFovorit(data.playList._id);
           setTrackList(data.playList.trackList.sort((a) => a.position));
+
+          console.log("Socket Joined")
+          socket.emit('join', data.playList._id);
           if (data.playList.public === false) {
             AsyncStorage.getItem("userInfo").then((user) => {
               let userInfo = JSON.parse(user);
@@ -118,14 +147,33 @@ const PlaylistDetailsScreens = (props) => {
             handlLikeList(data.playList.trackList);
           }
         }
+
+        // Get User information
+        AsyncStorage.getItem("userInfo").then((user) => {
+          let userInfo = JSON.parse(user);
+          getUserById(userInfo.userId, state.token).then(data => {
+            let users = [];
+            users.push(data)
+            socket.emit("newContributor", { room: id, user: data });
+            setListUsers(users);
+          })
+        })
       });
     }
   }, [route.params.playListDetails]);
+
+  useEffect(() => {
+    socket.on("newContributorJoined", (newUsers) => {
+        setListUsers(newUsers);
+    })
+  }, [])
+
   useEffect(() => {
     if (rerender !== 0) {
       setTrackList(trackList);
     }
   }, [rerender]);
+
   const startPlay = (i) => {
     if (isPlaying) {
       pause();
@@ -152,12 +200,14 @@ const PlaylistDetailsScreens = (props) => {
         });
       });
   };
+
   const pause = (i) => {
     if (sound) {
       sound.pause();
     }
     setIsPlaying(false);
   };
+
   const handleLikePress = async (id, track) => {
     let user = JSON.parse(await AsyncStorage.getItem("userInfo"));
     if (track.likes.indexOf(user.userId) === -1) {
@@ -170,9 +220,13 @@ const PlaylistDetailsScreens = (props) => {
     setRerender(Math.floor(Math.random() * 999999999));
     await updateTrackLikeService(listDetails._id, track, state.token);
   };
+
   let modalRef;
+
   const openModal = () => modalRef.show();
+
   const saveModalRef = (ref) => (modalRef = ref);
+
   const onSelectedOption = async (newPos) => {
     let data = songsList;
     // Get old position
@@ -193,6 +247,7 @@ const PlaylistDetailsScreens = (props) => {
       setRerender(Math.floor(Math.random() * 9999999999));
     }
   };
+
   const array_move = (arr, old_index, new_index) => {
     if (new_index >= arr.length) {
       var k = new_index - arr.length + 1;
@@ -203,6 +258,7 @@ const PlaylistDetailsScreens = (props) => {
     arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
     return arr;
   };
+
   const handleEditPosPress = (pos, track) => {
     let data = songsList;
     for (let i = 0; i < data.length; i++) {
@@ -217,6 +273,7 @@ const PlaylistDetailsScreens = (props) => {
     setSongsList(data.sort((a) => a.position));
     openModal();
   };
+
   const handlFavorit = async () => {
     let data = {
       playlistId: listDetails._id,
@@ -230,11 +287,36 @@ const PlaylistDetailsScreens = (props) => {
       setIsFavorit(true);
     }
   };
+
   const handlRditPlayList = async () => {
     navigation.navigate("PlayListEditor", {
       playListDetails: JSON.stringify(listDetails),
     });
   };
+
+  const renderItem = ({ item, index }) => (
+    <ListItem
+      key={item._id}
+      leftAvatar={{
+        source: {
+          uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn4.iconfinder.com%2Fdata%2Ficons%2Favatars-21%2F512%2Favatar-circle-human-male-5-512.png&f=1&nofb=1",
+        },
+      }}
+      title={item.username}
+    />
+  );
+
+  const contributorLeft = async () => {
+    let user = JSON.parse(await AsyncStorage.getItem("userInfo"));
+    console.log("ddddd");
+    let data = {
+      room: listDetails._id,
+      id: user.userId,
+    };
+
+    socket.emit("contributorLeft", data);
+  }
+
   return (
     <ScrollView style={Styles.container}>
       <ModalSelectList
@@ -252,7 +334,7 @@ const PlaylistDetailsScreens = (props) => {
           leftComponent={
             <BackWard
               onPress={() => {
-                pause(), navigation.goBack();
+                pause(), contributorLeft(), navigation.goBack();
               }}
               name="md-arrow-back"
               size={24}
@@ -299,6 +381,17 @@ const PlaylistDetailsScreens = (props) => {
           iconLeft
           title="  Start playlist"
         />
+
+
+        {/* List users */}
+        <FlatList
+          keyExtractor={(item, index) => index.toString()}
+          data={listUsers}
+          renderItem={renderItem}
+          horizontal={true}
+        />
+
+
         {listDetails.public == true && listDetails.trackList && trackList ? (
           trackList.map((l, i) => (
             <ListItem
@@ -336,72 +429,72 @@ const PlaylistDetailsScreens = (props) => {
                     onPress={() => pause(i)}
                   />
                 ) : (
-                  <SimpleLineIcons
-                    name="control-play"
-                    size={24}
-                    color="blue"
-                    onPress={() => startPlay(i)}
-                  />
-                )
+                    <SimpleLineIcons
+                      name="control-play"
+                      size={24}
+                      color="blue"
+                      onPress={() => startPlay(i)}
+                    />
+                  )
               }
             />
           ))
         ) : listDetails.public == false &&
           listDetails.trackList &&
           trackList ? (
-          trackList.map((l, i) => (
-            <ListItem
-              key={i}
-              leftAvatar={{
-                source: { uri: l.album ? l.album.cover_big : null },
-              }}
-              title={l.title}
-              // subtitle={l.subtitle}
-              bottomDivider
-              rightTitle={
-                listDetails.isVote && userPerms.canVote
-                  ? l.likes.length.toString()
-                  : null
-              }
-              rightIcon={
-                listDetails.isVote && userPerms.canVote ? (
-                  <SimpleLineIcons
-                    onPress={() => handleLikePress(i, l)}
-                    name="like"
-                    size={25}
-                    color="blue"
-                  />
-                ) : listDetails.isEditable && userPerms.canEdit ? (
-                  <SimpleLineIcons
-                    onPress={() => handleEditPosPress(i, l)}
-                    name="cursor-move"
-                    size={25}
-                    color="blue"
-                  />
-                ) : null
-              }
-              leftIcon={
-                i === currentSong && isPlaying ? (
-                  <SimpleLineIcons
-                    name="control-pause"
-                    size={25}
-                    color="blue"
-                    onPress={() => pause(i)}
-                  />
-                ) : (
-                  <SimpleLineIcons
-                    name="control-play"
-                    size={24}
-                    color="blue"
-                    onPress={() => startPlay(i)}
-                  />
-                )
-              }
-            />
-          ))
-        ) : (
-          <Text>Empty list</Text>
-        )}
+              trackList.map((l, i) => (
+                <ListItem
+                  key={i}
+                  leftAvatar={{
+                    source: { uri: l.album ? l.album.cover_big : null },
+                  }}
+                  title={l.title}
+                  // subtitle={l.subtitle}
+                  bottomDivider
+                  rightTitle={
+                    listDetails.isVote && userPerms.canVote
+                      ? l.likes.length.toString()
+                      : null
+                  }
+                  rightIcon={
+                    listDetails.isVote && userPerms.canVote ? (
+                      <SimpleLineIcons
+                        onPress={() => handleLikePress(i, l)}
+                        name="like"
+                        size={25}
+                        color="blue"
+                      />
+                    ) : listDetails.isEditable && userPerms.canEdit ? (
+                      <SimpleLineIcons
+                        onPress={() => handleEditPosPress(i, l)}
+                        name="cursor-move"
+                        size={25}
+                        color="blue"
+                      />
+                    ) : null
+                  }
+                  leftIcon={
+                    i === currentSong && isPlaying ? (
+                      <SimpleLineIcons
+                        name="control-pause"
+                        size={25}
+                        color="blue"
+                        onPress={() => pause(i)}
+                      />
+                    ) : (
+                        <SimpleLineIcons
+                          name="control-play"
+                          size={24}
+                          color="blue"
+                          onPress={() => startPlay(i)}
+                        />
+                      )
+                  }
+                />
+              ))
+            ) : (
+              <Text>Empty list</Text>
+            )}
       </View>
     </ScrollView>
   );
