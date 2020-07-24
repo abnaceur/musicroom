@@ -19,9 +19,11 @@ import axios from "axios";
 
 import Save from "react-native-vector-icons/Entypo";
 import BackWard from "react-native-vector-icons/Ionicons";
+import Delete from "react-native-vector-icons/AntDesign";
 
 import { Context as AuthContext } from "../context/AuthContext";
 import { getMyPlayList, saveNewEventService } from "../service/eventService";
+import { isContributorExistService } from "../service/userService";
 
 const apiKeyGeocoder = "2fc143fb400c48a38e3479e0dfd66278";
 
@@ -42,10 +44,15 @@ const EventEditor = ({ navigation }) => {
   const [contributors, setContributors] = useState([]);
   const [allAddress, setAllAddress] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
-  const lastUpdateTime = useRef(null);
+  const lastUpdateTime = useRef(null); 
   const typingInterval = useRef(null);
   const [isVote, setIsVote] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
+
+  const [canVote, setCanVote] = useState(true);
+  const [canEdit, setCanEdit] = useState(false);
+  const [rerender, setRerender] = useState(0);
+  const [eventId, setEventId] = useState("");
 
   const {
     state: { token },
@@ -135,11 +142,21 @@ const EventEditor = ({ navigation }) => {
     await saveNewEventService(data, token);
   };
 
-  const addContributor = () => {
-    contributor.trim() !== "" &&
-      setContributors([...contributors, contributor]);
-    setContributor("");
-    setModalContributorVisible(false);
+  const addContributor = async () => {
+    let data = {
+      contributor,
+      canVote,
+      canEdit,
+    };
+
+    let repsonse = await isContributorExistService(data, token);
+    if (repsonse.code === 200) {
+      // Check if user exist
+      data.id = repsonse.data.contributorId;
+      contributor.trim() !== "" && setContributors([...contributors, data]);
+      setContributor("");
+      setModalContributorVisible(false);
+    }
   };
 
   const getAddress = async () => {
@@ -209,42 +226,104 @@ const EventEditor = ({ navigation }) => {
           />
         }
       />
-      <View style={styles.textInputContainer}>
-        {modalContributorVisible && (
-          <View>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={modalContributorVisible}
-              onRequestClose={() => Alert.alert("Modal has been closed !")}
-            >
-              <View style={styles.modalContainer}>
+
+{modalContributorVisible ? (
+        <View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalContributorVisible}
+            onRequestClose={() => Alert.alert("Modal has been closed !")}
+          >
+            <View style={styles.modalContainer}>
+              <View style={[styles.textContainer, { width: 300, height: 300 }]}>
+                {/* set width and height with dimensions */}
+                <TextInput
+                  onChangeText={(text) => setContributor(text)}
+                  value={contributor}
+                  style={styles.textInput}
+                />
+
                 <View
-                  style={[styles.textContainer, { width: 300, height: 200 }]}
+                  atyle={{
+                    flex: 1,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "white",
+                    height: 100,
+                  }}
                 >
-                  {/* set width and height with dimensions */}
-                  <TextInput
-                    onChangeText={(text) => setContributor(text)}
-                    value={contributor}
-                    style={styles.textInput}
+                  {isVote ? (
+                    <View
+                      style={{
+                        // flex: 0.5,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <CheckBox
+                        style={styles.checkBoxStyle}
+                        // disabled={false}
+                        onChange={() => {
+                          !canVote ? setCanEdit(false) : null,
+                            setCanVote(!canVote);
+                        }}
+                        value={canVote}
+                      />
+                      <Text style={{ color: "black", flex: 0.6 }}>
+                        Can vote !
+                      </Text>
+                    </View>
+                  ) : null}
+
+                  {isEditable ? (
+                    <View
+                      style={{
+                        // flex: 0.5,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <CheckBox
+                        style={styles.checkBoxStyle}
+                        // disabled={false}
+                        value={canEdit}
+                        onChange={() => {
+                          !canEdit ? setCanVote(false) : null,
+                            setCanEdit(!canEdit);
+                        }}
+                      />
+                      <Text style={{ color: "black", flex: 0.6 }}>
+                        Can edit !
+                      </Text>
+                    </View>
+                  ) : null}
+                </View>
+
+                <View style={{ marginTop: 10 }}>
+                  <Button
+                    title="Add contributor"
+                    onPress={() => addContributor()}
                   />
-                  <View style={{ marginTop: 10 }}>
-                    <Button
-                      title="Add contributor"
-                      onPress={() => addContributor()}
-                    />
-                  </View>
-                  <View style={{ marginTop: 10 }}>
-                    <Button
-                      title="Close"
-                      onPress={() => setModalContributorVisible(false)}
-                    />
-                  </View>
+                </View>
+
+                <View style={{ marginTop: 10 }}>
+                  <Button
+                    title="Close"
+                    onPress={() => setModalContributorVisible(false)}
+                  />
                 </View>
               </View>
-            </Modal>
-          </View>
-        )}
+            </View>
+          </Modal>
+        </View>
+      ) : null}
+
+      <View style={styles.textInputContainer}>
+
         <Text style={styles.text}>Title</Text>
         <TextInput
           onChangeText={(text) => setTitle(text)}
@@ -384,59 +463,117 @@ const EventEditor = ({ navigation }) => {
           />
           <Text style={{ color: "white", flex: 0.6 }}>Set private !</Text>
         </View>
-        {isPrivate ? (
-          <View style={{ marginTop: 15, flex: 0.5, alignSelf: "center" }}>
+      </View>
+
+      <View
+        atyle={{
+          flex: 1,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "white",
+          height: 100,
+        }}
+      >
+        <View
+          style={{
+            // flex: 0.5,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 10
+          }}
+        >
+          <CheckBox
+            style={styles.checkBoxStyle}
+            // disabled={false}
+            onChange={() => {
+              !isVote ? setIsEditable(false) : null, setIsVote(!isVote);
+            }}
+            value={isVote}
+          />
+          <Text style={{ color: "white", flex: 0.6 }}>Set vote !</Text>
+        </View>
+        <View
+          style={{
+            // flex: 0.5,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <CheckBox
+            style={styles.checkBoxStyle}
+            // disabled={false}
+            value={isEditable}
+            onChange={() => {
+              !isEditable ? setIsVote(false) : null, setIsEditable(!isEditable);
+            }}
+          />
+          <Text style={{ color: "white", flex: 0.6 }}>Set editable !</Text>
+        </View>
+      </View>
+
+
+      {isPrivate ? (
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "white",
+            marginTop: 15,
+            borderTopRightRadius: 15,
+            borderTopLeftRadius: 15,
+          }}
+        >
+          <View
+            style={{ marginTop: 10, alignItems: "center", marginBottom: 10 }}
+          >
             <TouchableOpacity
-              style={styles.buttonDate}
+              style={styles.buttonAdd}
               onPress={() => setModalContributorVisible(true)}
             >
-              <Text style={styles.textDate}>Invite user in my event</Text>
+              <Text style={styles.buttonText}>Add group</Text>
             </TouchableOpacity>
           </View>
-        ) : null}
 
-        {!isPrivate ? (
-          <View style={{ marginTop: 15, flex: 1, alignSelf: "center" }}>
-            <View
-              style={{
-                flex: 0.5,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <CheckBox
-                style={styles.checkBoxStyle}
-                // disabled={false}
-                onChange={() => {
-                  !isVote ? setIsEditable(false) : null, setIsVote(!isVote);
-                }}
-                value={isVote}
-              />
-              <Text style={{ color: "white", flex: 0.6 }}>Set vote !</Text>
-            </View>
-            <View
-              style={{
-                flex: 0.5,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <CheckBox
-                style={styles.checkBoxStyle}
-                // disabled={false}
-                value={isEditable}
-                onChange={() => {
-                  !isEditable ? setIsVote(false) : null,
-                    setIsEditable(!isEditable);
-                }}
-              />
-              <Text style={{ color: "white", flex: 0.6 }}>Set editable !</Text>
-            </View>
-          </View>
-        ) : null}
-      </View>
+          <FlatList
+            data={contributors}
+            renderItem={({ item }) => {
+              const { contributor } = item;
+              return (
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: "row",
+                  }}
+                >
+                  <View style={[styles.optionsContainer]}>
+                    <View style={{ flex: 0.8, alignItems: "center" }}>
+                      <Text
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                        style={{
+                          paddingLeft: 20,
+                        }}
+                      >{`User: ${contributor}`}</Text>
+                    </View>
+                    <View style={{ flex: 0.2, alignItems: "center" }}>
+                      <Delete
+                        onPress={() => removeContributor(item)}
+                        name="delete"
+                        size={24}
+                        color="black"
+                      />
+                    </View>
+                  </View>
+                </View>
+              );
+            }}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </View>
+      ) : null}
+
       <View style={styles.playListsContainer}>
         <Text style={{ textAlign: "center", marginBottom: 10, marginTop: 10 }}>
           My playlist:
@@ -482,6 +619,13 @@ const styles = StyleSheet.create({
     flex: 0.2,
     color: "white",
   },
+  buttonText: {
+    fontSize: 14,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase",
+  },
   buttonDate: {
     // elevation: 8,
     backgroundColor: "#841584",
@@ -491,12 +635,28 @@ const styles = StyleSheet.create({
     width: 150,
     marginBottom: 10,
   },
+  buttonAdd: {
+    elevation: 8,
+    backgroundColor: "#841584",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    width: 150,
+  },
   textDate: {
     fontSize: 14,
     color: "#fff",
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase",
+  },
+  optionsContainer: {
+    flex: 1,
+    flexDirection: "row",
+    marginTop: 10,
+    borderBottomColor: "grey",
+    borderBottomWidth: 1,
+    paddingBottom: 10,
   },
   playListsContainer: {
     flex: 1,
