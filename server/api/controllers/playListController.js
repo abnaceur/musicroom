@@ -17,7 +17,7 @@ const getMine = (req, res, next) => {
 const createPlaylist = (req, res, next) => {
     let data = req.body
     let user = req.user
-    
+
     playListService.createPlaylistService.createPlaylist(req, res, data, user);
 }
 
@@ -52,6 +52,13 @@ positionPlaylist = (req, res, next) => {
     playListService.positionPlaylistTrackService.positionPlaylistTrack(res, user, data);
 }
 
+positionEvent = (req, res, next) => {
+    let user = req.user;
+    let data = req.body;
+    playListService.positionPlaylistTrackService.positionEventTrack(res, user, data);
+}
+
+
 newEvent = (req, res, next) => {
     let user = req.user;
     let data = req.body;
@@ -78,6 +85,7 @@ module.exports = {
     likePlaylist,
     getEventById,
     positionPlaylist,
+    positionEvent,
     likeEvent,
     newEvent,
     getPlaylistById,
