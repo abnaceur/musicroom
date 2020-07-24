@@ -61,7 +61,7 @@ const updateTrackLikeService = async (id, track, token) => {
 }
 
 const getPlaylistByidService = (id, token) => {
-    return new Promise( async (resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
             let response = await userApi.get(`/playlist/id/` + id,
                 { headers: authHeader(token) });
@@ -80,7 +80,7 @@ const getPlaylistByidService = (id, token) => {
 
 
 const updateTrackListPositionService = (playListId, trackList, token) => {
-    return new Promise( async (resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
             let data = {
                 _id: playListId,
@@ -117,7 +117,27 @@ const updatePlayListService = async (data, token) => {
         }
     } catch (error) {
         console.log(error, " error");
-    }   
+    }
+}
+
+const getUserById = async (id, token) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await userApi.get(
+                `/users/id/` + id,
+                {
+                    headers: authHeader(token)
+                }
+            );
+            if (response.data.code === 200) {
+                resolve(response.data.data.user)
+            } else {
+                Alert.alert(response.data.data.msg)
+            }
+        } catch (error) {
+            console.log(error, " error");
+        }
+    })
 }
 
 export {
@@ -125,6 +145,7 @@ export {
     savePlayListService,
     getPlaylistByidService,
     updateTrackLikeService,
+    getUserById,
     updatePlayListService,
     getAllPlayListService
 }
