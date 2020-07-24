@@ -126,7 +126,6 @@ const PlaylistDetailsScreens = (props) => {
           checkIfFovorit(data.playList._id);
           setTrackList(data.playList.trackList.sort((a) => a.position));
 
-          console.log("Socket Joined")
           socket.emit('join', data.playList._id);
           if (data.playList.public === false) {
             AsyncStorage.getItem("userInfo").then((user) => {
@@ -167,10 +166,17 @@ const PlaylistDetailsScreens = (props) => {
       setListUsers(newUsers);
     })
 
+    socket.on("newChangePosition", (dataPosition) => {
+      setTrackList(dataPosition.arrangedTrack);
+      setDetails(dataPosition.newListTr);
+      handlSongsList(dataPosition.arrangedTrack);
+      setRerender(Math.floor(Math.random() * 9999999999));
+    })
+
     socket.on("newAddLikes", (trackListIn) => {
-      console.log("New like in")
       handlLikeList(trackListIn);
     })
+
   }, [])
 
   useEffect(() => {
@@ -250,6 +256,15 @@ const PlaylistDetailsScreens = (props) => {
       newListTr.trackList = arrangedTrack;
       setDetails(newListTr);
       handlSongsList(arrangedTrack);
+
+      let dataPos = {
+        room: listDetails._id,
+        newListTr,
+        arrangedTrack
+      };
+
+      socket.emit("changePosition", dataPos);
+
       await updateTrackListPositionService(
         newListTr._id,
         arrangedTrack,

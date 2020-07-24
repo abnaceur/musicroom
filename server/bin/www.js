@@ -56,8 +56,11 @@ app.io.on('connection', socket => {
   })
 
   socket.on('addLikes', async (data) => {
-    console.log("New likes");
     app.io.to(data.room).emit('newAddLikes', data.trackList);
+  });
+
+  socket.on('changePosition', async (data) => {
+    app.io.to(data.room).emit('newChangePosition', data);
   });
 
   socket.on('disconnect', async (reason) => {
