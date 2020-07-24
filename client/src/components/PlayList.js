@@ -3,7 +3,7 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
+  ScrollView, 
   Text,
 } from "react-native";
 import { FlatList } from "react-native-gesture-handler";

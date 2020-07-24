@@ -146,21 +146,21 @@ const EventEditor = ({ navigation }) => {
 
   const saveEvent = async () => {
     const { trackList, name, creator, _id } = playLists[playListChecked];
+    console.log("title :", title);
     let data = {
       name: title,
       description,
-      public: isPrivate,
       trackList, // Musique
       creator, // id of user
-      name, // Name of playlist
       _id, // id of playList
+      contributors,
+      isPrivate,
       dateStartEvent: `${formatDate(startDate)} ${formatHour(startDate)}`, // dd/mm/yyyy hh:mm:ss
       dateEndEvent: `${formatDate(endDate)} ${formatHour(endDate)}`, // dd/mm/yyyy hh:mm:ss
       address,
       isVote,
       isEditable,
     };
-    console.log(data);
     await saveNewEventService(data, token);
   };
 
