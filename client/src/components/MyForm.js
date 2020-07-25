@@ -22,14 +22,10 @@ const MyForm = (props) => {
   const [animation, setAnimation] = useState(new Animated.Value(0));
 
   const handleOpenURL = ({ url }) => {
-    if (url.indexOf("?token=") !== -1) {
+    if (url.indexOf("?deezerToken") === -1) {
       let token = url.substring(url.indexOf("?token=") + 7, url.indexOf("&userId="));
       let userId = url.substring(url.indexOf("&userId=") + 9, url.indexOf("&givenName="));
-      oauth2google({token, userId});
-    } else if (url.indexOf("?deezerToken=") !== -1) {
-      let deezerToken = url.substring(url.indexOf("?deezerToken=") + 7, url.length);
-      console.log("Token :", deezerToken);
-      oauth2deezer(deezerToken);
+      oauth2google({ token, userId });
     }
   };
 
@@ -123,13 +119,13 @@ const MyForm = (props) => {
       <TouchableOpacity style={Styles.socialBtn}
         onPress={() => Linking.openURL('http://ec2-3-15-228-137.us-east-2.compute.amazonaws.com/auth/google')}>
         <Text style={Styles.buttonText} >
-       Google</Text>
+          Google</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={Styles.social42Btn}
         onPress={() => Linking.openURL('http://ec2-3-15-228-137.us-east-2.compute.amazonaws.com/login/42')}>
         <Text style={Styles.buttonText} >
-       42 LOGIN</Text>
+          42 LOGIN</Text>
       </TouchableOpacity>
     </View>
   )

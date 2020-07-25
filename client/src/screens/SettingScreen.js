@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import IconEntypo from "react-native-vector-icons/Entypo";
 import IconMaterial from "react-native-vector-icons/MaterialIcons";
-import IconCommunity from "react-native-vector-icons/MaterialCommunityIcons";
 import AsyncStorage from "@react-native-community/async-storage";
 import { Context as AuthContext } from "../context/AuthContext";
 import {
@@ -36,8 +35,17 @@ const Settings = () => {
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
   const passwordRegex = /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/;
   const {
-    state: { token },
+    state: { token }, state, oauth2deezer
   } = useContext(AuthContext);
+
+  // Handle deezer oauth2
+  const handleOpenURLDeezer = ({ url }) => {
+    if (url.indexOf("&userId=") === -1) {
+      let deezerToken = url.substring(url.indexOf("?deezerToken=") + 13, url.length);
+      oauth2deezer(state, deezerToken);  
+    }
+  }
+
 
   const fetchUserInfo = async () => {
     try {
@@ -115,14 +123,10 @@ const Settings = () => {
     }
     saveUserPasswordService(password, token);
   };
-  const test = async () => {
-    const test2 = await Linking.canOpenURL(url);
-    if (test2) {
-      await Linking.openURL(url);
-    }
-  };
+
 
   useEffect(() => {
+    Linking.addEventListener('url', handleOpenURLDeezer);
     fetchUserInfo();
   }, []);
 
