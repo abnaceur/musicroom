@@ -16,6 +16,7 @@ import { Context as AuthContext } from "../context/AuthContext";
 import { Card, ListItem, Button, Header, Icon } from "react-native-elements";
 import Add from "react-native-vector-icons/Entypo";
 import Eye from "react-native-vector-icons/AntDesign";
+import { useIsFocused } from "@react-navigation/native";
 
 // impor tservices
 import { getAllEventsService } from "../service/eventService";
@@ -23,10 +24,18 @@ import { getAllEventsService } from "../service/eventService";
 const EventScreen = ({ navigation }) => {
   const [publicEvents, setPublicEvents] = useState([]);
   const [myEvents, setMyEvents] = useState([]);
+  const [invitedEvent, setInvitedEvent] = useState([]);
+
   const {
     state: { token },
     signout,
   } = useContext(AuthContext);
+
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    if (isFocused)
+      getAllEvent();
+  }, [isFocused]);
 
   // Get date
   useEffect(() => {
@@ -37,9 +46,10 @@ const EventScreen = ({ navigation }) => {
     try {
       const response = await getAllEventsService(token);
       // console.log(response, " event");
-      const { myEvent, publicEvent } = response;
+      const { myEvent, publicEvent, getInvitedEv } = response;
       setPublicEvents(publicEvent);
       setMyEvents(myEvent);
+      setInvitedEvent(getInvitedEv);
     } catch (error) {
       console.log(error, " error EventScreen");
     }
@@ -59,7 +69,7 @@ const EventScreen = ({ navigation }) => {
         style={{
           marginBottom: 10,
           position: "absolute",
-          bottom: 15,
+          bottom: 35,
           color: "white",
           left: 10,
           fontWeight: "200",
@@ -68,7 +78,7 @@ const EventScreen = ({ navigation }) => {
         onPress={() =>
           navigation.navigate("EventDetails", {
             address: item.address,
-            playListDetails: JSON.stringify(item),
+            eventDetails: JSON.stringify(item),
           })
         }
       >
@@ -80,20 +90,21 @@ const EventScreen = ({ navigation }) => {
   );
 
   return (
-    <View style={Styles.container}>
-      <Header
-        backgroundColor="#633689"
-        centerComponent={{ text: "Event", style: { color: "#fff" } }}
-        rightComponent={
-          <Add
-            onPress={() => navigation.navigate("EventEditor")}
-            name="add-to-list"
-            size={24}
-            color="white"
-          />
-        }
-      />
-      {/* <ScrollView>
+    <ScrollView>
+      <View style={Styles.container}>
+        <Header
+          backgroundColor="#633689"
+          centerComponent={{ text: "Event", style: { color: "#fff" } }}
+          rightComponent={
+            <Add
+              onPress={() => navigation.navigate("EventEditor")}
+              name="add-to-list"
+              size={24}
+              color="white"
+            />
+          }
+        />
+        {/* <ScrollView>
         <View>
           <Card
             style={Styles.cardStyle}
@@ -111,25 +122,35 @@ const EventScreen = ({ navigation }) => {
           </Card>
         </View>
       </ScrollView> */}
-      <View>
-        <Text style={Styles.playlistTitle}>Public Event</Text>
+        <View>
+          <Text style={Styles.playlistTitle}>Public Event</Text>
+        </View>
+        <FlatList
+          keyExtractor={(item, index) => index.toString()}
+          data={publicEvents}
+          renderItem={renderItem}
+          horizontal={true}
+        />
+        <View>
+          <Text style={Styles.playlistTitle}>Invited to Event</Text>
+        </View>
+        <FlatList
+          keyExtractor={(item, index) => index.toString()}
+          data={invitedEvent}
+          renderItem={renderItem}
+          horizontal={true}
+        />
+        <View>
+          <Text style={Styles.playlistTitle}>My Event</Text>
+        </View>
+        <FlatList
+          keyExtractor={(item, index) => index.toString()}
+          data={myEvents}
+          renderItem={renderItem}
+          horizontal={true}
+        />
       </View>
-      <FlatList
-        keyExtractor={(item, index) => index.toString()}
-        data={publicEvents}
-        renderItem={renderItem}
-        horizontal={true}
-      />
-      <View>
-        <Text style={Styles.playlistTitle}>My Event</Text>
-      </View>
-      <FlatList
-        keyExtractor={(item, index) => index.toString()}
-        data={myEvents}
-        renderItem={renderItem}
-        horizontal={true}
-      />
-    </View>
+    </ScrollView>
   );
 };
 

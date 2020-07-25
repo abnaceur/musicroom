@@ -74,7 +74,15 @@ async function loginOauth2UserVia42(res, userInfo) {
 }
 
 
+async function deezerOauth2User(res, user) {
+    if (user) {
+        const accessTokenDeezer = user.accessToken;
+        res.redirect("msrm42app://msrm42app.io?deezerToken=" + accessTokenDeezer);
+    } else res.redirect("msrm42app://msrm42app.io?deezerToken=false");
+}
+
 module.exports = {
     loginOauth2User,
-    loginOauth2UserVia42
+    loginOauth2UserVia42,
+    deezerOauth2User
 }

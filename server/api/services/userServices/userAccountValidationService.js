@@ -2,7 +2,6 @@ const userDao = require('../../daos/userDao/userDao');
 const jwt = require('jsonwebtoken');
 
 async function validateEmailAddress(res, token) {
-    console.log('validate');
     if (await userDao.accountValidation(token) > 0) {
         res.send("Account validated succesfully, you may login to your account.")
     } else {
@@ -11,7 +10,6 @@ async function validateEmailAddress(res, token) {
 }
 
 async function validateNewEmailAddress(res, token) {
-    console.log('validate');
     try {
         var tokendata = jwt.verify(token, process.env.JWT_KEY);
         if (await userDao.ifExistUserAccount(tokendata.email) === 0) {

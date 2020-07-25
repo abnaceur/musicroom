@@ -1,5 +1,6 @@
 const Event = require('../../models/event');
 const EventClass = require("../../class/EventClass");
+const userDao = require('../../daos/userDao/userDao');
 
 const getEventById = (id) => {
     return new Promise((resolve, reject) => {
@@ -115,9 +116,26 @@ const deleteEvent = (id) => {
     })
 }
 
+const getInvitedEvents = (id) => {
+    return new Promise(async (resolve, reject) => {
+        let user = await userDao.getUserById(id);
+       
+        console.log("user :", user);
+        Event.find().exec()
+            .then(response => {
+                console.log("response :", response);
+                resolve(response);
+            }).catch(err => {
+                console.log("getInvitedEvents ERR :", err)
+                reject(err)
+            });
+    })
+}
+
 module.exports = {
     getMyevents,
     updateEvent,
+    getInvitedEvents,
     updateEventTracks,
     updateEventTracksPos,
     getEventById,

@@ -135,7 +135,7 @@ const Settings = () => {
             style={styles.inputStyle}
             placeholder="Age"
             keyboardType="decimal-pad"
-            value={age.toString()}
+            value={age ? age.toString() : ""}
             onChangeText={(value) => setAge(value)}
           />
         </View>
@@ -231,6 +231,17 @@ const Settings = () => {
         >
           <Text style={styles.buttonText}>Change password</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.lastbuttonContainer1}
+          onPress={() => Linking.openURL('http://ec2-3-15-228-137.us-east-2.compute.amazonaws.com/auth/deezer')}
+          >             
+          <Text style={styles.buttonText}>
+            
+            Connect2YourDeezerAccount
+            
+            </Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -270,6 +281,16 @@ const styles = StyleSheet.create({
   },
   lastbuttonContainer: {
     backgroundColor: "#27ae60",
+    paddingVertical: 10,
+    marginTop: 30,
+    width: 300,
+    height: 40,
+    textAlign: "center",
+    alignItems: "center",
+    marginBottom: 30,
+  },
+  lastbuttonContainer1: {
+    backgroundColor: "gray",
     paddingVertical: 10,
     marginTop: 30,
     width: 300,

@@ -12,6 +12,7 @@ async function userLogin(userInfo, res) {
     })
         .exec()
         .then(async userData => {
+            console.log("userData :", userData);
             if (userData.length === 0) {
                 res.status(200).json({
                     success: true,
