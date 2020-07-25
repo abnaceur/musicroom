@@ -65,6 +65,7 @@ async function loginOauth2UserVia42(res, userInfo) {
                 const accessTokenValue = await accessTokenDao.saveTokenAndGetAccessToken(token, usrOne[0]._id);
                 const basedAccesstoken = await accessTokenDao.generateToken(accessTokenValue, usrOne[0]._id);
 
+                console.log("usrOne[0] ", usrOne[0])
                 res.redirect("msrm42app://msrm42app.io?token=" + basedAccesstoken +
                     "&userId=" + usrOne[0]._id + "&givenName=" +
                     usrOne[0].username);
