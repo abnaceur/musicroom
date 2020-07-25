@@ -70,7 +70,7 @@ const Settings = () => {
       status: mood,
       city,
       age,
-      musicStyle: musicPreferences,
+      musicStyle: musicPreferences, 
       firstname,
       lastname,
     };
@@ -135,7 +135,7 @@ const Settings = () => {
             style={styles.inputStyle}
             placeholder="Age"
             keyboardType="decimal-pad"
-            value={age.toString()}
+            value={age ? age.toString() : ""}
             onChangeText={(value) => setAge(value)}
           />
         </View>

@@ -11,6 +11,7 @@ const saveUserInfoService = async (datauser, token) => {
       });
       const { data, code } = response.data;
       if (code === 200) {
+        Alert.alert("User information updated with succes !")
         resolve(data);
       } else {
         Alert.alert(data.msg);
@@ -34,6 +35,7 @@ const saveUserEmailService = async (email, token) => {
       );
       const { data, code } = response.data;
       if (code === 200) {
+        Alert.alert("Email updated with succes !")
         resolve(data);
       } else {
         Alert.alert(data.msg);
@@ -58,6 +60,7 @@ const saveUserPasswordService = async (password, token) => {
       const { data, code } = response.data;
       console.log(response.data);
       if (code === 200) {
+        Alert.alert("Password updated with succes !")
         resolve(data);
       } else {
         Alert.alert(data.msg);
