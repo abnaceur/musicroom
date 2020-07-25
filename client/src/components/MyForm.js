@@ -13,7 +13,7 @@ import {
 import { Context as AuthContext } from '../context/AuthContext';
 
 const MyForm = (props) => {
-  const { state, signup, signin, hideMessages, oauth2google } = useContext(AuthContext);
+  const { state, signup, signin, hideMessages, oauth2google, oauth2deezer } = useContext(AuthContext);
 
   const { name, navigation, isLoggin } = props;
   const [username, setUsername] = useState('');
@@ -22,9 +22,15 @@ const MyForm = (props) => {
   const [animation, setAnimation] = useState(new Animated.Value(0));
 
   const handleOpenURL = ({ url }) => {
-    let token = url.substring(url.indexOf("?token=") + 7, url.indexOf("&userId="));
-    let userId = url.substring(url.indexOf("&userId=") + 9, url.indexOf("&givenName="));
-    oauth2google({token, userId});
+    if (url.indexOf("?token=") !== -1) {
+      let token = url.substring(url.indexOf("?token=") + 7, url.indexOf("&userId="));
+      let userId = url.substring(url.indexOf("&userId=") + 9, url.indexOf("&givenName="));
+      oauth2google({token, userId});
+    } else if (url.indexOf("?deezerToken=") !== -1) {
+      let deezerToken = url.substring(url.indexOf("?deezerToken=") + 7, url.length);
+      console.log("Token :", deezerToken);
+      oauth2deezer(deezerToken);
+    }
   };
 
   useEffect(() => {
