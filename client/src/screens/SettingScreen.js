@@ -52,9 +52,7 @@ const Settings = () => {
   const fetchUserInfo = async () => {
     try {
       const tokeninfo = JSON.parse(await AsyncStorage.getItem("userInfo"));
-      console.log("tokeninfo ",  tokeninfo.userId)
       const response = await getUserInfoService(token, tokeninfo.userId);
-      console.log(response);
       const {
         age,
         city,
@@ -130,7 +128,6 @@ const Settings = () => {
 
   useEffect(() => {
     Linking.addEventListener('url', handleOpenURLDeezer);
-    console.log("Toke :===========>", deezerToken)
     if (deezerToken === null) 
       setDisplayDeezerBtn(true);
 
