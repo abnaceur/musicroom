@@ -1,6 +1,7 @@
 const userDao = require('../../daos/userDao/userDao');
 
 const getUserById = (res, id) => {
+    console.log("id :", id);
     if (!id)
         res.status(200).json({
             success: false,
