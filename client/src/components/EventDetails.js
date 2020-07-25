@@ -6,6 +6,7 @@ import {
   ScrollView,
   Dimensions,
   Modal,
+  FlatList,
   Image,
   KeyboardAvoidingView,
   StyleSheet,
@@ -25,16 +26,24 @@ import Icon from "react-native-vector-icons/AntDesign";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import Sound, { setCategory } from "react-native-sound";
 
-// Import servces
+// Import servces 
 import {
   updateTrackListEventPositionService,
   updateTrackLikeEventService,
   getEventByIdService,
 } from "../service/eventService";
 
+import {
+  getUserById,
+} from "../service/playListService";
+
+
 import BackWard from "react-native-vector-icons/Ionicons";
 import Marker from "react-native-vector-icons/MaterialCommunityIcons";
 import Geolocation from "react-native-geolocation-service";
+
+import io from 'socket.io-client';
+import { useIsFocused } from "@react-navigation/native";
 
 const EventDetails = ({ navigation, route }) => {
   const {
@@ -51,6 +60,36 @@ const EventDetails = ({ navigation, route }) => {
   const [rerender, setRerender] = useState(0);
   const [userPerms, setUserPerms] = useState({});
   const [sound, setSound] = useState(false);
+  const [userId, setUserId] = useState("");
+
+  const [listUsers, setListUsers] = useState([]);
+  const [socket, setSocket] = useState(io("http://192.168.42.120:3000"));
+
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    if (isFocused) {
+      socket.connect(true);
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    socket.on("newContributorJoined", (newUsers) => {
+      setListUsers(newUsers);
+    })
+
+    socket.on("newChangePosition", (dataPosition) => {
+      setTrackList(dataPosition.arrangedTrack);
+      setDetails(dataPosition.newListTr);
+      handlSongsList(dataPosition.arrangedTrack);
+      setRerender(Math.floor(Math.random() * 9999999999));
+    })
+
+    socket.on("newAddLikes", (trackListIn) => {
+      handlLikeList(trackListIn);
+    })
+
+  }, [])
+
 
   useEffect(() => {
     if (route.params?.newCoordsUser) {
@@ -70,7 +109,7 @@ const EventDetails = ({ navigation, route }) => {
         coords.latitude,
         coords.longitude
       );
-      console.log(userPosition, distance, " distance");
+
       setRightToVote(userPosition < distance ? true : false);
     }
   }, [coordsUser]);
@@ -124,13 +163,18 @@ const EventDetails = ({ navigation, route }) => {
           if (data.playList) {
             setDetails(data.playList);
             setTrackList(data.playList.trackList.sort((a) => a.position));
+
+            socket.emit('join', data.playList._id);
+
             if (data.playList.public === false) {
               AsyncStorage.getItem("userInfo").then((user) => {
                 let userInfo = JSON.parse(user);
+                setUserId(userInfo.userId);
                 let perms = {};
                 if (data.playList.contributors) {
                   let dt = data.playList.contributors;
                   dt.map((collab) => {
+                    console.log("collab ", collab, userInfo.userId);
                     if (collab.id === userInfo.userId) perms = collab;
                   });
                 }
@@ -143,6 +187,18 @@ const EventDetails = ({ navigation, route }) => {
               handlLikeList(data.playList.trackList);
             }
           }
+
+          // Get User information
+          AsyncStorage.getItem("userInfo").then((user) => {
+            let userInfo = JSON.parse(user);
+            getUserById(userInfo.userId, state.token).then(data => {
+              let users = [];
+              users.push(data);
+              socket.emit("newContributor", { room: dataIn._id, user: data });
+              setListUsers(users);
+            })
+          })
+
         }
       );
     }
@@ -199,12 +255,21 @@ const EventDetails = ({ navigation, route }) => {
     handlLikeList(trackList);
     // await setTrackList(trackList);
     setRerender(Math.floor(Math.random() * 999999999));
+
+    let dataLike = {
+      room: listDetails._id,
+      trackList,
+    };
+
+    socket.emit("addLikes", dataLike);
+
     await updateTrackLikeEventService(listDetails._id, track, state.token);
   };
 
   let modalRef;
   const openModal = () => modalRef.show();
   const saveModalRef = (ref) => (modalRef = ref);
+
   const onSelectedOption = async (newPos) => {
     let data = songsList;
     // Get old position
@@ -217,6 +282,15 @@ const EventDetails = ({ navigation, route }) => {
       newListTr.trackList = arrangedTrack;
       setDetails(newListTr);
       handlSongsList(arrangedTrack);
+
+      let dataPos = {
+        room: listDetails._id,
+        newListTr,
+        arrangedTrack
+      };
+
+      socket.emit("changePosition", dataPos);
+
       await updateTrackListEventPositionService(
         newListTr._id,
         arrangedTrack,
@@ -301,6 +375,28 @@ const EventDetails = ({ navigation, route }) => {
     }
   };
 
+  const contributorLeft = async () => {
+    let user = JSON.parse(await AsyncStorage.getItem("userInfo"));
+    let data = {
+      room: listDetails._id,
+      id: user.userId,
+    };
+
+    socket.emit("contributorLeft", data);
+  }
+
+  const renderItem = ({ item, index }) => (
+    <ListItem
+      key={item._id}
+      leftAvatar={{
+        source: {
+          uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn4.iconfinder.com%2Fdata%2Ficons%2Favatars-21%2F512%2Favatar-circle-human-male-5-512.png&f=1&nofb=1",
+        },
+      }}
+      title={item.username}
+    />
+  );
+
   return (
     <ScrollView style={Styles.container}>
       <ModalSelectList
@@ -317,7 +413,7 @@ const EventDetails = ({ navigation, route }) => {
           centerComponent={{ text: "EventDetails", style: { color: "#fff" } }}
           leftComponent={
             <BackWard
-              onPress={() => navigation.goBack()}
+              onPress={() => { pause(), contributorLeft(), navigation.goBack() }}
               name="md-arrow-back"
               size={24}
               color="white"
@@ -354,6 +450,14 @@ const EventDetails = ({ navigation, route }) => {
           }
           iconLeft
           title="  Start playlist"
+        />
+
+        {/* List users */}
+        <FlatList
+          keyExtractor={(item, index) => index.toString()}
+          data={listUsers}
+          renderItem={renderItem}
+          horizontal={true}
         />
 
         {listDetails.public == true && listDetails.trackList && trackList ? (
@@ -397,76 +501,77 @@ const EventDetails = ({ navigation, route }) => {
                     onPress={() => pause(i)}
                   />
                 ) : (
-                  <SimpleLineIcons
-                    name="control-play"
-                    size={24}
-                    color="blue"
-                    onPress={() => startPlay(i)}
-                  />
-                )
+                    <SimpleLineIcons
+                      name="control-play"
+                      size={24}
+                      color="blue"
+                      onPress={() => startPlay(i)}
+                    />
+                  )
               }
             />
           ))
         ) : listDetails.public == false &&
           listDetails.trackList &&
           trackList ? (
-          trackList.map((l, i) => (
-            <ListItem
-              key={i}
-              leftAvatar={{
-                source: { uri: l.album ? l.album.cover_big : null },
-              }}
-              title={l.title}
-              // subtitle={l.subtitle}
-              bottomDivider
-              rightTitle={
-                listDetails.isVote && userPerms.canVote
-                  ? l.likes.length.toString()
-                  : null
-              }
-              rightIcon={
-                listDetails.isVote && userPerms.canVote ? (
-                  <SimpleLineIcons
-                    onPress={() =>
-                      rightToVote
-                        ? handleLikePress(i, l)
-                        : Alert.alert("You are not in the right place !")
-                    }
-                    name="like"
-                    size={25}
-                    color="blue"
-                  />
-                ) : listDetails.isEditable && userPerms.canEdit ? (
-                  <SimpleLineIcons
-                    onPress={() => handleEditPosPress(i, l)}
-                    name="cursor-move"
-                    size={25}
-                    color="blue"
-                  />
-                ) : null
-              }
-              leftIcon={
-                i === currentSong && isPlaying ? (
-                  <SimpleLineIcons
-                    name="control-pause"
-                    size={25}
-                    color="blue"
-                    onPress={() => pause(i)}
-                  />
-                ) : (
-                  <SimpleLineIcons
-                    name="control-play"
-                    size={24}
-                    color="blue"
-                    onPress={() => startPlay(i)}
-                  />
-                )
-              }
-            />
-          ))
-        ) : (
-          <Text>Empty list</Text>
-        )}
+              trackList.map((l, i) => (
+                <ListItem
+                  key={i}
+                  leftAvatar={{
+                    source: { uri: l.album ? l.album.cover_big : null },
+                  }}
+                  title={l.title}
+                  // subtitle={l.subtitle}
+                  bottomDivider
+                  rightTitle={
+                    listDetails.isVote && userPerms.canVote
+                      ? l.likes.length.toString()
+                      : null
+                  }
+                  rightIcon={
+                    (listDetails.isVote && userPerms.canVote) 
+                     || (listDetails.creator === userId && listDetails.isVote) ? (<SimpleLineIcons
+                        onPress={() =>
+                          rightToVote
+                            ? handleLikePress(i, l)
+                            : Alert.alert("You are not in the right place !")
+                        }
+                        name="like"
+                        size={25}
+                        color="blue"
+                      />
+                    ) : (listDetails.isEditable && userPerms.canEdit) ||
+                    (listDetails.creator === userId && listDetails.isEditable)  ? (
+                      <SimpleLineIcons
+                        onPress={() => handleEditPosPress(i, l)}
+                        name="cursor-move"
+                        size={25}
+                        color="blue"
+                      />
+                    ) : null
+                  }
+                  leftIcon={
+                    i === currentSong && isPlaying ? (
+                      <SimpleLineIcons
+                        name="control-pause"
+                        size={25}
+                        color="blue"
+                        onPress={() => pause(i)}
+                      />
+                    ) : (
+                        <SimpleLineIcons
+                          name="control-play"
+                          size={24}
+                          color="blue"
+                          onPress={() => startPlay(i)}
+                        />
+                      )
+                  }
+                />
+              ))
+            ) : (
+              <Text>Empty list</Text>
+            )}
       </View>
     </ScrollView>
   );
