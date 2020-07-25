@@ -13,6 +13,7 @@ import {
 // Import context
 import { Context as AuthContext } from "../context/AuthContext";
 import { Card, ListItem, Button, Icon } from "react-native-elements";
+import Settings from "./SettingScreen";
 
 const HomeScreens = ({ navigation }) => {
   const { signout } = useContext(AuthContext);
@@ -51,6 +52,7 @@ const HomeScreens = ({ navigation }) => {
           image={require("../assets/settings.jpg")}
         >
           <Button
+            onPress={() => navigation.push("Settings")}
             buttonStyle={{
               borderRadius: 0,
               marginLeft: 0,
