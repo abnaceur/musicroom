@@ -234,7 +234,7 @@ const Settings = () => {
 
         <TouchableOpacity
           style={styles.lastbuttonContainer1}
-          onPress={() => Linking.openURL('http://192.168.42.120:3000/auth/deezer')}
+          onPress={() => Linking.openURL('http://ec2-3-15-228-137.us-east-2.compute.amazonaws.com/auth/deezer')}
           >             
           <Text style={styles.buttonText}>
             
