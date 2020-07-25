@@ -21,7 +21,7 @@ const authReducer = (state, action) => {
         case 'hideMsg':
             return { ...state, response_msg: "", error_msg: "" };
         case 'addTokenDeezer':
-            return state;
+            return { ...state, deezerToken: action.payload };
         default:
             return state;
     }
@@ -87,15 +87,15 @@ const resetPwd = dispatch => async (email) => {
     }
 }
 
-const oauth2google = dispatch => async ({token, userId}) => {
+const oauth2google = dispatch => async ({ token, userId }) => {
     await AsyncStorage.setItem('token_id', token);
-    await AsyncStorage.setItem('userInfo', JSON.stringify({userId: userId}));
+    await AsyncStorage.setItem('userInfo', JSON.stringify({ userId: userId }));
     dispatch({ type: 'addToken', payload: token })
 }
 
-const oauth2deezer = dispatch => async ({token_deezer}) => {
+const oauth2deezer = dispatch => async (state, token_deezer) => {
     await AsyncStorage.setItem('token_deezer', token_deezer);
-    dispatch({ type: 'addTokenDeezer' })
+    dispatch({ type: 'addTokenDeezer', payload: token_deezer });
 }
 
 export const { Context, Provider } = creatDataContext(
@@ -103,6 +103,7 @@ export const { Context, Provider } = creatDataContext(
     { signup, signin, signout, resetPwd, hideMessages, oauth2google, oauth2deezer },
     {
         token: null,
+        deezerToken: null,
         error_msg: "",
         response_msg: "",
     }
