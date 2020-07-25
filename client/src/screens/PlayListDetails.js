@@ -53,14 +53,8 @@ const PlaylistDetailsScreens = (props) => {
   const [willEdit, setWillEdit] = useState(false);
   const [listUsers, setListUsers] = useState([]);
   const [socket, setSocket] = useState(io("http://192.168.42.120:3000"));
+  const [userId, setUserId] = useState("");
 
-  // this.state.socket.connect(true);
-  //   this.state.socket.emit('join', room);
-  //   this.state.socket.on('userNotifications', (data) => {
-  //     this.setState({
-  //       notifCount: data.length
-  //     })
-  //   })
 
   const isFocused = useIsFocused();
   useEffect(() => {
@@ -130,6 +124,7 @@ const PlaylistDetailsScreens = (props) => {
           if (data.playList.public === false) {
             AsyncStorage.getItem("userInfo").then((user) => {
               let userInfo = JSON.parse(user);
+              setUserId(userInfo.userId);
               if (userInfo.userId === data.playList.creator) setWillEdit(true);
               let perms = {};
               if (data.playList.contributors) {
@@ -480,24 +475,28 @@ const PlaylistDetailsScreens = (props) => {
                   rightTitle={
                     listDetails.isVote && userPerms.canVote
                       ? l.likes.length.toString()
-                      : null
+                      : listDetails.isVote && listDetails.creator === userId
+                        ? l.likes.length.toString()
+                        : null
                   }
                   rightIcon={
-                    listDetails.isVote && userPerms.canVote ? (
-                      <SimpleLineIcons
-                        onPress={() => handleLikePress(i, l)}
-                        name="like"
-                        size={25}
-                        color="blue"
-                      />
-                    ) : listDetails.isEditable && userPerms.canEdit ? (
-                      <SimpleLineIcons
-                        onPress={() => handleEditPosPress(i, l)}
-                        name="cursor-move"
-                        size={25}
-                        color="blue"
-                      />
-                    ) : null
+                    (listDetails.isVote && userPerms.canVote)
+                      || (listDetails.creator === userId && listDetails.isVote) ? (
+                        <SimpleLineIcons
+                          onPress={() => handleLikePress(i, l)}
+                          name="like"
+                          size={25}
+                          color="blue"
+                        />
+                      ) : (listDetails.isEditable && userPerms.canEdit) ||
+                        (listDetails.creator === userId && listDetails.isEditable) ? (
+                          <SimpleLineIcons
+                            onPress={() => handleEditPosPress(i, l)}
+                            name="cursor-move"
+                            size={25}
+                            color="blue"
+                          />
+                        ) : null
                   }
                   leftIcon={
                     i === currentSong && isPlaying ? (
