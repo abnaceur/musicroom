@@ -70,7 +70,7 @@ const Settings = () => {
       status: mood,
       city,
       age,
-      musicStyle: musicPreferences, 
+      musicStyle: musicPreferences,
       firstname,
       lastname,
     };
@@ -231,6 +231,17 @@ const Settings = () => {
         >
           <Text style={styles.buttonText}>Change password</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.lastbuttonContainer1}
+          onPress={() => Linking.openURL('http://192.168.42.120:3000/auth/deezer')}
+          >             
+          <Text style={styles.buttonText}>
+            
+            Connect2YourDeezerAccount
+            
+            </Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -270,6 +281,16 @@ const styles = StyleSheet.create({
   },
   lastbuttonContainer: {
     backgroundColor: "#27ae60",
+    paddingVertical: 10,
+    marginTop: 30,
+    width: 300,
+    height: 40,
+    textAlign: "center",
+    alignItems: "center",
+    marginBottom: 30,
+  },
+  lastbuttonContainer1: {
+    backgroundColor: "gray",
     paddingVertical: 10,
     marginTop: 30,
     width: 300,

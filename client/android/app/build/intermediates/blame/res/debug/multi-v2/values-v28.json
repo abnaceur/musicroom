@@ -1,17 +1,10 @@
 {
     "logs": [
         {
-<<<<<<< HEAD
             "outputFile": "/home/abn/my-projects/42_Projects/musicroom42/client/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v28/values-v28.xml",
             "map": [
                 {
                     "source": "/root/.gradle/caches/transforms-2/files-2.1/c2c5fa787d66aaf40578b3071f4d283f/appcompat-1.1.0/res/values-v28/values-v28.xml",
-=======
-            "outputFile": "/Users/DonKey/musicroom42/client/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v28/values-v28.xml",
-            "map": [
-                {
-                    "source": "/Users/DonKey/.gradle/caches/transforms-2/files-2.1/c2c5fa787d66aaf40578b3071f4d283f/appcompat-1.1.0/res/values-v28/values-v28.xml",
->>>>>>> 2825de86d10d1817788adf6ed55ff5c4b2f1cfec
                     "from": {
                         "startLines": "2,3,4,8",
                         "startColumns": "4,4,4,4",
@@ -30,11 +23,7 @@
                     }
                 },
                 {
-<<<<<<< HEAD
                     "source": "/root/.gradle/caches/transforms-2/files-2.1/081958b85be993b26123dd5b1125e07f/material-1.1.0/res/values-v28/values-v28.xml",
-=======
-                    "source": "/Users/DonKey/.gradle/caches/transforms-2/files-2.1/081958b85be993b26123dd5b1125e07f/material-1.1.0/res/values-v28/values-v28.xml",
->>>>>>> 2825de86d10d1817788adf6ed55ff5c4b2f1cfec
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
