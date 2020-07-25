@@ -16,19 +16,18 @@ async function getEvents(res, user) {
     else {
         // Get all public playlist
         let publicEvent = await eventDao.getAllPublicEvent();
-        // let myPlaylist = await playListDao.getMine(id);
         let myEvent = await eventDao.getMyevents(user.id);
+        let getInvitedEv = await eventDao.getInvitedEvents(user.id);
 
         res.status(200).json({
             success: true,
             data: {
                 publicEvent,
                 myEvent,
+                getInvitedEv,
             },
             code: 200
         })
-        // Get all private playList 'invited'
-        // Get all this user private playList
     }
 }
 

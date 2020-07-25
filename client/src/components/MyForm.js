@@ -13,7 +13,7 @@ import {
 import { Context as AuthContext } from '../context/AuthContext';
 
 const MyForm = (props) => {
-  const { state, signup, signin, hideMessages, oauth2google } = useContext(AuthContext);
+  const { state, signup, signin, hideMessages, oauth2google, oauth2deezer } = useContext(AuthContext);
 
   const { name, navigation, isLoggin } = props;
   const [username, setUsername] = useState('');
@@ -22,9 +22,15 @@ const MyForm = (props) => {
   const [animation, setAnimation] = useState(new Animated.Value(0));
 
   const handleOpenURL = ({ url }) => {
-    let token = url.substring(url.indexOf("?token=") + 7, url.indexOf("&userId="));
-    let userId = url.substring(url.indexOf("&userId=") + 9, url.indexOf("&givenName="));
-    oauth2google({token, userId});
+    if (url.indexOf("?token=") !== -1) {
+      let token = url.substring(url.indexOf("?token=") + 7, url.indexOf("&userId="));
+      let userId = url.substring(url.indexOf("&userId=") + 9, url.indexOf("&givenName="));
+      oauth2google({token, userId});
+    } else if (url.indexOf("?deezerToken=") !== -1) {
+      let deezerToken = url.substring(url.indexOf("?deezerToken=") + 7, url.length);
+      console.log("Token :", deezerToken);
+      oauth2deezer(deezerToken);
+    }
   };
 
   useEffect(() => {
@@ -115,13 +121,13 @@ const MyForm = (props) => {
       <Text style={Styles.txtLine}>___________ OR ____________</Text>
 
       <TouchableOpacity style={Styles.socialBtn}
-        onPress={() => Linking.openURL('https://42music.pagekite.me/auth/google')}>
+        onPress={() => Linking.openURL('http://ec2-3-15-228-137.us-east-2.compute.amazonaws.com/auth/google')}>
         <Text style={Styles.buttonText} >
        Google</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={Styles.social42Btn}
-        onPress={() => Linking.openURL('https://42music.pagekite.me/login/42')}>
+        onPress={() => Linking.openURL('http://ec2-3-15-228-137.us-east-2.compute.amazonaws.com/login/42')}>
         <Text style={Styles.buttonText} >
        42 LOGIN</Text>
       </TouchableOpacity>

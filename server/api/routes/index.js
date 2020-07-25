@@ -5,6 +5,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const keys = require('../../config/googleOath2');
 const oauth2Controller = require('../../api/controllers/oauth2Controller');
 var FortyTwoStrategy = require('passport-42').Strategy;
+var DeezerStrategy = require('passport-deezer').Strategy;
 
 const userDao = require('../daos/userDao/userDao')
 
@@ -44,8 +45,8 @@ passport.deserializeUser((user, done) => {
 })
 
 passport.use(new GoogleStrategy({
-  clientID: keys.clientId,
-  clientSecret: keys.clientSecret,
+  clientID: "393906309113-lf7gnp6pkk65bjeelg0rh90rqulqb574.apps.googleusercontent.com",
+  clientSecret: "QT3XCRQLbRADLQbFuZPD0NL6",
   callbackURL: '/auth/google/callback'
 }, (accessToken, refreshToken, profile, done) => {
   done(null, profile);
@@ -57,13 +58,6 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-// router.get('/auth/google/callback',
-//   passport.authenticate('google', { failureRedirect: '/login' }),
-//   function (req, res) {
-//     // Successful authentication, redirect home.
-//     res.redirect('/');
-//   });
-
 // Googe Oauth2
 router.get('/auth/google', passport.authenticate('google', {
   scope: ['profile', 'email'],
@@ -72,6 +66,24 @@ router.get('/auth/google', passport.authenticate('google', {
 // Google Oauth2 callback url
 router.get('/auth/google/callback', passport.authenticate('google'), oauth2Controller.googleOauth2);
 
+
+// Deezer
+passport.use(new DeezerStrategy({
+  clientID: "427042",
+  clientSecret: "161704cadd55a360d2db9644e688db05",
+  callbackURL: "http://192.168.42.120:3000/auth/deezer/callback"
+}, (accessToken, refreshToken, profile, done) => {
+  done(null, { profile, accessToken});
+}
+));
+
+router.get('/auth/deezer',
+  passport.authenticate('deezer'));
+
+router.get('/auth/deezer/callback',
+  passport.authenticate('deezer', { failureRedirect: '/login' }),
+  oauth2Controller.deezerOauth2
+  );
 
 
 // 42
