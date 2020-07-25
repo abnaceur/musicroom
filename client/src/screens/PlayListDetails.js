@@ -135,7 +135,14 @@ const PlaylistDetailsScreens = (props) => {
               }
               setUserPerms(perms);
             });
+          } else {
+            AsyncStorage.getItem("userInfo").then((user) => {
+              let userInfo = JSON.parse(user);
+              setUserId(userInfo.userId);
+              if (userInfo.userId === data.playList.creator) setWillEdit(true);
+            })
           }
+
           if (data.playList.isEditable) handlSongsList(data.playList.trackList);
           else {
             handlLikeList(data.playList.trackList);
