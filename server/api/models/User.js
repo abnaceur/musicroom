@@ -30,6 +30,14 @@ let userSchema = mongoose.Schema({
     googlePhoto: {
         type: String,
     },
+    age: {
+        type: String,
+        default: ""
+    },
+    city: {
+        type: String,
+        default: ""
+    },
     googleId: {
         type: String,
     },
@@ -40,6 +48,10 @@ let userSchema = mongoose.Schema({
     blocked: {
         type: Boolean,
         default: false,
+    },
+    musicStyle: {
+        type: String,
+        default: ""
     },
     dateOfLastUpdate: {
         type: Date,
