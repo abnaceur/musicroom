@@ -90,7 +90,7 @@ router.get('/auth/deezer/callback',
 passport.use(new FortyTwoStrategy({
   clientID: `f70297f82626c75530095926c74be94b13125f221dfaeb84939af7eb5e577aa2`,
   clientSecret: `283224cfe2096e88b44006727c3a2797cc187b73fe3467df07833448eef9d9f2`,
-  callbackURL: '/auth/42/callback'
+  callbackURL: 'http://ec2-3-15-228-137.us-east-2.compute.amazonaws.com/auth/42/callback'
 },
   function (accessToken, refreshToken, profile, cb) {
     return cb(null, profile);
