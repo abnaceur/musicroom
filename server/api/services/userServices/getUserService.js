@@ -10,7 +10,7 @@ const getUserById = (res, id) => {
             code: 406
         })
     else
-        userDao.getUserById(id).then(data => {
+        userDao.getUserById(id.toString()).then(data => {
             if (data) {
                 res.status(200).json({
                     success: true,
