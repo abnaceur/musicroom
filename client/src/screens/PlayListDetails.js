@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 import { ModalSelectList } from "react-native-modal-select-list";
+
 // Import context
 import { Context as AuthContext } from "../context/AuthContext";
 import { Card, Tile, ListItem, Button, Header } from "react-native-elements";
@@ -22,6 +23,7 @@ import Edit from "react-native-vector-icons/AntDesign";
 import Icon from "react-native-vector-icons/AntDesign";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import Sound, { setCategory } from "react-native-sound";
+
 // Import servces
 import {
   updateTrackListPositionService,
@@ -29,6 +31,7 @@ import {
   getPlaylistByidService,
   getUserById,
 } from "../service/playListService";
+
 import {
   getMyBookmarck,
   addFavoritService,

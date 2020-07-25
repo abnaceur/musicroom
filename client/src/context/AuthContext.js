@@ -56,7 +56,6 @@ const signin = dispatch => async ({ email, password }) => {
             dispatch({ type: "add_error", payload: response.data.data.msg })
         }
         if (response.data.code == 200) {
-            console.log("response.data.data.token :", response.data.data.token);
             await AsyncStorage.setItem('token_id', response.data.data.token);
             await AsyncStorage.setItem('userInfo', JSON.stringify(response.data.data));
             dispatch({ type: 'addToken', payload: response.data.data.token });
@@ -102,7 +101,6 @@ const oauth2deezer = dispatch => async (state, token_deezer) => {
 
 const logoutDeezer = dispatch => async () => {
     await AsyncStorage.removeItem('token_deezer');
-    console.log("logout ======================")
     dispatch({ type: 'rmTokenDeezer', payload: null });
 }
 

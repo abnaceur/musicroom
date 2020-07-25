@@ -21,6 +21,7 @@ import {
   Alert,
 } from "react-native";
 
+
 const Settings = () => {
   const [user, setUser] = useState({});
   const [displayDeezerBtn, setDisplayDeezerBtn] = useState(true);

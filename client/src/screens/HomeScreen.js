@@ -12,15 +12,30 @@ import {
 
 // Import context
 import { Context as AuthContext } from "../context/AuthContext";
-import { Card, ListItem, Button, Icon } from "react-native-elements";
-import Settings from "./SettingScreen";
+import { Card, ListItem, Button, Icon, Header } from "react-native-elements";
+import Logout from "react-native-vector-icons/AntDesign";
 
 const HomeScreens = ({ navigation }) => {
-  const { signout } = useContext(AuthContext);
+  const { signout  } = useContext(AuthContext);
 
   return (
     <ScrollView style={Styles.container}>
       <View>
+
+      <Header
+          backgroundColor="#633689"
+          centerComponent={{ style: { color: "#fff" } }}
+          rightComponent={
+            // name favoris for desactivate
+            <Logout
+              onPress={() => signout()}
+              name={"logout"}
+              size={24}
+              color="white"
+            />
+          }
+        />
+
         <Card style={Styles.cardStyle} image={require("../assets/music.jpg")}>
           <Button
             buttonStyle={{
