@@ -17,7 +17,6 @@ async function CreateNewUser(data, token) {
 
 async function creatNewOauth2User(data) {
     return new Promise(async (resolve, reject) => {
-        let hashedPwd = await utils.hashPassword(data.password);
         resolve({
             _id: new mongoose.Types.ObjectId,
             username: data.displayName,
@@ -28,7 +27,6 @@ async function creatNewOauth2User(data) {
             active: true,
         })
     })
-
 }
 
 async function creatNewOauth2UserVia42(userInfo) {
