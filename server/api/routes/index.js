@@ -71,7 +71,7 @@ router.get('/auth/google/callback', passport.authenticate('google'), oauth2Contr
 passport.use(new DeezerStrategy({
   clientID: "427042",
   clientSecret: "161704cadd55a360d2db9644e688db05",
-  callbackURL: "http://192.168.42.120:3000/auth/deezer/callback"
+  callbackURL: "http://ec2-3-15-228-137.us-east-2.compute.amazonaws.com/auth/deezer/callback"
 }, (accessToken, refreshToken, profile, done) => {
   done(null, { profile, accessToken});
 }
