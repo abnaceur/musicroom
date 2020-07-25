@@ -121,13 +121,13 @@ const MyForm = (props) => {
       <Text style={Styles.txtLine}>___________ OR ____________</Text>
 
       <TouchableOpacity style={Styles.socialBtn}
-        onPress={() => Linking.openURL('https://42music.pagekite.me/auth/google')}>
+        onPress={() => Linking.openURL('http://ec2-3-15-228-137.us-east-2.compute.amazonaws.com/auth/google')}>
         <Text style={Styles.buttonText} >
        Google</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={Styles.social42Btn}
-        onPress={() => Linking.openURL('https://42music.pagekite.me/login/42')}>
+        onPress={() => Linking.openURL('http://ec2-3-15-228-137.us-east-2.compute.amazonaws.com/login/42')}>
         <Text style={Styles.buttonText} >
        42 LOGIN</Text>
       </TouchableOpacity>
