@@ -23,6 +23,7 @@ import {
 
 const Settings = () => {
   const [user, setUser] = useState({});
+  const [displayDeezerBtn, setDisplayDeezerBtn] = useState(true);
   const [age, setAge] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -35,13 +36,14 @@ const Settings = () => {
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
   const passwordRegex = /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/;
   const {
-    state: { token }, state, oauth2deezer
+    state: { token, deezerToken }, state, oauth2deezer, logoutDeezer
   } = useContext(AuthContext);
 
   // Handle deezer oauth2
   const handleOpenURLDeezer = ({ url }) => {
     if (url.indexOf("&userId=") === -1) {
       let deezerToken = url.substring(url.indexOf("?deezerToken=") + 13, url.length);
+      setDisplayDeezerBtn(false)
       oauth2deezer(state, deezerToken);  
     }
   }
@@ -50,6 +52,7 @@ const Settings = () => {
   const fetchUserInfo = async () => {
     try {
       const tokeninfo = JSON.parse(await AsyncStorage.getItem("userInfo"));
+      console.log("tokeninfo ",  tokeninfo.userId)
       const response = await getUserInfoService(token, tokeninfo.userId);
       console.log(response);
       const {
@@ -127,6 +130,10 @@ const Settings = () => {
 
   useEffect(() => {
     Linking.addEventListener('url', handleOpenURLDeezer);
+    console.log("Toke :===========>", deezerToken)
+    if (deezerToken === null) 
+      setDisplayDeezerBtn(true);
+
     fetchUserInfo();
   }, []);
 
@@ -236,16 +243,31 @@ const Settings = () => {
           <Text style={styles.buttonText}>Change password</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.lastbuttonContainer1}
-          onPress={() => Linking.openURL('http://ec2-3-15-228-137.us-east-2.compute.amazonaws.com/auth/deezer')}
-          >             
-          <Text style={styles.buttonText}>
-            
-            Connect2YourDeezerAccount
-            
-            </Text>
-        </TouchableOpacity>
+        {displayDeezerBtn ? 
+          <TouchableOpacity
+            style={styles.lastbuttonContainer1}
+            onPress={() => Linking.openURL('http://ec2-3-15-228-137.us-east-2.compute.amazonaws.com/auth/deezer')}
+            >             
+            <Text style={styles.buttonText}>
+              
+              Connect2YourDeezerAccount
+              
+              </Text>
+          </TouchableOpacity>
+      : 
+          <TouchableOpacity
+            style={styles.lastbuttonContainer1}
+            onPress={() => { setDisplayDeezerBtn(true), logoutDeezer()}}
+            >             
+            <Text style={styles.buttonText}>
+              
+              Logout2YourDeezerAccount
+              
+              </Text>
+          </TouchableOpacity>
+
+      }
+        
       </View>
     </ScrollView>
   );

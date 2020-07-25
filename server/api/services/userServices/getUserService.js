@@ -1,7 +1,7 @@
 const userDao = require('../../daos/userDao/userDao');
 
 const getUserById = (res, id) => {
-    if (String(id).length !== 24)
+    if (!id)
         res.status(200).json({
             success: false,
             data: {
