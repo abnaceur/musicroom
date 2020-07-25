@@ -19,6 +19,7 @@ import PlayListMusic from "react-native-vector-icons/MaterialCommunityIcons";
 import SigninScreens from "./src/screens/SigninScreen";
 import SignupScreens from "./src/screens/SignupScreen";
 import HomeScreens from "./src/screens/HomeScreen";
+import Settings from "./src/screens/SettingScreen";
 import ResetPwdScreens from "./src/screens/ResetPwdScreen";
 import PlayList from "./src/components/PlayList";
 import PlayListEditor from "./src/components/PlayListEditor";
@@ -195,6 +196,7 @@ const App = () => {
 
               <Stack.Screen name="MusicList" component={MusicList} />
               <Stack.Screen name="Player" component={Player} />
+              <Stack.Screen name="Settings" component={Settings} />
             </Stack.Navigator>
           </NavigationContainer>
         );
