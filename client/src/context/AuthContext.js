@@ -2,6 +2,7 @@ import creatDataContext from './CreateDataContext';
 import userApi from '../api/user';
 import AsyncStorage from '@react-native-community/async-storage';
 import { navigate } from '../helpers/NavigationRef';
+import axios from 'axios';
 
 const authReducer = (state, action) => {
 
