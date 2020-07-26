@@ -16,12 +16,13 @@ import { Card, ListItem, Button, Icon } from 'react-native-elements';
 import { useIsFocused } from "@react-navigation/native";
 
 const FavorisScreen = (props) => {
-    const { signout } = useContext(AuthContext);
+    const { deezerToken } = useContext(AuthContext); 
 
     const isFocused = useIsFocused();
     useEffect(() => {
-      if (isFocused)
-      fetchPlaylistes();
+      if (isFocused) {
+        fetchPlaylistes();
+      }
     }, [isFocused]);
 
     return (

@@ -35,6 +35,7 @@ import FavorisScreen from "./src/screens/FavorisScreen";
 import Map from "./src/components/Map";
 import EventDetails from "./src/components/EventDetails";
 import PlaylistDetailsScreens from "./src/screens/PlayListDetails";
+import PlaylistDeezerDetailsScreens from './src/components/PlaylistDeezerDetails'
 
 // Import helpers
 import checkAuth from "./src/helpers/PrivateRoute";
@@ -104,7 +105,7 @@ const App = () => {
   const { state } = useContext(AuthContext);
   // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IiQyYiQxMCQySW84ckxhRGNMTC9XVE45Q3N6MzQubk4zNWNrZUxpc3hzaW9ZV0FUclAvN3JkemZGb3FMTyIsImRhdGEiOiI1ZjBkOGQ2Mzc3NjMwNjAwOGFmZGY4MGUiLCJpYXQiOjE1OTQ5OTMzMTMsImV4cCI6MTU5NTAzNjUxM30.FVGmZOBa9BAlt4hMAe3BTExWYiiG-7plHpZv1mRcX9k";
   const token = state.token;
-  
+
   if (!token) {
     return (
       <NavigationContainer>
@@ -168,6 +169,13 @@ const App = () => {
                 options={{ headerShown: false }}
                 component={PlaylistDetailsScreens}
               />
+
+              <Stack.Screen
+                name="PlaylistDeezerDetails"
+                options={{ headerShown: false }}
+                component={PlaylistDeezerDetailsScreens}
+              />
+
               <Stack.Screen
                 name="EventEditor"
                 options={{ headerShown: false }}
