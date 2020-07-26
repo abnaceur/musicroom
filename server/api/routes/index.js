@@ -58,11 +58,44 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+/**
+ * @swagger
+ * tags:
+ *   name: Oauth2
+ *   description: User Oauth2 system, for login or sigin and get token 
+ */
+
+/**
+* @swagger
+* /auth/google:
+*    get:
+*      description:  auth google
+*      tags: [Oauth2]
+*    responses:
+*      '200':
+*        description: Successfully Oauth2
+*        schema:
+*          type: string
+*          format: string
+*/
 // Googe Oauth2
 router.get('/auth/google', passport.authenticate('google', {
   scope: ['profile', 'email'],
 }));
 
+/**
+* @swagger
+* /auth/google/callback:
+*    get:
+*      description:  auth google callback
+*      tags: [Oauth2]
+*    responses:
+*      '200':
+*        description: Successfully Oauth2
+*        schema:
+*          type: string
+*          format: string
+*/
 // Google Oauth2 callback url
 router.get('/auth/google/callback', passport.authenticate('google'), oauth2Controller.googleOauth2);
 
@@ -73,17 +106,43 @@ passport.use(new DeezerStrategy({
   clientSecret: "161704cadd55a360d2db9644e688db05",
   callbackURL: "http://ec2-3-15-228-137.us-east-2.compute.amazonaws.com/auth/deezer/callback"
 }, (accessToken, refreshToken, profile, done) => {
-  done(null, { profile, accessToken});
+  done(null, { profile, accessToken });
 }
 ));
 
+/**
+* @swagger
+* /auth/deezer:
+*    get:
+*      description:  auth deezer 
+*      tags: [Oauth2]
+*    responses:
+*      '200':
+*        description: Successfully Oauth2
+*        schema:
+*          type: string
+*          format: string
+*/
 router.get('/auth/deezer',
   passport.authenticate('deezer'));
 
+/**
+* @swagger
+* /auth/deezer/callback:
+*    get:
+*      description:  auth deezer callback
+*      tags: [Oauth2]
+*    responses:
+*      '200':
+*        description: Successfully Oauth2
+*        schema:
+*          type: string
+*          format: string
+*/
 router.get('/auth/deezer/callback',
   passport.authenticate('deezer', { failureRedirect: '/login' }),
   oauth2Controller.deezerOauth2
-  );
+);
 
 
 // 42
@@ -97,9 +156,36 @@ passport.use(new FortyTwoStrategy({
   }));
 
 
+/**
+* @swagger
+* /login/42:
+*    get:
+*      description:  auth 42 
+*      tags: [Oauth2]
+*    responses:
+*      '200':
+*        description: Successfully Oauth2
+*        schema:
+*          type: string
+*          format: string
+*/
 router.get('/login/42',
   passport.authenticate('42'));
 
+
+/**
+* @swagger
+* /login/42/callback:
+*    get:
+*      description:  auth 42 callback
+*      tags: [Oauth2]
+*    responses:
+*      '200':
+*        description: Successfully Oauth2
+*        schema:
+*          type: string
+*          format: string
+*/
 router.get('/auth/42/callback',
   passport.authenticate('42', { failureRedirect: '/login' }),
   oauth2Controller.Oauth2Via42);

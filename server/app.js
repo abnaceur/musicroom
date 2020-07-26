@@ -10,12 +10,37 @@ const rateLimiter = require('express-rate-limit-middleware').rateLimit
 const helmet = require('helmet');
 let mongoose = require('mongoose');
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./docs/openApiDocumentation/BasicInformation');
+const swaggerJsDoc = require('swagger-jsdoc')
 var cron = require('node-cron');
 const passport = require('passport');
 const eventDao = require('./api/daos/eventDao/eventDao')
+
+
 // Main app
 var app = express();
+
+
+
+/// Init auto swagger 
+// Extended: https://swagger.io/specification/#infoObject
+const swaggerOptions = {
+  swaggerDefinition: {
+    info: {
+      version: "1.0.0",
+      title: "Music Room API",
+      description: "Music Room API Information",
+      contact: {
+        name: "Music Room Team !"
+      },
+      servers: ["http://localhost:3000"]
+    }
+  },
+  // ['.routes/*.js']
+  apis: ['./api/routes/*.js', './api/models/*.js']
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Initialize passprt
 app.use(passport.initialize());
@@ -98,7 +123,6 @@ app.use('/api/v1/playList', playListRouter);
 app.use('/api/v1/certificate', certificateRouter);
 app.use('/api/v1/bookmark', bookmarkRouter);
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //Use hamlet 
 app.use(helmet())
 
@@ -117,5 +141,7 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 module.exports = app;
