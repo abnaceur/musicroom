@@ -16,6 +16,7 @@ import BackWard from "react-native-vector-icons/Ionicons";
 
 // Import sevrices
 import { getMyFavoritList } from '../service/bookmarkService';
+import { getDeezerUserTracks } from '../service/playListService';
 
 // import contexts
 import { Context as AuthContext } from "../context/AuthContext";
@@ -23,18 +24,50 @@ import { Context as AuthContext } from "../context/AuthContext";
 const FavorisComponent = (props) => {
   const { navigation } = props;
   const [favoritPlayList, setfavoritPlayList] = useState([]);
+  const [userDeezerTracks, setUserDeezerTracks] = useState([]);
 
   const keyExtractor = (item, index) => index.toString();
 
   const {
-    state: { token },
+    state: { token, deezerToken },
   } = useContext(AuthContext);
 
   useEffect(() => {
+    console.log("deezerToken :===>" , deezerToken);
+    if (deezerToken)
+      getDeezerUserTracks(deezerToken).then(response => {
+        setUserDeezerTracks(response.data.data);
+      });
+
     getMyFavoritList(token).then(data => {
       setfavoritPlayList(data);
     })
-  }, [])
+  }, []);
+
+  const renderItemDeezer = ({ item, index }) => (
+    <Card
+      image={{ uri: item.album.cover_medium }}
+      //   item.trackList[index].album.cover : "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fi.ytimg.com%2Fvi%2F7pgqf1hQ648%2Fmaxresdefault.jpg&f=1&nofb=1" }}
+      // image={{ uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fak9.picdn.net%2Fshutterstock%2Fvideos%2F22562299%2Fthumb%2F1.jpg&f=1&nofb=1" }}
+      containerStyle={{ padding: 0, width: 160, height: 153 }}
+    >
+      <Text style={{
+        marginBottom: 10, position: 'absolute', bottom: 15, color: 'white', left: 10, fontWeight: '200',
+        fontSize: 15
+      }}
+
+        onPress={() => {
+          /* 1. Navigate to the Details route with params */
+          navigation.navigate('PlaylistDeezerDetails', {
+            playListDetails: JSON.stringify(item),
+          });
+        }}>
+        <Eye name="eyeo" size={24} color="white" />
+
+        {item.title}
+      </Text>
+    </Card>
+  );
 
   const renderItem = ({ item, index }) => (
     <Card
@@ -87,6 +120,19 @@ const FavorisComponent = (props) => {
           renderItem={renderItem}
           horizontal={true}
         />
+
+        <View>
+          <Text style={styles.playlistTitle}>MyDeezer tracks</Text>
+        </View>
+
+        {deezerToken ?
+          <FlatList
+            keyExtractor={keyExtractor}
+            data={userDeezerTracks}
+            renderItem={renderItemDeezer}
+            horizontal={true}
+          />
+          : null}
 
       </View>
     </ScrollView>
