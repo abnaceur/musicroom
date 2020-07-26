@@ -1,10 +1,10 @@
-import Axios from "axios";
+import axios from "axios";
 
 const BASE_URL = process.env.BASE_URL;
 const VERSION_API = process.env.REACT_APP_API_VERSION;
 
 // TODO CHECK WHY ENV NOT DETECTING
-export default Axios.create({
+export default axios.create({
   // baseURL: "http://192.168.42.120:3000/api/v1/"
   // baseURL: "http://192.168.42.120:3000/api/v1/"
   // baseURL: "http://10.1.9.64:3000/api/v1/"
