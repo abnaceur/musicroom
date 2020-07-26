@@ -12,61 +12,244 @@ const checkAuth = require("../middleware/check-auth");
 // @access  Public
 // router.post('/signup', multer.upload.any(), userController.createNewAccount)
 
-// @desc    Signup new user
-// @route   POST /api/v1/users/signup 
-// @access  Public
+
+/**
+ * @swagger
+ * tags:
+ *   name: User
+ *   description: user management
+ */
+
+
+
+/**
+ * @swagger
+ * /api/v1/users/signup:
+ *    post:
+ *      description: create user account 
+ *      tags: [User]
+ *    parameters:
+ *      - userdata: all data of user
+ *        in: query
+ *        required: false
+ *        schema:
+ *          type: string
+ *          format: string
+ *    responses:
+ *      '200':
+ *        description: Successfully create user
+ *        schema:
+ *          type: string
+ *          format: string
+ */
 router.post('/signup', userController.createNewAccount)
 
-// @desc    Signin  user
-// @route   POST /api/v1/users/signin
-// @access  Public
+/**
+ * @swagger
+ * /api/v1/users/signin:
+ *    post:
+ *      description: signin user account 
+ *      tags: [User]
+ *    parameters:
+ *      - userdata: username and password
+ *        in: query
+ *        required: false
+ *        schema:
+ *          type: string
+ *          format: string
+ *    responses:
+ *      '200':
+ *        description: Successfully signin user
+ *        schema:
+ *          type: string
+ *          format: string
+ */
 router.post('/signin', userController.loginUser)
 
-// @desc    validateAccount
-// @route   POST /api/v1/users/validation/:token
-// @access  Public
+/**
+ * @swagger
+ * /api/v1/users/validation/:token:
+ *    post:
+ *      description: PUBLIC validate token
+ *      tags: [User]
+ *    parameters:
+ *      - token: token
+ *        in: query
+ *        required: false
+ *        schema:
+ *          type: string
+ *          format: string
+ *    responses:
+ *      '200':
+ *        description: Successfully validate user
+ *        schema:
+ *          type: string
+ *          format: string
+ */
 router.get('/validation/:token', userController.validateAccount)
 
-// @desc    resetPassword
-// @route   POST /api/v1/users/resetpwd
-// @access  Public
+/**
+ * @swagger
+ * /api/v1/users/resetpwd:
+ *    post:
+ *      description: PUBLIC reset password
+ *      tags: [User]
+ *    parameters:
+ *      - usermail: mail of user
+ *        in: query
+ *        required: false
+ *        schema:
+ *          type: string
+ *          format: string
+ *    responses:
+ *      '200':
+ *        description: Successfully resetpwd user
+ *        schema:
+ *          type: string
+ *          format: string
+ */
 router.post('/resetpwd', userController.resetPassword)
 
-// @desc    getUserById
-// @route   GET /api/v1/users/id/:id
-// @access  Private
-router.get('/id/:id', checkAuth, userController.getUserById)
 
-// @desc    deleteUserById
-// @route   POST /api/v1/users/delete/
-// @access  Private / Token
-router.post('/delete', checkAuth, userController.deleteUserById)
+/**
+ * @swagger
+ * /api/v1/users/delete:
+ *    post:
+ *      description: delete user account 
+ *      tags: [User]
+ *    parameters:
+ *      - userdata: username and password
+ *        in: query
+ *        required: false
+ *        schema:
+ *          type: string
+ *          format: string
+ *    responses:
+ *      '200':
+ *        description: Successfully delete user
+ *        schema:
+ *          type: string
+ *          format: string
+ */router.post('/delete', checkAuth, userController.deleteUserById)
 
-// @desc    update
-// @route   POST /api/v1/users/update/
-// @access  Private / Token
+/**
+ * @swagger
+ * /api/v1/users/update:
+ *    post:
+ *      description: update user account 
+ *      tags: [User]
+ *    parameters:
+ *      - userdata: username and password
+ *        in: query
+ *        required: false
+ *        schema:
+ *          type: string
+ *          format: string
+ *    responses:
+ *      '200':
+ *        description: Successfully update user
+ *        schema:
+ *          type: string
+ *          format: string
+*/
 router.post('/update', checkAuth, userController.updateUser)
 
 
-// @desc    updatePassword
-// @route   POST /api/v1/users/update/
-// @access  Private / Token
+/**
+ * @swagger
+ * /api/v1/users/updatePassword:
+ *    post:
+ *      description: updatePassword user account 
+ *      tags: [User]
+ *    parameters:
+ *      - userdata: username and password
+ *        in: query
+ *        required: false
+ *        schema:
+ *          type: string
+ *          format: string
+ *    responses:
+ *      '200':
+ *        description: Successfully updatePassword user
+ *        schema:
+ *          type: string
+ *          format: string
+*/
 router.post('/updatePassword', checkAuth, userController.updateUserPassword)
 
-// @desc    updatePassword
-// @route   POST /api/v1/users/update/
-// @access  Private / Token
+/**
+ * @swagger
+ * /api/v1/users/updateEmail:
+ *    post:
+ *      description: updateEmail user account 
+ *      tags: [User]
+ *    parameters:
+ *      - userdata: username and password
+ *        in: query
+ *        required: false
+ *        schema:
+ *          type: string
+ *          format: string
+ *    responses:
+ *      '200':
+ *        description: Successfully updateEmail user
+ *        schema:
+ *          type: string
+ *          format: string
+*/
 router.post('/updateEmail', checkAuth, userController.updateUserEmail)
 
-// @desc    get contributor
-// @route   POST /api/v1/users/contributor/
-// @access  Private / Token
+/**
+ * @swagger
+ * /api/v1/users/contributor:
+ *    post:
+ *      description: contributor user account 
+ *      tags: [User]
+ *    parameters:
+ *      - userdata: username and password
+ *        in: query
+ *        required: false
+ *        schema:
+ *          type: string
+ *          format: string
+ *    responses:
+ *      '200':
+ *        description: Successfully contributor user
+ *        schema:
+ *          type: string
+ *          format: string
+*/
 router.post('/contributor', checkAuth, userController.getContributor)
 
-// @desc    validateAccount
-// @route   POST /api/v1/users/validation/:token
-// @access  Public
+/**
+ * @swagger
+ * /api/v1/users/newemailvalidation/:token:
+ *    get:
+ *      description:  PUBLIC validate user acount by token
+ *      tags: [User]
+ *    responses:
+ *      '200':
+ *        description: user account validate
+ *        schema:
+ *          type: string
+ *          format: string
+ */
 router.get('/newemailvalidation/:token', userController.validateNewEmail)
+
+/**
+ * @swagger
+ * /api/v1/users/id/:id:
+ *    get:
+ *      description:  get user by id
+ *      tags: [User]
+ *    responses:
+ *      '200':
+ *        description: user data
+ *        schema:
+ *          type: string
+ *          format: string
+ */
+router.get('/id/:id', checkAuth, userController.getUserById)
 
 
 module.exports = router;
