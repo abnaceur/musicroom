@@ -59,7 +59,6 @@ const EventEditor = ({ navigation }) => {
   } = useContext(AuthContext);
 
   useEffect(() => {
-    console.log("dddd");
     fetchPlayLists();
   }, []);
 
@@ -146,7 +145,6 @@ const EventEditor = ({ navigation }) => {
 
   const saveEvent = async () => {
     const { trackList, name, creator, _id } = playLists[playListChecked];
-    console.log("title :", title);
     let data = {
       name: title,
       description,
