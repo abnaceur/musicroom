@@ -13,7 +13,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./docs/openApiDocumentation/BasicInformation');
 var cron = require('node-cron');
 const passport = require('passport');
-
+const eventDao = require('./api/daos/eventDao/eventDao')
 // Main app
 var app = express();
 
@@ -42,9 +42,10 @@ app.use(bodyParser.json());
 //  reset: '1 hour'
 //}))
 
-
+// Remove at start ans evry minuts
+eventDao.delAllOutdatedEvents()
 cron.schedule('* * * * *', () => {
-  console.log('running a task every minute //// Remove event here');
+  eventDao.delAllOutdatedEvents()
 });
 
 
