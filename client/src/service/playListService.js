@@ -140,9 +140,38 @@ const getUserById = async (id, token) => {
     })
 }
 
+const getDeezerUserTracks = async (token) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await userApi.get(
+                `https://api.deezer.com/user/me/tracks?access_token=` + token,
+            );
+                resolve(response)
+        } catch (error) {
+            console.log(error, " error");
+        }
+    })
+}
+
+const getDeezerTracksList = async (url, token) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await userApi.get(
+                url + `?access_token=` + token,
+            );
+                resolve(response)
+        } catch (error) {
+            console.log(error, " error");
+        }
+    })
+}
+
+
 export {
     updateTrackListPositionService,
+    getDeezerUserTracks,
     savePlayListService,
+    getDeezerTracksList,
     getPlaylistByidService,
     updateTrackLikeService,
     getUserById,
