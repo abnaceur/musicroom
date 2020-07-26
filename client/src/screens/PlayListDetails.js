@@ -55,7 +55,8 @@ const PlaylistDetailsScreens = (props) => {
   const [isFavorit, setIsFavorit] = useState(false);
   const [willEdit, setWillEdit] = useState(false);
   const [listUsers, setListUsers] = useState([]);
-  const [socket, setSocket] = useState(io("http://192.168.42.120:3000"));
+  // const [socket, setSocket] = useState(io("http://192.168.42.120:3000"));
+  const [socket, setSocket] = useState(io("http://ec2-3-15-228-137.us-east-2.compute.amazonaws.com"));
   const [userId, setUserId] = useState("");
 
 
