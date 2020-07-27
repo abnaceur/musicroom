@@ -26,7 +26,7 @@ async function loginOauth2User(res, userInfo) {
                     })
                     .catch(err => utils.defaultError(res, err));
             } else {
-                const token = await accessTokenDao.generateToken(usrOne[0]._id, userInfo.id !== undefined ? userInfo.id : usrOne[0]._id);
+                const token = await accessTokenDao.generateToken(usrOne[0]._id, usrOne[0]._id);
                 const accessTokenValue = await accessTokenDao.saveTokenAndGetAccessToken(token, usrOne[0]._id);
                 const basedAccesstoken = await accessTokenDao.generateToken(accessTokenValue, usrOne[0]._id);
 
@@ -41,6 +41,7 @@ async function loginOauth2User(res, userInfo) {
 async function loginOauth2UserVia42(res, userInfo) {
     const accessTokenDao = new AccessToken();
 
+    console.log("userInfo 42Login:", userInfo);
     User.find({
         "email": userInfo.emails[0].value
     })
@@ -50,7 +51,7 @@ async function loginOauth2UserVia42(res, userInfo) {
                 let user = new User(await userClass.creatNewOauth2UserVia42(userInfo));
                 user.save()
                     .then(async usr => {
-                        const token = await accessTokenDao.generateToken(userInfo.id !== undefined ? userInfo.id : usr._id, usr._id);
+                        const token = await accessTokenDao.generateToken(usr._id, usr._id);
                         const accessTokenValue = await accessTokenDao.saveTokenAndGetAccessToken(token, usr._id);
                         const basedAccesstoken = await accessTokenDao.generateToken(accessTokenValue, usr._id);
 
@@ -61,7 +62,7 @@ async function loginOauth2UserVia42(res, userInfo) {
                     .catch(err => utils.defaultError(res, err));
             } else {
 
-                const token = await accessTokenDao.generateToken(usrOne[0]._id, userInfo.googleId !== undefined ? userInfo.googleId : usrOne[0]._id);
+                const token = await accessTokenDao.generateToken(usrOne[0]._id, usrOne[0]._id);
                 const accessTokenValue = await accessTokenDao.saveTokenAndGetAccessToken(token, usrOne[0]._id);
                 const basedAccesstoken = await accessTokenDao.generateToken(accessTokenValue, usrOne[0]._id);
 
