@@ -44,7 +44,9 @@ app.io.on('connection', socket => {
 
   socket.on('newContributor', (data) => {
     usersList[data.room].push(data.user);
-    app.io.to(data.room).emit('newContributorJoined', usersList[data.room]);
+
+    let uniqMembers = [...new Set(usersList[data.room])];
+    app.io.to(data.room).emit('newContributorJoined', uniqMembers);
   });
 
   socket.on('contributorLeft', (data) => {
