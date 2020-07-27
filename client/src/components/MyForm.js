@@ -24,7 +24,7 @@ const MyForm = (props) => {
   const handleOpenURL = ({ url }) => {
     if (url.indexOf("?deezerToken") === -1) {
       let token = url.substring(url.indexOf("?token=") + 7, url.indexOf("&userId="));
-      let userId = url.substring(url.indexOf("&userId=") + 9, url.indexOf("&givenName="));
+      let userId = url.substring(url.indexOf("&userId=") + 8, url.indexOf("&givenName="));
       oauth2google({ token, userId });
     }
   };

@@ -1,19 +1,6 @@
 const userDao = require('../../daos/userDao/userDao');
 
 const getUserById = (res, id) => {
-    console.log("String(id).length: ", String(id).length);
-    userDao.getUserById(id).then(data => {
-        console.log("Data ---> ", data);
-        if (data) {
-            res.status(200).json({
-                success: true,
-                data: {
-                    user: data
-                },
-                code: 200
-            })
-        } 
-    })
     if (String(id).length !== 24)
         res.status(200).json({
             success: false,

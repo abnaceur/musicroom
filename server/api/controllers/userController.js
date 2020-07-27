@@ -16,7 +16,6 @@ validateAccount = (req, res, next) => {
 
 getUserById = (req, res, next) => {
     let id = req.params.id
-    console.log("id :", id)
     userService.getUserService.getUserById(res, id);
 }
 
