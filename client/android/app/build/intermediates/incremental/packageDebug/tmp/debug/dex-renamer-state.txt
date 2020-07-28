@@ -1,4 +1,4 @@
-#Mon Jul 27 18:07:57 CEST 2020
+#Wed Jul 29 01:05:51 CEST 2020
 base.0=/home/abn/my-projects/42_Projects/musicroom42/client/android/app/build/intermediates/dex/debug/mergeDexDebug/classes.dex
 path.0=classes.dex
 renamed.0=classes.dex

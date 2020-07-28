@@ -653,7 +653,7 @@ const EventDetails = ({ navigation, route }) => {
                         ) : null
                   }
                   leftIcon={
-                    i === currentSong && isPlaying ? (
+                    l.isPlayingOn && isPlaying ? (
                       <SimpleLineIcons
                         name="control-pause"
                         size={25}
