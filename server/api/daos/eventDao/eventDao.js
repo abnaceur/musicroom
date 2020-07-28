@@ -120,11 +120,11 @@ const deleteEvent = (id) => {
 const getInvitedEvents = (id) => {
     return new Promise(async (resolve, reject) => {
         let user = await userDao.getUserById(id);
-
-        console.log("user :", user);
-        Event.find().exec()
+        Event.find({ public: false, "contributors.contributor": {
+            "$in": [user.email]
+        } }).exec()
             .then(response => {
-                console.log("response :", response);
+                console.log("response 11 :", response);
                 resolve(response);
             }).catch(err => {
                 console.log("getInvitedEvents ERR :", err)

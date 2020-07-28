@@ -122,7 +122,6 @@ const getInvitedPlaylist = (id) => {
             "$in": [user.email]
         } }).exec()
             .then(response => {
-                console.log("response :", response);
                 resolve(response);
             }).catch(err => {
                 console.log("getPlayListById ERR :", err)

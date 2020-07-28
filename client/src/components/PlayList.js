@@ -3,6 +3,7 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
+  Dimensions,
   ScrollView, 
   Text,
 } from "react-native";
@@ -140,6 +141,12 @@ const PlayList = (props) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#282830",
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+  },
   playlistTitle: {
     color: "white",
     fontSize: 16,
@@ -163,10 +170,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 10,
     marginBottom: 10,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "#282830",
   },
 });
 
