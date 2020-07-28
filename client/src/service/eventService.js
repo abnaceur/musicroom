@@ -80,7 +80,6 @@ const getEventByIdService = (id, token) => {
           let response = await userApi.get(`/playlist/event/id/` + id,
               { headers: authHeader(token) });
 
-          console.log("response :", response.data);
           if (response.data.code === 200) {
               resolve(response.data.data);
           } else {

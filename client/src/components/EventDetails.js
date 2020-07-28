@@ -26,6 +26,9 @@ import Icon from "react-native-vector-icons/AntDesign";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import Sound, { setCategory } from "react-native-sound";
 
+import CountDown from 'react-native-countdown-component';
+import moment from 'moment';
+
 // Import servces 
 import {
   updateTrackListEventPositionService,
@@ -62,6 +65,9 @@ const EventDetails = ({ navigation, route }) => {
   const [userPerms, setUserPerms] = useState({});
   const [sound, setSound] = useState(false);
   const [userId, setUserId] = useState("");
+  const [eventStarted, setEventStarted] = useState(false);
+  const [totalDuration, setTotalDuration] = useState(0);
+  const [startCountingDown, setStartCountingDown] = useState(null)
 
   const [listUsers, setListUsers] = useState([]);
   // const [socket, setSocket] = useState(io("http://192.168.42.120:3000"));
@@ -169,15 +175,49 @@ const EventDetails = ({ navigation, route }) => {
 
             socket.emit('join', data.playList._id);
 
+
+            let date2 = moment.utc(data.playList.dateStartEvent)
+              .format('YYYY-MM-DD hh:mm:ss');
+
+            let date1 = moment()
+              .format('YYYY-MM-DD hh:mm:ss');
+
+            var diffr = moment.duration(moment(date2).diff(moment(date1)));
+            var hours = parseInt(diffr.asHours());
+            var minutes = parseInt(diffr.minutes());
+            var seconds = parseInt(diffr.seconds());
+            var d = hours * 60 * 60 + minutes * 60 + seconds;
+         
+            setTotalDuration(d);
+            setStartCountingDown(<View style={{ marginTop: 30, flex: 1, justifyContent: 'center', alignContent: 'center' }}>
+              <Text style={{ marginBottom: 10, color: 'white', fontSize: 18, textAlign: 'center' }}>
+                The event {data.playList.name} will start in 
+              </Text>
+              <CountDown
+                until={d}
+                timetoShow={('H', 'M', 'S')}
+                timeLabels={{m: "Min", s: "Sec", h: "Hours", d: "Days"}}
+                timeLabelStyle={{fontSize: 10, color: 'white', fontWeight: 'bold'}}
+                onFinish={() => setEventStarted(true)}
+                size={20}
+              />
+            </View>)
+
+            if (d <= 0) {
+              setEventStarted(true);
+            } else {
+              setRerender(Math.floor(Math.random() * 999999999));
+            }
+
             if (data.playList.public === false) {
               AsyncStorage.getItem("userInfo").then((user) => {
                 let userInfo = JSON.parse(user);
                 setUserId(userInfo.userId);
                 let perms = {};
+
                 if (data.playList.contributors) {
                   let dt = data.playList.contributors;
                   dt.map((collab) => {
-                    console.log("collab ", collab, userInfo.userId);
                     if (collab.id === userInfo.userId) perms = collab;
                   });
                 }
@@ -400,6 +440,10 @@ const EventDetails = ({ navigation, route }) => {
     />
   );
 
+  // const startCountingDown = (d) => {
+  //   return (
+  // }
+
   return (
     <ScrollView style={Styles.container}>
       <ModalSelectList
@@ -433,37 +477,53 @@ const EventDetails = ({ navigation, route }) => {
             />
           }
         />
-        <Tile
-          imageSrc={require("../assets/music.jpg")}
-          title={listDetails.name}
-          featured
-          caption={listDetails.desctiption}
-        />
 
-        <Button
-          onPress={() =>
-            !isPlaying ? startPlay(currentSong) : pause(currentSong)
-          }
-          icon={
-            <Icon
-              name={!isPlaying ? "play" : "pause"}
-              size={25}
-              color="white"
-            />
-          }
-          iconLeft
-          title="  Start playlist"
-        />
+
+        {!eventStarted ?
+          startCountingDown
+          : null}
+
+
+
+        {eventStarted ?
+          <Tile
+            imageSrc={require("../assets/music.jpg")}
+            title={listDetails.name}
+            featured
+            caption={listDetails.desctiption}
+          />
+          : null}
+
+
+        {eventStarted ?
+          <Button
+            onPress={() =>
+              !isPlaying ? startPlay(currentSong) : pause(currentSong)
+            }
+            icon={
+              <Icon
+                name={!isPlaying ? "play" : "pause"}
+                size={25}
+                color="white"
+              />
+            }
+            iconLeft
+            title="  Start playlist"
+          />
+          : null}
+
 
         {/* List users */}
-        <FlatList
-          keyExtractor={(item, index) => index.toString()}
-          data={listUsers}
-          renderItem={renderItem}
-          horizontal={true}
-        />
+        {eventStarted ?
+          <FlatList
+            keyExtractor={(item, index) => index.toString()}
+            data={listUsers}
+            renderItem={renderItem}
+            horizontal={true}
+          /> : null}
 
-        {listDetails.public == true && listDetails.trackList && trackList ? (
+
+        {eventStarted && listDetails.public == true && listDetails.trackList && trackList ? (
           trackList.map((l, i) => (
             <ListItem
               key={i}
@@ -515,7 +575,7 @@ const EventDetails = ({ navigation, route }) => {
               }
             />
           ))
-        ) : listDetails.public == false &&
+        ) : eventStarted && listDetails.public == false &&
           listDetails.trackList &&
           trackList ? (
               trackList.map((l, i) => (
@@ -573,9 +633,9 @@ const EventDetails = ({ navigation, route }) => {
                   }
                 />
               ))
-            ) : (
+            ) : eventStarted ? (
               <Text>Empty list</Text>
-            )}
+            ) : null}
       </View>
     </ScrollView>
   );
