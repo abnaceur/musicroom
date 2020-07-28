@@ -78,6 +78,7 @@ const PlaylistDetailsScreens = (props) => {
           selected: false,
           label: (i + 1).toString(),
           value: i.toString(),
+          isPlayingOn: false,
         });
       });
     }
@@ -98,6 +99,7 @@ const PlaylistDetailsScreens = (props) => {
           selected: false,
           label: (i + 1).toString(),
           value: i.toString(),
+          isPlayingOn: l.isPlayingOn ? true : false,
         });
       });
     }
@@ -195,6 +197,11 @@ const PlaylistDetailsScreens = (props) => {
     if (isPlaying) {
       pause();
       setIsPlaying(false);
+      trackList.map(tr => { 
+        tr.isPlayingOn = false;
+      })
+      setTrackList(trackList);
+      setRerender(Math.floor(Math.random() * 9999999999));
     }
     setCurrentSong(i);
     if (songsList[i])
@@ -205,14 +212,39 @@ const PlaylistDetailsScreens = (props) => {
         }
         setIsPlaying(true);
         setSound(sound1);
+        if (trackList[i]) {
+          trackList[i].isPlayingOn = true;
+          setTrackList(trackList);
+          setRerender(Math.floor(Math.random() * 9999999999));
+        }
+
         sound1.play(() => {
           sound1.release();
-          if (parseInt(i) + 1 < songsList.length) {
-            setCurrentSong(i + 1);
-            startPlay(i + 1);
+
+          let pos = 0;
+          trackList.map((tr, index) => { 
+            if (tr.isPlayingOn === true) pos = index;
+            tr.isPlayingOn = false;
+          })
+
+          if (parseInt(pos) + 1 < songsList.length) {
+            setCurrentSong(pos + 1);
+            trackList[pos].isPlayingOn = false;
+            trackList[pos + 1].isPlayingOn = true;
+            setTrackList(trackList);
+            setIsPlaying(false);
+            startPlay(pos + 1);
+            setRerender(Math.floor(Math.random() * 9999999999));
           } else {
+            trackList.map(tr => { 
+              tr.isPlayingOn = false;
+            })
+            trackList[0].isPlayingOn = true;
+            setTrackList(trackList);
             setCurrentSong(0);
+            setIsPlaying(false);
             startPlay(0);
+            setRerender(Math.floor(Math.random() * 9999999999));
           }
         });
       });
@@ -222,6 +254,13 @@ const PlaylistDetailsScreens = (props) => {
     if (sound) {
       sound.pause();
     }
+
+    if (trackList[i]) {
+      trackList[i].isPlayingOn = false;
+      setTrackList(trackList);
+      setRerender(Math.floor(Math.random() * 9999999999));
+    }
+
     setIsPlaying(false);
   };
 
@@ -234,7 +273,6 @@ const PlaylistDetailsScreens = (props) => {
     }
     handlLikeList(trackList);
     // await setTrackList(trackList);
-    setRerender(Math.floor(Math.random() * 999999999));
     let dataLike = {
       room: listDetails._id,
       trackList,
@@ -242,7 +280,7 @@ const PlaylistDetailsScreens = (props) => {
 
     socket.emit("addLikes", dataLike);
     await updateTrackLikeService(listDetails._id, track, state.token);
-
+    setRerender(Math.floor(Math.random() * 999999999));
   };
 
   let modalRef;
@@ -453,7 +491,7 @@ const PlaylistDetailsScreens = (props) => {
                 ) : null
               }
               leftIcon={
-                i === currentSong && isPlaying ? (
+                l.isPlayingOn && isPlaying ? (
                   <SimpleLineIcons
                     name="control-pause"
                     size={25}

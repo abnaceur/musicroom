@@ -134,6 +134,7 @@ const EventDetails = ({ navigation, route }) => {
           selected: false,
           label: (i + 1).toString(),
           value: i.toString(),
+          isPlayingOn: false,
         });
       });
     }
@@ -156,6 +157,7 @@ const EventDetails = ({ navigation, route }) => {
           selected: false,
           label: (i + 1).toString(),
           value: i.toString(),
+          isPlayingOn: l.isPlayingOn ? true : false,
         });
       });
     }
@@ -257,6 +259,11 @@ const EventDetails = ({ navigation, route }) => {
     if (isPlaying) {
       pause();
       setIsPlaying(false);
+      trackList.map(tr => { 
+        tr.isPlayingOn = false;
+      })
+      setTrackList(trackList);
+      setRerender(Math.floor(Math.random() * 9999999999));
     }
     setCurrentSong(i);
     if (songsList[i])
@@ -267,14 +274,39 @@ const EventDetails = ({ navigation, route }) => {
         }
         setIsPlaying(true);
         setSound(sound1);
+        if (trackList[i]) {
+          trackList[i].isPlayingOn = true;
+          setTrackList(trackList);
+          setRerender(Math.floor(Math.random() * 9999999999));
+        }
+
         sound1.play(() => {
           sound1.release();
-          if (parseInt(i) + 1 < songsList.length) {
-            setCurrentSong(i + 1);
-            startPlay(i + 1);
+
+          let pos = 0;
+          trackList.map((tr, index) => { 
+            if (tr.isPlayingOn === true) pos = index;
+            tr.isPlayingOn = false;
+          })
+
+          if (parseInt(pos) + 1 < songsList.length) {
+            setCurrentSong(pos + 1);
+            trackList[pos].isPlayingOn = false;
+            trackList[pos + 1].isPlayingOn = true;
+            setTrackList(trackList);
+            setIsPlaying(false);
+            startPlay(pos + 1);
+            setRerender(Math.floor(Math.random() * 9999999999));
           } else {
+            trackList.map(tr => { 
+              tr.isPlayingOn = false;
+            })
+            trackList[0].isPlayingOn = true;
+            setTrackList(trackList);
             setCurrentSong(0);
+            setIsPlaying(false);
             startPlay(0);
+            setRerender(Math.floor(Math.random() * 9999999999));
           }
         });
       });
@@ -284,6 +316,13 @@ const EventDetails = ({ navigation, route }) => {
     if (sound) {
       sound.pause();
     }
+
+    if (trackList[i]) {
+      trackList[i].isPlayingOn = false;
+      setTrackList(trackList);
+      setRerender(Math.floor(Math.random() * 9999999999));
+    }
+
     setIsPlaying(false);
   };
 
@@ -296,8 +335,6 @@ const EventDetails = ({ navigation, route }) => {
     }
 
     handlLikeList(trackList);
-    // await setTrackList(trackList);
-    setRerender(Math.floor(Math.random() * 999999999));
 
     let dataLike = {
       room: listDetails._id,
@@ -307,6 +344,7 @@ const EventDetails = ({ navigation, route }) => {
     socket.emit("addLikes", dataLike);
 
     await updateTrackLikeEventService(listDetails._id, track, state.token);
+    setRerender(Math.floor(Math.random() * 999999999));
   };
 
   let modalRef;
@@ -557,7 +595,7 @@ const EventDetails = ({ navigation, route }) => {
                 ) : null
               }
               leftIcon={
-                i === currentSong && isPlaying ? (
+                l.isPlayingOn && isPlaying ? (
                   <SimpleLineIcons
                     name="control-pause"
                     size={25}
