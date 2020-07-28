@@ -94,8 +94,8 @@ const Map = ({ route, navigation }) => {
         <MapView
           style={styles.map}
           initialRegion={positionMap}
-          onRegionChange={(region) => onRegionChange(region)}
-          onPress={(e) => newCoordinate(e)}
+          // onRegionChange={(region) => onRegionChange(region)}
+          // onPress={(e) => newCoordinate(e)}
           zoomEnabled={false}
           minZoomLevel={5}
           maxZoomLevel={19}
