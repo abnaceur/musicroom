@@ -5,7 +5,6 @@ const AccessToken = require('../../class/accessTokenClass');
 
 async function loginOauth2User(res, userInfo) {
     const accessTokenDao = new AccessToken();
-    console.log("userInfo :", userInfo);
 
     User.find({
         "email": userInfo.emails[0].value

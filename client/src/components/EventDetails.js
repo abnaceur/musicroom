@@ -52,6 +52,7 @@ const EventDetails = ({ navigation, route }) => {
   const { state } = useContext(AuthContext);
   const [coordsUser, setCoordsUser] = useState({});
   const [rightToVote, setRightToVote] = useState(false);
+  const [rightToPosition, setRightToPosition] = useState(false);
   const [listDetails, setDetails] = useState({});
   const [trackList, setTrackList] = useState([]);
   const [songsList, setSongsList] = useState([]);
@@ -112,6 +113,7 @@ const EventDetails = ({ navigation, route }) => {
       );
 
       setRightToVote(userPosition < distance ? true : false);
+      setRightToPosition(userPosition < distance ? true : false);
     }
   }, [coordsUser]);
 
@@ -476,7 +478,7 @@ const EventDetails = ({ navigation, route }) => {
                 listDetails.isVote ? (
                   <SimpleLineIcons
                     onPress={() =>
-                      !rightToVote
+                      rightToVote
                         ? handleLikePress(i, l)
                         : Alert.alert("You are not in the right place !")
                     }
@@ -486,7 +488,8 @@ const EventDetails = ({ navigation, route }) => {
                   />
                 ) : listDetails.isEditable ? (
                   <SimpleLineIcons
-                    onPress={() => handleEditPosPress(i, l)}
+                    onPress={() => rightToPosition ? handleEditPosPress(i, l)
+                      : Alert.alert("You are not in the right place !")}
                     name="cursor-move"
                     size={25}
                     color="blue"
@@ -530,8 +533,8 @@ const EventDetails = ({ navigation, route }) => {
                       : null
                   }
                   rightIcon={
-                    (listDetails.isVote && userPerms.canVote) 
-                     || (listDetails.creator === userId && listDetails.isVote) ? (<SimpleLineIcons
+                    (listDetails.isVote && userPerms.canVote)
+                      || (listDetails.creator === userId && listDetails.isVote) ? (<SimpleLineIcons
                         onPress={() =>
                           rightToVote
                             ? handleLikePress(i, l)
@@ -541,15 +544,15 @@ const EventDetails = ({ navigation, route }) => {
                         size={25}
                         color="blue"
                       />
-                    ) : (listDetails.isEditable && userPerms.canEdit) ||
-                    (listDetails.creator === userId && listDetails.isEditable)  ? (
-                      <SimpleLineIcons
-                        onPress={() => handleEditPosPress(i, l)}
-                        name="cursor-move"
-                        size={25}
-                        color="blue"
-                      />
-                    ) : null
+                      ) : (listDetails.isEditable && userPerms.canEdit) ||
+                        (listDetails.creator === userId && listDetails.isEditable) ? (
+                          <SimpleLineIcons
+                            onPress={() => handleEditPosPress(i, l)}
+                            name="cursor-move"
+                            size={25}
+                            color="blue"
+                          />
+                        ) : null
                   }
                   leftIcon={
                     i === currentSong && isPlaying ? (
