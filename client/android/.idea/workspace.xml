@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3fbc61c2-3819-42bf-8f60-a340e6678110" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/-1583465308/react-native-safe-area-context.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/-1583465308/react-native-safe-area-context.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/-1782586312/react-native-maps.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/-1782586312/react-native-maps.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/-1845163060/react-native-community_slider.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/-1845163060/react-native-community_slider.iml" afterDir="false" />
@@ -12,22 +11,13 @@
       <change beforePath="$PROJECT_DIR$/.idea/modules/1011201518/react-native-community_checkbox.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/1011201518/react-native-community_checkbox.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/1290140347/react-native-vector-icons.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/1290140347/react-native-vector-icons.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/mergeDebugResources/compile-file-map.properties" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/mergeDebugResources/compile-file-map.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebug/tmp/debug/dex-renamer-state.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebug/tmp/debug/dex-renamer-state.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebug/tmp/debug/zip-cache/javaResources0" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebug/tmp/debug/zip-cache/javaResources0" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_java_res/debug/out.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_java_res/debug/out.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/outputs/apk/debug/app-debug.apk" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/outputs/apk/debug/app-debug.apk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/api/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/api/user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/components/EventDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/components/EventDetails.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/screens/PlayListDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/screens/PlayListDetails.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../server/api/middleware/check-auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../server/api/middleware/check-auth.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="9WV4C18922048483" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="Pixel_2_API_28" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -146,13 +136,13 @@
       <screen x="67" y="27" width="1853" height="1053" />
     </state>
     <state x="771" y="315" width="424" height="491" key="FileChooserDialogImpl/67.27.1853.1053@67.27.1853.1053" timestamp="1595851290891" />
-    <state x="167" y="127" width="1653" height="853" key="com.android.tools.idea.avdmanager.AvdListDialog" timestamp="1595971137021">
+    <state x="167" y="127" width="1653" height="853" key="com.android.tools.idea.avdmanager.AvdListDialog" timestamp="1596015567561">
       <screen x="67" y="27" width="1853" height="1053" />
     </state>
-    <state x="167" y="127" width="1653" height="853" key="com.android.tools.idea.avdmanager.AvdListDialog/67.27.1853.1053@67.27.1853.1053" timestamp="1595971137021" />
-    <state x="649" y="381" key="com.intellij.ide.util.TipDialog" timestamp="1595977386032">
+    <state x="167" y="127" width="1653" height="853" key="com.android.tools.idea.avdmanager.AvdListDialog/67.27.1853.1053@67.27.1853.1053" timestamp="1596015567561" />
+    <state x="649" y="381" key="com.intellij.ide.util.TipDialog" timestamp="1596015545217">
       <screen x="67" y="27" width="1853" height="1053" />
     </state>
-    <state x="649" y="381" key="com.intellij.ide.util.TipDialog/67.27.1853.1053@67.27.1853.1053" timestamp="1595977386032" />
+    <state x="649" y="381" key="com.intellij.ide.util.TipDialog/67.27.1853.1053@67.27.1853.1053" timestamp="1596015545217" />
   </component>
 </project>
