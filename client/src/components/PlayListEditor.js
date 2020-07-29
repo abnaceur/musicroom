@@ -550,7 +550,7 @@ const PlayListEditor = ({ navigation, route }) => {
         <View style={{ marginTop: 10, alignItems: "center", marginBottom: 10 }}>
           <TouchableOpacity
             style={styles.buttonAdd}
-            onPress={() => navigation.navigate("AddMusic", { editor })}
+            onPress={() => navigation.navigate("AddMusic", { editor: true })}
           >
             <Text style={styles.buttonText}>Add music</Text>
           </TouchableOpacity>

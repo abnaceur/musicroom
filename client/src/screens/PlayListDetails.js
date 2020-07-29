@@ -423,7 +423,6 @@ const PlaylistDetailsScreens = (props) => {
         />
         {willEdit ? (
           <Edit
-            onPress={() => handlFavorit()}
             name="edit"
             size={24}
             style={{ position: "absolute", zIndex: 1, right: 45, top: 40 }}
