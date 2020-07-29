@@ -30,6 +30,11 @@ const authReducer = (state, action) => {
     }
 };
 
+const userNameRegex = /^[a-zA-Z0-9]*$/;
+const emailRegex = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
+const passwordRegex = /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/;
+
+
 const hideMessages = dispatch => async () => {
     setTimeout(() => {
         dispatch({ type: "hideMsg" })
@@ -38,6 +43,19 @@ const hideMessages = dispatch => async () => {
 
 const signup = dispatch => async ({ username, email, password }) => {
     try {
+        if (!username || !userNameRegex.test(username)) {
+            dispatch({ type: "add_error", payload: "Invalid username" });
+            return;
+        }
+        if (!emailRegex.test(email)) {
+            dispatch({ type: "add_error", payload: "Invalid email" });
+            return;
+        }
+        if (!passwordRegex.test(password)) {
+            dispatch({ type: "add_error", payload: "Invalid password" });
+            return;
+        }
+
         let response = await userApi.post('/users/signup', { username, email, password });
         if (response.data.code !== 200) {
             dispatch({ type: "add_error", payload: response.data.data.msg })
@@ -52,6 +70,15 @@ const signup = dispatch => async ({ username, email, password }) => {
 
 const signin = dispatch => async ({ email, password }) => {
     try {
+        if (!emailRegex.test(email)) {
+            dispatch({ type: "add_error", payload: "Invalid email" });
+            return;
+        }
+        if (!passwordRegex.test(password)) {
+            dispatch({ type: "add_error", payload: "Invalid password" });
+            return;
+        }
+
         let response = await userApi.post('/users/signin', { email, password });
         if (response.data.code !== 200) {
             dispatch({ type: "add_error", payload: response.data.data.msg })
@@ -76,6 +103,11 @@ const signout = dispatch => async () => {
 
 const resetPwd = dispatch => async (email) => {
     try {
+        if (!emailRegex.test(email.email)) {
+            dispatch({ type: "add_error", payload: "Invalid email" });
+            return;
+        }
+
         let response = await userApi.post('/users/resetpwd', { email });
         if (response.data.code !== 200) {
             dispatch({ type: "resetPwd_error", payload: response.data.data.msg })
