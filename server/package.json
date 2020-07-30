@@ -12,7 +12,7 @@
     "start": "node -r ts-node/register ./bin/www",
     "build": "tsc",
     "dev:watch": "nodemon",
-    "test": "mocha tests/",
+    "test": "jest",
     "devstart": "nodemon ./bin/www --inspect"
   },
   "dependencies": {
@@ -60,6 +60,12 @@
     "mocha": "^7.0.0",
     "nodemon": "^1.18.3",
     "sinon": "^8.1.0",
-    "supertest": "^4.0.2"
+    "supertest": "^4.0.2",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jest": "^22.6.4",
+    "eslint-plugin-prettier": "^3.1.0",
+    "jest": "^24.8.0"
   }
 }
